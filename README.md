@@ -28,7 +28,7 @@ npm run dev
 👤 **Mislav**
 
 * Github: [@mislavjc](https://github.com/mislavjc)
-* LinkedIn: [@mislavjc](https://linkedin.com/in/mislavjc)
+* LinkedIn: [@mislavjc](https://www.linkedin.com/in/mislav-jovani%C4%87-811021a8/)
 
 ## 🤝 Contributing
 

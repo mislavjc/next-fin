@@ -8,7 +8,6 @@ export default function Setup() {
   return (
     <div className="container">
       <Grid item xs={12} md={6}>
-        {session && !loading ? <h1>{session.user.email}</h1> : null}
         <BasicOptions />
       </Grid>
     </div>

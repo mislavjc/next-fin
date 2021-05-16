@@ -1,10 +1,11 @@
 import Typography from "@material-ui/core/Typography";
+import { CategoryNames } from "./CategoryNames";
 import TextField from "@material-ui/core/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const validationSchema = yup.object({
   numOfCategories: yup
@@ -49,6 +50,7 @@ export const BasicOptions = () => {
           }
         />
         <Button
+          style={{ marginTop: "1rem" }}
           color="primary"
           variant="contained"
           type="submit"
@@ -57,6 +59,7 @@ export const BasicOptions = () => {
           Submit
         </Button>
       </form>
+      {count > 0 && <CategoryNames count={count} />}
     </div>
   );
 };

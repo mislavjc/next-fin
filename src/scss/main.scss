@@ -1,0 +1,51 @@
+
+body {
+  font-family: "Inter";
+  font-weight: 400;
+}
+
+@mixin linkHover {
+  display: inline-block;
+  text-decoration: none;
+  &::after {
+    content: "";
+    display: block;
+    width: 0;
+    height: 2px;
+    background: black;
+    transition: width 0.3s;
+  }
+  &:hover {
+    color: black;
+    &::after {
+      width: 100%;
+      transition: width 0.3s;
+    }
+  }
+}
+
+nav {
+  font-size: 1.2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  a {
+    padding: 1rem 0;
+    color: black;
+    margin-left: 1rem;
+    @include linkHover;
+  }
+  .active {
+    color: #45489d;
+  }
+  .account {
+    margin-left: auto;
+  }
+}
+
+.container {
+  max-width: 1200ox;
+  display: flex;
+  justify-content: center;
+}

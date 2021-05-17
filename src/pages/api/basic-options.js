@@ -5,9 +5,7 @@ const handler = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
     const data = req.body;
-    console.log(data);
     const user = await User.find({}).exec();
-    console.log(user);
     res.status(201).json({ message: "all ok" });
   }
   if (req.method === "GET") {

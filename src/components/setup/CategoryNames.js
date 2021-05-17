@@ -2,7 +2,7 @@ import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -11,10 +11,18 @@ import { motion } from "framer-motion";
 import { Field } from "../Field";
 
 export const CategoryNames = ({ count }) => {
+  const [nameObj, setNameObj] = useState({})
+
+  const clickHandler = (e) => {
+    e.preventDefault();
+    console.log(nameObj)
+  }
+  
   const categoryArr = [];
   for (let i = 0; i < count; i++) {
     categoryArr.push(i);
   }
+
 
   return (
     <form>
@@ -27,7 +35,7 @@ export const CategoryNames = ({ count }) => {
         {categoryArr.map((category) => (
           <div style={{ marginTop: "1rem" }} key={category}>
             <Typography variant="h6">Kategorija {category + 1}</Typography>
-            <Field category={category} />
+            <Field category={category} setNameObj={setNameObj} nameObj={nameObj} />
             {/* <FormControl variant="filled">
               <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
               <Select
@@ -49,6 +57,7 @@ export const CategoryNames = ({ count }) => {
           color="primary"
           variant="contained"
           type="submit"
+          onClick={clickHandler}
           disableElevation
         >
           Submit

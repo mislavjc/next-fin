@@ -4,7 +4,7 @@ export const dbConnect = async () => {
   if (mongoose.connection.readyState >= 1) return;
 
   return mongoose.connect(process.env.DB_CONN_STR, {
-    newUrlParser: true,
+    usenewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: true,
   });

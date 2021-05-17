@@ -1,21 +1,24 @@
-import {useState} from 'react'
+import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 
-
-export const Field = ({category, passChildData}) => {
+export const Field = ({ category, setNameObj, nameObj }) => {
   const [name, setName] = useState("");
 
+  useEffect(() => {
+    nameObj[category] = name;
+    setNameObj(nameObj);
+  }, [name]);
 
   return (
     <TextField
       fullWidth
       variant="filled"
       type="text"
-      id={category}
+      id={`id${category}`}
       name="categoryNames"
       label="Naziv kategorije"
       value={name}
-      onChange={e => setName(e.target.value)}
+      onChange={(e) => setName(e.target.value)}
     />
   );
 };

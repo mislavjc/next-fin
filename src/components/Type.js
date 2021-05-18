@@ -21,11 +21,11 @@ export const Type = ({ category, setTypeObj, typeObj }) => {
         labelId={`labelid${category}`}
         id={`id${category}`}
       >
-        <MenuItem value={"Tekst"}>Tekst</MenuItem>
-        <MenuItem value={"Datum"}>Datum</MenuItem>
-        <MenuItem value={"Broj"}>Broj</MenuItem>
-        <MenuItem value={"Decimalni broj"}>Decimalni broj</MenuItem>
-        <MenuItem value={"Tracking broj"}>Tracking broj</MenuItem>
+        <MenuItem value={"text"}>Tekst</MenuItem>
+        <MenuItem value={"date"}>Datum</MenuItem>
+        <MenuItem value={"number"}>Broj</MenuItem>
+        <MenuItem value={"decimal"}>Decimalni broj</MenuItem>
+        <MenuItem value={"tracking"}>Tracking broj</MenuItem>
       </Select>
     </FormControl>
   );

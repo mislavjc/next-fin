@@ -1,28 +1,35 @@
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
-import { useState, useEffect } from "react";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { Field } from "../Field";
+import { Type } from "../Type";
+import { useSession } from "next-auth/client";
+
 
 export const CategoryNames = ({ count }) => {
-  const [nameObj, setNameObj] = useState({})
+  const [session, loading] = useSession();
+  const [nameObj, setNameObj] = useState({});
+  const [typeObj, setTypeObj] = useState({});
 
   const clickHandler = (e) => {
+    const currentUser = session.user;
     e.preventDefault();
-    console.log(nameObj)
-  }
-  
+    const values = {
+      currentUser,
+      names: nameObj,
+      types: typeObj,
+    };
+    axios
+      .post("/api/basic-options", values)
+      .then((response) => console.log(response));
+  };
+
   const categoryArr = [];
   for (let i = 0; i < count; i++) {
     categoryArr.push(i);
   }
-
 
   return (
     <form>
@@ -35,21 +42,16 @@ export const CategoryNames = ({ count }) => {
         {categoryArr.map((category) => (
           <div style={{ marginTop: "1rem" }} key={category}>
             <Typography variant="h6">Kategorija {category + 1}</Typography>
-            <Field category={category} setNameObj={setNameObj} nameObj={nameObj} />
-            {/* <FormControl variant="filled">
-              <InputLabel id="demo-simple-select-filled-label">Age</InputLabel>
-              <Select
-                labelId="demo-simple-select-filled-label"
-                id="demo-simple-select-filled"
-              >
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
-              </Select>
-            </FormControl> */}
+            <Field
+              category={category}
+              setNameObj={setNameObj}
+              nameObj={nameObj}
+            />
+            <Type
+              category={category}
+              setTypeObj={setTypeObj}
+              typeObj={typeObj}
+            />
           </div>
         ))}
         <Button

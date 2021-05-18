@@ -1,11 +1,9 @@
-import Typography from "@material-ui/core/Typography";
 import { CategoryNames } from "./CategoryNames";
 import TextField from "@material-ui/core/TextField";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const validationSchema = yup.object({
   numOfCategories: yup
@@ -23,9 +21,6 @@ export const BasicOptions = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {
       setCount(values.numOfCategories);
-      axios
-        .post("/api/basic-options", values)
-        .then((response) => console.log(response));
     },
   });
 

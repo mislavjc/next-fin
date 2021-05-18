@@ -6,6 +6,7 @@ const basicOptionsHandler = async (req, res) => {
   if (req.method === "POST") {
     const { currentUser, names, types } = req.body;
     const user = await User.findOne({ email: currentUser.email }).exec();
+    console.log(user._id)
     res.status(201).json({ message: "all ok" });
   }
 };

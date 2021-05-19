@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { session, loading } from "next-auth/client";
+import { useSession } from "next-auth/client";
 import { Input } from "@/components/fields/Input";
 import { dbConnect } from "@/middleware/db";
 import Container from "@material-ui/core/Container";
@@ -11,7 +11,6 @@ import axios from "axios";
 export async function getServerSideProps(context) {
   dbConnect();
   const fieldTypes = await FieldType.find({}).exec();
-  console.log(fieldTypes);
   return {
     props: {
       fieldTypes: JSON.parse(JSON.stringify(fieldTypes)),
@@ -20,12 +19,19 @@ export async function getServerSideProps(context) {
 }
 
 export default function Form({ fieldTypes }) {
-  // console.log(fieldTypes[0]);
+  const [session, loading] = useSession();
   const [dataObj, setDataObj] = useState({});
 
-  const  clickHandler = () => {
+  const clickHandler = () => {
+    const currentUser = session.user;
+    const values = {
+      currentUser,
+      dataObj,
+    };
     console.log(dataObj);
-    axios.post('/api/')
+    axios
+      .post("/api/crud/create", values)
+      .then((response) => console.log(response));
   };
 
   return (

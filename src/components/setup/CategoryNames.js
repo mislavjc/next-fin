@@ -3,8 +3,8 @@ import Button from "@material-ui/core/Button";
 import axios from "axios";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Field } from "../Field";
-import { Type } from "../Type";
+import { Field } from "./Field";
+import { Type } from "./Type";
 import { useSession } from "next-auth/client";
 
 

@@ -1,7 +1,7 @@
 import mongoose, { Schema } from "mongoose";
 import Field from "./field"
 
-const MODEL_NAME = "Template"
+const MODEL_NAME = "Form"
 
 const schema = new Schema({
   owner: String,
@@ -16,5 +16,5 @@ const schema = new Schema({
 });
 
 export default mongoose.models[MODEL_NAME] ||
-  mongoose.model(MODEL_NAME, schema, "templates");
+  mongoose.model(MODEL_NAME, schema, "forms");
 

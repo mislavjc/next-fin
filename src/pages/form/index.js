@@ -1,37 +1,43 @@
 import { useState } from "react";
-import { useSession } from "next-auth/client";
+import { getSession } from "next-auth/client";
+import { useRouter } from "next/router";
 import { Input } from "@/components/fields/Input";
 import { dbConnect } from "@/middleware/db";
 import Container from "@material-ui/core/Container";
 import Type from "@/models/type";
+import User from "@/models/user";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 
 export async function getServerSideProps(context) {
   dbConnect();
-  const types = await Type.find({}).exec();
+  const session = await getSession(context);
+  const { user } = session;
+  const owner = await User.findOne({ email: user.email });
+  const types = await Type.find({ owner: owner._id });
   return {
     props: {
+      owner: JSON.parse(JSON.stringify(owner)),
       types: JSON.parse(JSON.stringify(types)),
     },
   };
 }
 
-export default function Form({ types }) {
-  const [session, loading] = useSession();
+export default function Form({ types, owner }) {
+  const router = useRouter();
   const [dataObj, setDataObj] = useState({});
 
   const clickHandler = () => {
-    const currentUser = session.user;
+    const currentUser = owner._id;
     const values = {
       currentUser,
       dataObj,
     };
-    console.log(dataObj);
     axios
       .post("/api/crud/create", values)
       .then((response) => console.log(response));
+    router.push("/all-items");
   };
 
   return (

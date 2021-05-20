@@ -9,7 +9,7 @@ const createHandler = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
     const { currentUser, dataObj } = req.body;
-    const user = await User.findOne({ email: currentUser.email }).exec();
+    const user = await User.findOne({ id: currentUser._id }).exec();
     const formArr = [];
     for (const [key, value] of Object.entries(dataObj)) {
       const type = await Type.findOne({ _id: key });
@@ -22,7 +22,7 @@ const createHandler = async (req, res) => {
       formArr.push(input);
     }
     const form = new Form({
-      fields: formArr,
+      inputs: formArr,
       owner: user.id,
     });
     await form.save();

@@ -5,7 +5,7 @@ const MODEL_NAME = "Form"
 
 const schema = new Schema({
   owner: String,
-  fields: [{ type: Schema.Types.ObjectId, ref: "Input" }],
+  inputs: [{ type: Schema.Types.ObjectId, ref: "Input" }],
   attachments: [
     {
       url: String,

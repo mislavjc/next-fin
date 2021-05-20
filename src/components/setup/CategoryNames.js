@@ -1,15 +1,16 @@
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
+import { useRouter } from "next/router";
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Field } from "./Field";
 import { Type } from "./Type";
 import { useSession } from "next-auth/client";
 
-
 export const CategoryNames = ({ count }) => {
   const [session, loading] = useSession();
+  const router = useRouter();
   const [nameObj, setNameObj] = useState({});
   const [typeObj, setTypeObj] = useState({});
 
@@ -24,6 +25,7 @@ export const CategoryNames = ({ count }) => {
     axios
       .post("/api/basic-options", values)
       .then((response) => console.log(response));
+    router.push("/form");
   };
 
   const categoryArr = [];

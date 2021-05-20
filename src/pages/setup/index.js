@@ -8,7 +8,7 @@ export default function Setup() {
   const [session, loading] = useSession();
   const router = useRouter();
   useEffect(() => {
-    if (!session) {
+    if (!session && !loading) {
       router.push("/api/auth/signin");
     }
   }, [session, loading]);

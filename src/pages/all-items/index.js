@@ -27,7 +27,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function allItems({ forms }) {
-
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>

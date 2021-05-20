@@ -6,6 +6,7 @@ import { dbConnect } from "@/middleware/db";
 import Container from "@material-ui/core/Container";
 import Type from "@/models/type";
 import User from "@/models/user";
+import Form from "@/models/form";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
@@ -13,18 +14,26 @@ import axios from "axios";
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
+  const { item: id } = context.query;
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ owner: owner._id });
+  const form = await Form.findById(id).populate({
+    path: "inputs",
+    populate: {
+      path: "type",
+    },
+  });
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
       types: JSON.parse(JSON.stringify(types)),
+      form: JSON.parse(JSON.stringify(form)),
     },
   };
 }
 
-export default function Form({ types, owner }) {
+export default function Edit({ types, owner, form }) {
   const router = useRouter();
   const [dataObj, setDataObj] = useState({});
 
@@ -51,6 +60,7 @@ export default function Form({ types, owner }) {
             id={type._id}
             dataObj={dataObj}
             setDataObj={setDataObj}
+            initialValue={form}
           />
         </div>
       ))}

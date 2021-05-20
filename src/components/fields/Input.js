@@ -1,8 +1,23 @@
 import TextField from "@material-ui/core/TextField";
 import { useState, useEffect } from "react";
 
-export const Input = ({ name, type, id, dataObj, setDataObj }) => {
-  const [value, setValue] = useState("");
+export const Input = ({
+  name,
+  type,
+  id,
+  dataObj,
+  setDataObj,
+  initialValue,
+}) => {
+  const inputValue = () => {
+    for (let value of initialValue.inputs) {
+      if (value.type._id === id) {
+        return value.value;
+      }
+    }
+    return "";
+  };
+  const [value, setValue] = useState(inputValue());
 
   useEffect(() => {
     dataObj[id] = value;

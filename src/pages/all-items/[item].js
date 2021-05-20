@@ -9,10 +9,11 @@ import { CardItem } from "@/components/CardItem";
 
 export async function getServerSideProps(context) {
   dbConnect();
+  const { item: id } = context.query;
   const session = await getSession(context);
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const forms = await Form.find({ owner: owner._id }).populate({
+  const form = await Form.findById(id).populate({
     path: "inputs",
     populate: {
       path: "type",
@@ -21,20 +22,17 @@ export async function getServerSideProps(context) {
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
-      forms: JSON.parse(JSON.stringify(forms)),
+      form: JSON.parse(JSON.stringify(form)),
     },
   };
 }
 
-export default function allItems({ forms }) {
-
+export default function allItems({ form }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>
       <Grid container spacing={4}>
-        {forms.map((form) => (
-          <CardItem form={form} />
-        ))}
+        <CardItem form={form} />
       </Grid>
     </Container>
   );

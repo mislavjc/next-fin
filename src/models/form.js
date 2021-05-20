@@ -1,11 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import Field from "./field"
+import Input from "./input"
 
 const MODEL_NAME = "Form"
 
 const schema = new Schema({
   owner: String,
-  fields: [{ type: Schema.Types.ObjectId, ref: "Field" }],
+  fields: [{ type: Schema.Types.ObjectId, ref: "Input" }],
   attachments: [
     {
       url: String,

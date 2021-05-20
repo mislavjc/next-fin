@@ -1,5 +1,5 @@
 import User from "@/models/user";
-import FieldType from "@/models/fieldType";
+import Type from "@/models/type";
 import { dbConnect } from "@/middleware/db";
 
 const basicOptionsHandler = async (req, res) => {
@@ -13,8 +13,8 @@ const basicOptionsHandler = async (req, res) => {
         type: types[i.toString()],
         owner: user._id,
       };
-      const fieldType = new FieldType(field);
-      await fieldType.save();
+      const type = new Type(field);
+      await type.save();
     }
     res.status(201).json({ message: "all ok" });
   }

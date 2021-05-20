@@ -1,6 +1,6 @@
 import mongoose, { Schema } from "mongoose";
 
-const MODEL_NAME = "FieldType"
+const MODEL_NAME = "Type"
 
 const schema = new Schema({
   name: String,
@@ -15,4 +15,4 @@ const schema = new Schema({
 });
 
 export default mongoose.models[MODEL_NAME] ||
-  mongoose.model(MODEL_NAME, schema, "fieldTypes");
+  mongoose.model(MODEL_NAME, schema, "types");

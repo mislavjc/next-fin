@@ -3,22 +3,22 @@ import { useSession } from "next-auth/client";
 import { Input } from "@/components/fields/Input";
 import { dbConnect } from "@/middleware/db";
 import Container from "@material-ui/core/Container";
-import FieldType from "@/models/fieldType";
+import Type from "@/models/type";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import axios from "axios";
 
 export async function getServerSideProps(context) {
   dbConnect();
-  const fieldTypes = await FieldType.find({}).exec();
+  const types = await Type.find({}).exec();
   return {
     props: {
-      fieldTypes: JSON.parse(JSON.stringify(fieldTypes)),
+      types: JSON.parse(JSON.stringify(types)),
     },
   };
 }
 
-export default function Form({ fieldTypes }) {
+export default function Form({ types }) {
   const [session, loading] = useSession();
   const [dataObj, setDataObj] = useState({});
 
@@ -37,7 +37,7 @@ export default function Form({ fieldTypes }) {
   return (
     <Container maxWidth="sm">
       <Typography variant="h3">Unos</Typography>
-      {fieldTypes.map((field) => (
+      {types.map((field) => (
         <div style={{ marginBottom: "1rem" }} key={field._id}>
           <Input
             name={field.name}

@@ -12,7 +12,8 @@ export const Navbar = () => {
       <nav>
         <img src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
         <Link href="/">Naslovnica</Link>
-        <Link href="/setup">Aplikacija</Link>
+        <Link href="/form">Aplikacija</Link>
+        <Link href="/all-items">Svi</Link>
         <div className="account">
           {session && !loading ? (
             <div>

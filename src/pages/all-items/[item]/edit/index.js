@@ -44,10 +44,7 @@ export default function Edit({ types, owner, form }) {
       dataObj,
       form: form._id,
     };
-    axios
-      .put("/api/crud/edit", values)
-      .then((response) => console.log(response));
-    router.push("/all-items");
+    axios.put("/api/crud/edit", values).then(router.push("/all-items"));
   };
 
   return (

@@ -1,6 +1,3 @@
-import User from "@/models/user";
-import Type from "@/models/type";
-import Input from "@/models/input";
 import Form from "@/models/form";
 
 import { dbConnect } from "@/middleware/db";

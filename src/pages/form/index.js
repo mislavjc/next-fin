@@ -36,8 +36,7 @@ export default function Form({ types, owner }) {
     };
     axios
       .post("/api/crud/create", values)
-      .then((response) => console.log(response));
-    router.push("/all-items");
+      .then(router.push("/all-items"));
   };
 
   return (

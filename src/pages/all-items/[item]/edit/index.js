@@ -42,9 +42,10 @@ export default function Edit({ types, owner, form }) {
     const values = {
       currentUser,
       dataObj,
+      form: form._id,
     };
     axios
-      .post("/api/crud/create", values)
+      .put("/api/crud/edit", values)
       .then((response) => console.log(response));
     router.push("/all-items");
   };
@@ -72,6 +73,14 @@ export default function Edit({ types, owner, form }) {
         onClick={clickHandler}
       >
         Save
+      </Button>
+      <Button
+        onClick={() => router.back()}
+        variant="outlined"
+        color="secondary"
+        size="large"
+      >
+        Nazad
       </Button>
     </Container>
   );

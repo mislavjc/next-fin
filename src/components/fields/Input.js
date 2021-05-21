@@ -9,10 +9,12 @@ export const Input = ({
   setDataObj,
   initialValue,
 }) => {
+  let valueId = id;
   const inputValue = () => {
     if (initialValue) {
       for (let value of initialValue.inputs) {
         if (value.type._id === id) {
+          valueId = value._id
           return value.value;
         }
       }
@@ -22,7 +24,7 @@ export const Input = ({
   const [value, setValue] = useState(inputValue());
 
   useEffect(() => {
-    dataObj[id] = value;
+    dataObj[valueId] = value;
     setDataObj(dataObj);
   }, [value]);
 

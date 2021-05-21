@@ -33,6 +33,7 @@ export const CardItem = ({ form }) => {
           >
             Nazad
           </Button>
+          <Button onClick={() => router.push(`/all-items/${form._id}/edit`)} variant="outlined" color="primary">Promjeni</Button>
         </CardActions>
       </Card>
     </Grid>

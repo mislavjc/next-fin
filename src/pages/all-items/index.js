@@ -31,8 +31,8 @@ export default function allItems({ forms }) {
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>
       <Grid container spacing={4}>
-        {forms.map((form) => (
-          <CardItem form={form} />
+        {forms.map((form, index) => (
+          <CardItem form={form} key={index} />
         ))}
       </Grid>
     </Container>

@@ -14,10 +14,10 @@ export const CardItem = ({ form }) => {
 
   return (
     <Grid item xs={12} md={6} lg={4}>
-      <Card key={form._id}>
+      <Card>
         <CardContent>
           {form.inputs.map((input) => (
-            <Typography className="card-content" variant="p">
+            <Typography className="card-content" variant="body1" key={input._id}>
               {input.type.name}: {input.value}
             </Typography>
           ))}

@@ -10,9 +10,11 @@ export const Input = ({
   initialValue,
 }) => {
   const inputValue = () => {
-    for (let value of initialValue.inputs) {
-      if (value.type._id === id) {
-        return value.value;
+    if (initialValue) {
+      for (let value of initialValue.inputs) {
+        if (value.type._id === id) {
+          return value.value;
+        }
       }
     }
     return "";

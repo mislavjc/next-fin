@@ -32,7 +32,9 @@ export default function allItems({ forms }) {
       <Typography variant="h4">Unosi</Typography>
       <Grid container spacing={4}>
         {forms.map((form, index) => (
-          <CardItem form={form} key={index} />
+          <Grid item xs={12} md={6} lg={4}>
+            <CardItem form={form} key={index} />
+          </Grid>
         ))}
       </Grid>
     </Container>

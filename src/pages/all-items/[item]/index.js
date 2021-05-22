@@ -31,8 +31,10 @@ export default function allItems({ form }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>
-      <Grid container spacing={4}>
-        <CardItem form={form} />
+      <Grid container justify="center">
+        <Grid item xs={12} md={8} lg={6}>
+          <CardItem form={form} />
+        </Grid>
       </Grid>
     </Container>
   );

@@ -13,7 +13,10 @@ export const Type = ({ category, setTypeObj, typeObj }) => {
   }, [type]);
 
   return (
-    <FormControl variant="filled">
+    <FormControl
+      variant="filled"
+      style={{ minWidth: "10rem", marginLeft: "1rem" }}
+    >
       <InputLabel id={`labelid${category}`}>Tip</InputLabel>
       <Select
         value={type}

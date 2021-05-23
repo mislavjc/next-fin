@@ -8,7 +8,8 @@ import { Field } from "@/components/setup/Field";
 import { Type } from "@/components/setup/Type";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import axios from "axios";
-import { Container } from "@material-ui/core";
+import Container from "@material-ui/core/Container";
+import { ButtonGroup } from "@material-ui/core";
 
 const containerVariants = {
   hidden: {
@@ -104,32 +105,31 @@ export default function Setup({ session }) {
                     <Typography variant="h6">
                       Kategorija {category + 2}
                     </Typography>
-                    <Field
-                      category={index}
-                      setNameObj={setNameObj}
-                      nameObj={nameObj}
-                    />
-                    <Type
-                      category={index}
-                      setTypeObj={setTypeObj}
-                      typeObj={typeObj}
-                    />
-                    <Button
-                      color="primary"
-                      variant="contained"
-                      onClick={() => removeHandler(index)}
-                    >
-                      Remove
-                    </Button>
-                    {index === arr.length - 1 && count < 4 && (
-                      <Button
-                        color="primary"
-                        variant="outlined"
-                        style={{ marginTop: "0.5rem", display: "block" }}
-                        onClick={() => setCount(count + 1)}
-                      >
-                        +
-                      </Button>
+                    <div style={{ display: "flex" }}>
+                      <Field
+                        category={index}
+                        setNameObj={setNameObj}
+                        nameObj={nameObj}
+                      />
+                      <Type
+                        category={index}
+                        setTypeObj={setTypeObj}
+                        typeObj={typeObj}
+                      />
+                    </div>
+                    {index === arr.length - 1 && (
+                      <div style={{ marginTop: "0.5rem" }}>
+                        <ButtonGroup color="primary" variant="outlined">
+                          {count < 4 && (
+                            <Button onClick={() => setCount(count + 1)}>
+                              +
+                            </Button>
+                          )}
+                          <Button onClick={() => removeHandler(index)}>
+                            -
+                          </Button>
+                        </ButtonGroup>
+                      </div>
                     )}
                   </motion.div>
                 ))}

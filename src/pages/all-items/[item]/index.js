@@ -11,6 +11,16 @@ export async function getServerSideProps(context) {
   dbConnect();
   const { item: id } = context.query;
   const session = await getSession(context);
+  if (!session) {
+    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.end();
+    return {
+      props: {
+        owner: false,
+        form: false,
+      },
+    };
+  }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const form = await Form.findById(id).populate({
@@ -19,6 +29,16 @@ export async function getServerSideProps(context) {
       path: "type",
     },
   });
+  if (form.owner !== owner) {
+    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.end();
+    return {
+      props: {
+        owner: false,
+        form: false,
+      },
+    };
+  }
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),

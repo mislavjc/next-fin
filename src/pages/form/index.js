@@ -13,6 +13,16 @@ import axios from "axios";
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
+  if (!session) {
+    context.res.writeHead(302, {Location: "/api/auth/signin"});
+    context.res.end();
+    return {
+      props: {
+        owner: false,
+        types: false,
+      }
+    };
+  }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ owner: owner._id });

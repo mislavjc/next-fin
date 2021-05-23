@@ -6,6 +6,22 @@ import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { CardItem } from "@/components/CardItem";
+import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+
+const cardVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.1,
+    },
+  },
+};
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -31,11 +47,23 @@ export default function allItems({ forms }) {
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>
       <Grid container spacing={4}>
-        {forms.map((form, index) => (
-          <Grid item xs={12} md={6} lg={4}>
-            <CardItem form={form} key={index} />
-          </Grid>
-        ))}
+        <AnimateSharedLayout>
+          <AnimatePresence>
+            {forms.map((form) => (
+              <Grid item xs={12} md={6} lg={4} key={form._id}>
+                <motion.div
+                  variants={cardVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  layoutId={form._id}
+                >
+                  <CardItem form={form} />
+                </motion.div>
+              </Grid>
+            ))}
+          </AnimatePresence>
+        </AnimateSharedLayout>
       </Grid>
     </Container>
   );

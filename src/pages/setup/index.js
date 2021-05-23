@@ -1,23 +1,155 @@
-import { BasicOptions } from "@/components/setup/BasicOptions";
 import Grid from "@material-ui/core/Grid";
-import { useSession } from "next-auth/client";
-import { useEffect } from "react";
+import { getSession } from "next-auth/client";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/router";
+import Button from "@material-ui/core/Button";
+import Typography from "@material-ui/core/Typography";
+import { Field } from "@/components/setup/Field";
+import { Type } from "@/components/setup/Type";
+import { motion, AnimateSharedLayout } from "framer-motion";
+import axios from "axios";
+import { Container } from "@material-ui/core";
 
-export default function Setup() {
-  const [session, loading] = useSession();
-  const router = useRouter();
+const containerVariants = {
+  hidden: {
+    y: 50,
+  },
+  visible: {
+    y: 0,
+    transition: {
+      type: "spring",
+      stiffness: 100,
+      delayChildren: 0.5,
+    },
+  },
+};
+
+const inputVariants = {
+  hidden: {
+    y: 50,
+    opacity: 0,
+  },
+  visible: {
+    y: 0,
+    opacity: 1,
+    transition: {
+      type: "tween",
+      stiffness: 100,
+    },
+  },
+};
+
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+
+  return {
+    props: {
+      session,
+    },
+  };
+}
+export default function Setup({ session }) {
   useEffect(() => {
-    if (!session && !loading) {
+    if (!session) {
       router.push("/api/auth/signin");
     }
-  }, [session, loading]);
+  }, [session]);
+
+  const [count, setCount] = useState(0);
+  const router = useRouter();
+  const [nameObj, setNameObj] = useState({});
+  const [typeObj, setTypeObj] = useState({});
+  const [arr, setArr] = useState([]);
+
+  const removeHandler = (index) => {
+    delete nameObj[index];
+    delete typeObj[index];
+    setCount(count - 1);
+  };
+
+  const clickHandler = (e) => {
+    const currentUser = session.user;
+    e.preventDefault();
+    const values = {
+      currentUser,
+      names: nameObj,
+      types: typeObj,
+    };
+    axios.post("/api/basic-options", values).then(router.push("/form"));
+  };
+  const categoryArr = [-1];
+  useEffect(() => {
+    if (count < 5) {
+      for (let i = 0; i < count; i++) {
+        categoryArr.push(i);
+      }
+      setArr(categoryArr);
+    }
+  }, [count]);
 
   return (
-    <div className="container">
-      <Grid item xs={12} md={6}>
-        <BasicOptions />
-      </Grid>
-    </div>
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
+      <Container maxWidth="sm">
+        <Grid item xs={12}>
+          <form>
+            <div>
+              <AnimateSharedLayout>
+                {arr.map((category, index) => (
+                  <motion.div
+                    variants={inputVariants}
+                    style={{ marginTop: "1rem" }}
+                    key={category}
+                    layoutId={index}
+                  >
+                    <Typography variant="h6">
+                      Kategorija {category + 2}
+                    </Typography>
+                    <Field
+                      category={index}
+                      setNameObj={setNameObj}
+                      nameObj={nameObj}
+                    />
+                    <Type
+                      category={index}
+                      setTypeObj={setTypeObj}
+                      typeObj={typeObj}
+                    />
+                    <Button
+                      color="primary"
+                      variant="contained"
+                      onClick={() => removeHandler(index)}
+                    >
+                      Remove
+                    </Button>
+                    {index === arr.length - 1 && count < 4 && (
+                      <Button
+                        color="primary"
+                        variant="outlined"
+                        style={{ marginTop: "0.5rem", display: "block" }}
+                        onClick={() => setCount(count + 1)}
+                      >
+                        +
+                      </Button>
+                    )}
+                  </motion.div>
+                ))}
+                <motion.div layoutId={21}>
+                  <Button
+                    style={{ marginTop: "1rem" }}
+                    color="primary"
+                    variant="contained"
+                    type="submit"
+                    onClick={clickHandler}
+                    disableElevation
+                  >
+                    Submit
+                  </Button>
+                </motion.div>
+              </AnimateSharedLayout>
+            </div>
+          </form>
+        </Grid>
+      </Container>
+    </motion.div>
   );
 }

@@ -1,7 +1,7 @@
 import Head from "next/head";
 import { Provider } from "next-auth/client";
 import "@/css/main.min.css";
-import { Navbar } from "@/components/setup/Navbar";
+import { Navbar } from "@/components/Navbar";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { deepPurple } from "@material-ui/core/colors";
 

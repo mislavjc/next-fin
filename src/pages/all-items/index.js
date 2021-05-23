@@ -11,10 +11,15 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 const cardVariants = {
   hidden: {
     opacity: 0,
+    y: -50,
   },
-  visible: {
+  visible: (index) => ({
     opacity: 1,
-  },
+    y: 0,
+    transition: {
+      delay: index * 0.01,
+    },
+  }),
   exit: {
     opacity: 0,
     transition: {
@@ -49,13 +54,14 @@ export default function allItems({ forms }) {
       <Grid container spacing={4}>
         <AnimateSharedLayout>
           <AnimatePresence>
-            {forms.map((form) => (
+            {forms.map((form, index) => (
               <Grid item xs={12} md={6} lg={4} key={form._id}>
                 <motion.div
                   variants={cardVariants}
                   initial="hidden"
                   animate="visible"
                   exit="exit"
+                  custom={index}
                   layoutId={form._id}
                 >
                   <CardItem form={form} />

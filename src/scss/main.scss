@@ -33,8 +33,13 @@ nav {
   font-size: 1.2rem;
   max-width: 1200px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
+  .logo {
+    display: none;
+  }
+  div {
+    display: flex;
+    align-items: center;
+  }
   a {
     padding: 1rem 0;
     color: black;
@@ -47,6 +52,33 @@ nav {
   .account {
     margin-left: auto;
   }
+  .nav-menu {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  nav {
+    div {
+      display: none;
+    }
+    display: flex;
+    align-items: center;
+    .logo {
+      display: block;
+    }
+    .nav-menu {
+      display: block;
+    }
+  }
+  .landing-text {
+    h1 {
+      font-size: 2.5rem;
+    }
+    h2 {
+      font-size: 1.5rem;
+    }
+  }
 }
 
 .container {
@@ -58,4 +90,32 @@ nav {
 .card-content {
   display: block;
   border-bottom: 1px solid rgb(170, 170, 170);
+}
+
+h1 {
+  font-weight: 700;
+}
+
+.landing-text {
+  max-width: 800px;
+  margin: 5rem auto;
+  h1 {
+    font-weight: 700;
+  }
+  h2 {
+    margin-top: 1rem;
+    font-weight: 300;
+  }
+  button {
+    margin: 0 auto;
+  }
+  a {
+    text-decoration: none;
+    color: white;
+  }
+}
+
+.container-bg {
+  background-color: rgba(255, 255, 255, 0.555);
+  border: 1px solid black;
 }

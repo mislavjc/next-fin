@@ -3,15 +3,15 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
-export const Type = ({ category, value, onChange }) => {
+export const Dropdown = ({ category, value, onChange }) => {
   return (
     <FormControl
       variant="filled"
       style={{ minWidth: "10rem", marginLeft: "1rem" }}
     >
-      <InputLabel id={`labelid${category}`}>Tip</InputLabel>
+      <InputLabel id={`labelid`}>Tip</InputLabel>
       <Select
-        value={value ? value : ''}
+        value={value}
         onChange={(e) => onChange(e.target.value)}
         labelId={`labelid${category}`}
         id={`id${category}`}

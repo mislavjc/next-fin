@@ -6,10 +6,11 @@ import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { Field } from "@/components/setup/Field";
 import { Type } from "@/components/setup/Type";
+import { Additional } from "@/components/setup/Additional";
 import { motion, AnimateSharedLayout } from "framer-motion";
 import axios from "axios";
 import Container from "@material-ui/core/Container";
-import { ButtonGroup } from "@material-ui/core";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 const containerVariants = {
   hidden: {
@@ -69,6 +70,7 @@ export default function Setup({ session }) {
   const router = useRouter();
   const [nameObj, setNameObj] = useState({});
   const [typeObj, setTypeObj] = useState({});
+  const [additionalObj, setAdditionalObj] = useState({});
   const [arr, setArr] = useState([]);
 
   const removeHandler = (index) => {
@@ -84,6 +86,7 @@ export default function Setup({ session }) {
       currentUser,
       names: nameObj,
       types: typeObj,
+      additional: additionalObj,
     };
     axios.post("/api/basic-options", values).then(router.push("/form"));
   };
@@ -122,10 +125,27 @@ export default function Setup({ session }) {
                       />
                       <Type
                         category={index}
-                        setTypeObj={setTypeObj}
-                        typeObj={typeObj}
+                        value={typeObj[index]}
+                        onChange={(val) => {
+                          setTypeObj({
+                            ...typeObj,
+                            [index]: val,
+                          });
+                        }}
                       />
                     </div>
+                    {typeObj[index] == "dropdown" && (
+                      <motion.div
+                        style={{ marginTop: "1rem", marginLeft: "0" }}
+                        variants={inputVariants}
+                      >
+                        <Additional
+                          category={index}
+                          setAdditionalObj={setAdditionalObj}
+                          additionalObj={additionalObj}
+                        />
+                      </motion.div>
+                    )}
                     {index === arr.length - 1 && (
                       <div style={{ marginTop: "0.5rem" }}>
                         <ButtonGroup color="primary" variant="outlined">

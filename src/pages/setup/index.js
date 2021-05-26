@@ -76,6 +76,7 @@ export default function Setup({ session }) {
   const removeHandler = (index) => {
     delete nameObj[index];
     delete typeObj[index];
+    delete additionalObj[index];
     setCount(count - 1);
   };
 

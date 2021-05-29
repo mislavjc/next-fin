@@ -1,10 +1,14 @@
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import { useRouter } from "next/router";
 import axios from "axios";
+import DeleteIcon from "@material-ui/icons/Delete";
+import EditIcon from "@material-ui/icons/Edit";
+import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 
 export const CardItem = ({ form }) => {
   const router = useRouter();
@@ -18,33 +22,31 @@ export const CardItem = ({ form }) => {
   };
 
   return (
-      <Card>
-        <CardContent>
-          {form.inputs.map((input) => (
-            <Typography
-              className="card-content"
-              variant="body1"
-              key={input._id}
-            >
-              {input.type.name}: {input.value}
-            </Typography>
-          ))}
-        </CardContent>
-        <CardActions>
-          <Button onClick={clickHandler} variant="contained" color="primary">
-            Više
-          </Button>
-          <Button
-            onClick={() => router.push(`/all-items/${form._id}/edit`)}
-            variant="outlined"
-            color="primary"
-          >
-            Promjeni
-          </Button>
-          <Button onClick={deleteHandler} variant="contained" color="secondary">
-            Obriši
-          </Button>
-        </CardActions>
-      </Card>
+    <Card>
+      <CardContent>
+        {form.inputs.map((input) => (
+          <Typography className="card-content" variant="body1" key={input._id}>
+            {input.type.name}: {input.value}
+          </Typography>
+        ))}
+      </CardContent>
+      <CardActions>
+        {router.pathname === "/all-items/[item]" ? (
+          <IconButton onClick={() => router.back()}>
+            <KeyboardBackspaceIcon />
+          </IconButton>
+        ) : (
+          <IconButton onClick={clickHandler}>
+            <MoreHorizIcon />
+          </IconButton>
+        )}
+        <IconButton onClick={() => router.push(`/all-items/${form._id}/edit`)}>
+          <EditIcon />
+        </IconButton>
+        <IconButton style={{ marginLeft: "auto" }} onClick={deleteHandler}>
+          <DeleteIcon />
+        </IconButton>
+      </CardActions>
+    </Card>
   );
 };

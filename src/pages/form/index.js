@@ -7,20 +7,21 @@ import Container from "@material-ui/core/Container";
 import Type from "@/models/type";
 import User from "@/models/user";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import axios from "axios";
+import SaveIcon from "@material-ui/icons/Save";
+import IconButton from "@material-ui/core/IconButton";
 
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, {Location: "/api/auth/signin"});
+    context.res.writeHead(302, { Location: "/api/auth/signin" });
     context.res.end();
     return {
       props: {
         owner: false,
         types: false,
-      }
+      },
     };
   }
   const { user } = session;
@@ -44,9 +45,7 @@ export default function Form({ types, owner }) {
       currentUser,
       dataObj,
     };
-    axios
-      .post("/api/crud/create", values)
-      .then(router.push("/all-items"));
+    axios.post("/api/crud/create", values).then(router.push("/all-items"));
   };
 
   return (
@@ -64,15 +63,9 @@ export default function Form({ types, owner }) {
           />
         </div>
       ))}
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        size="large"
-        onClick={clickHandler}
-      >
-        Save
-      </Button>
+      <IconButton onClick={clickHandler} style={{ float: "right" }}>
+        <SaveIcon />
+      </IconButton>
     </Container>
   );
 }

@@ -8,8 +8,11 @@ import Type from "@/models/type";
 import User from "@/models/user";
 import Form from "@/models/form";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import axios from "axios";
+import SaveIcon from '@material-ui/icons/Save';
+import IconButton from "@material-ui/core/IconButton";
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -80,26 +83,21 @@ export default function Edit({ types, owner, form }) {
             dataObj={dataObj}
             setDataObj={setDataObj}
             initialValue={form}
+            additional={type.additional || null}
           />
         </div>
       ))}
-      <Button
-        variant="contained"
-        color="primary"
-        type="submit"
-        size="large"
-        onClick={clickHandler}
-      >
-        Save
-      </Button>
-      <Button
+      <IconButton
         onClick={() => router.back()}
-        variant="outlined"
-        color="secondary"
-        size="large"
       >
-        Nazad
-      </Button>
+        <KeyboardBackspaceIcon />
+      </IconButton>
+      <IconButton
+        onClick={clickHandler}
+        style={{float: "right"}}
+      >
+        <SaveIcon />
+      </IconButton>
     </Container>
   );
 }

@@ -26,7 +26,7 @@ const createHandler = async (req, res) => {
       owner: user.id,
     });
     await form.save();
-    res.status(201).json({ message: "all ok" });
+    await res.status(201).json({ message: "all ok" });
   }
 };
 

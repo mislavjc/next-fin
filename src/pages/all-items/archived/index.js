@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const forms = await Form.find({ owner: owner._id, archived: false }).populate({
+  const forms = await Form.find({ owner: owner._id, archived: true }).populate({
     path: "inputs",
     populate: {
       path: "type",
@@ -60,7 +60,7 @@ export async function getServerSideProps(context) {
 export default function allItems({ forms }) {
   return (
     <Container maxWidth="lg">
-      <Typography variant="h4" align="center">Unosi</Typography>
+      <Typography variant="h4" align="center">Arhivirani unosi</Typography>
       <Grid container spacing={4}>
         <AnimateSharedLayout>
           <AnimatePresence>

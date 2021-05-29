@@ -13,6 +13,10 @@ const schema = new Schema({
       size: Number,
     },
   ],
+  archived: {
+    type: Boolean,
+    default: false,
+  }
 });
 
 export default mongoose.models[MODEL_NAME] ||

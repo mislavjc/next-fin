@@ -7,7 +7,7 @@ const deleteHandler = async (req, res) => {
   if (req.method === "DELETE") {
     const { delete: id } = req.query;
     await Form.findByIdAndDelete(id);
-    res.status(201).json({ message: "all ok" });
+    await res.status(201).json({ message: "all ok" });
   }
 };
 

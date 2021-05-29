@@ -21,7 +21,7 @@ const editHandler = async (req, res) => {
       await input.save();
     }
     await form.save();
-    res.status(201).json({ message: "all ok" });
+    await res.status(201).json({ message: "all ok" });
   }
 };
 

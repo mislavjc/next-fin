@@ -8,16 +8,23 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import MoreHorizIcon from "@material-ui/icons/MoreHoriz";
 import IconButton from "@material-ui/core/IconButton";
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
+import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
+import ArchiveIcon from "@material-ui/icons/Archive";
+import UnarchiveIcon from "@material-ui/icons/Unarchive";
 
 export const CardItem = ({ form }) => {
   const router = useRouter();
+  const id = form._id;
   const clickHandler = () => {
     router.push(`/all-items/${form._id}`);
   };
+  const archiveHandler = () => {
+    axios.get(`/api/archive/${id}`).then(router.push("/all-items"));
+  };
+  const unArchiveHandler = () => {
+    axios.post(`/api/archive/${id}`).then(router.push("/all-items/archived"));
+  }
   const deleteHandler = () => {
-    const id = form._id;
-    console.log(id);
     axios.delete(`/api/crud/${id}`).then(router.push("/all-items"));
   };
 
@@ -43,9 +50,20 @@ export const CardItem = ({ form }) => {
         <IconButton onClick={() => router.push(`/all-items/${form._id}/edit`)}>
           <EditIcon />
         </IconButton>
-        <IconButton style={{ marginLeft: "auto" }} onClick={deleteHandler}>
-          <DeleteIcon />
-        </IconButton>
+        <span style={{ marginLeft: "auto" }}>
+          {form.archived ? (
+            <IconButton onClick={unArchiveHandler}>
+              <UnarchiveIcon />
+            </IconButton>
+          ) : (
+            <IconButton onClick={archiveHandler}>
+              <ArchiveIcon />
+            </IconButton>
+          )}
+          <IconButton onClick={deleteHandler}>
+            <DeleteIcon />
+          </IconButton>
+        </span>
       </CardActions>
     </Card>
   );

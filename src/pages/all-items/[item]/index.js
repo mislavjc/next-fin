@@ -29,7 +29,7 @@ export async function getServerSideProps(context) {
       path: "type",
     },
   });
-  if (form.owner !== owner) {
+  if (JSON.stringify(form.owner) !== JSON.stringify(owner.id)) {
     context.res.writeHead(302, { Location: "/api/auth/signin" });
     context.res.end();
     return {
@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function allItems({ form }) {
+export default function Item({ form }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>

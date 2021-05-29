@@ -35,6 +35,16 @@ export async function getServerSideProps(context) {
       path: "type",
     },
   });
+  if (JSON.stringify(form.owner) !== JSON.stringify(owner.id)) {
+    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.end();
+    return {
+      props: {
+        owner: false,
+        form: false,
+      },
+    };
+  }
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),

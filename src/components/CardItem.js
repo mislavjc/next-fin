@@ -35,13 +35,6 @@ export const CardItem = ({ form }) => {
             Više
           </Button>
           <Button
-            onClick={() => router.back()}
-            variant="outlined"
-            color="secondary"
-          >
-            Nazad
-          </Button>
-          <Button
             onClick={() => router.push(`/all-items/${form._id}/edit`)}
             variant="outlined"
             color="primary"

@@ -60,6 +60,7 @@ export default function Form({ types, owner }) {
             id={type._id}
             dataObj={dataObj}
             setDataObj={setDataObj}
+            additional={type.additional || null}
           />
         </div>
       ))}

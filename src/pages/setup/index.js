@@ -60,12 +60,6 @@ export async function getServerSideProps(context) {
   };
 }
 export default function Setup({ session }) {
-  useEffect(() => {
-    if (!session) {
-      router.push("/api/auth/signin");
-    }
-  }, [session]);
-
   const [count, setCount] = useState(0);
   const router = useRouter();
   const [nameObj, setNameObj] = useState({});

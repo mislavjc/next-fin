@@ -57,7 +57,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function allItems({ forms }) {
+export default function archivedItems({ forms }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" align="center">Arhivirani unosi</Typography>

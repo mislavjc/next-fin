@@ -119,3 +119,10 @@ h1 {
   background-color: rgba(255, 255, 255, 0.555);
   border: 1px solid black;
 }
+
+.fab-form {
+  position: absolute;
+  left: calc(50% - 300px);
+  top: 33%;
+  width: 600px;
+}

@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
+import Tooltip from "@material-ui/core/Tooltip";
 
 export const CardItem = ({ form }) => {
   const router = useRouter();
@@ -23,7 +24,7 @@ export const CardItem = ({ form }) => {
   };
   const unArchiveHandler = () => {
     axios.post(`/api/archive/${id}`).then(router.push("/all-items/archived"));
-  }
+  };
   const deleteHandler = () => {
     axios.delete(`/api/crud/${id}`).then(router.push("/all-items"));
   };
@@ -39,30 +40,44 @@ export const CardItem = ({ form }) => {
       </CardContent>
       <CardActions>
         {router.pathname === "/all-items/[item]" ? (
-          <IconButton onClick={() => router.back()}>
-            <KeyboardBackspaceIcon />
-          </IconButton>
+          <Tooltip title="Nazad">
+            <IconButton onClick={() => router.back()}>
+              <KeyboardBackspaceIcon />
+            </IconButton>
+          </Tooltip>
         ) : (
-          <IconButton onClick={clickHandler}>
-            <MoreHorizIcon />
-          </IconButton>
+          <Tooltip title="Više">
+            <IconButton onClick={clickHandler}>
+              <MoreHorizIcon />
+            </IconButton>
+          </Tooltip>
         )}
-        <IconButton onClick={() => router.push(`/all-items/${form._id}/edit`)}>
-          <EditIcon />
-        </IconButton>
+        <Tooltip title="Promjeni">
+          <IconButton
+            onClick={() => router.push(`/all-items/${form._id}/edit`)}
+          >
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
         <span style={{ marginLeft: "auto" }}>
           {form.archived ? (
-            <IconButton onClick={unArchiveHandler}>
-              <UnarchiveIcon />
-            </IconButton>
+            <Tooltip title="Vrati iz arhiva">
+              <IconButton onClick={unArchiveHandler}>
+                <UnarchiveIcon />
+              </IconButton>
+            </Tooltip>
           ) : (
-            <IconButton onClick={archiveHandler}>
-              <ArchiveIcon />
-            </IconButton>
+            <Tooltip title="Arhiviraj">
+              <IconButton onClick={archiveHandler}>
+                <ArchiveIcon />
+              </IconButton>
+            </Tooltip>
           )}
-          <IconButton onClick={deleteHandler}>
-            <DeleteIcon />
-          </IconButton>
+          <Tooltip title="Obriši">
+            <IconButton onClick={deleteHandler}>
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
         </span>
       </CardActions>
     </Card>

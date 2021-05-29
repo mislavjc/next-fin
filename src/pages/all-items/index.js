@@ -19,6 +19,7 @@ import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
 import Tooltip from "@material-ui/core/Tooltip";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const cardVariants = {
   hidden: {
@@ -90,6 +91,7 @@ export default function allItems({ owner, types, forms }) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [dataObj, setDataObj] = useState({});
+  const [open, setOpen] = useState(false);
 
   const clickHandler = () => {
     setShowForm(false);
@@ -98,7 +100,18 @@ export default function allItems({ owner, types, forms }) {
       currentUser,
       dataObj,
     };
-    axios.post("/api/crud/create", values).then(router.push("/all-items"));
+    axios
+      .post("/api/crud/create", values)
+      .then(router.push("/all-items"))
+      .then(setOpen(true));
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
   };
 
   return (
@@ -107,6 +120,18 @@ export default function allItems({ owner, types, forms }) {
         <Typography variant="h4" align="center">
           Unosi
         </Typography>
+        {!forms.length && !showForm && (
+          <div
+            style={{
+              height: "80vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Typography variant="h2">Dodajte unos pritiskom na plus</Typography>
+          </div>
+        )}
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>
@@ -175,6 +200,26 @@ export default function allItems({ owner, types, forms }) {
           </motion.div>
         )}
       </AnimatePresence>
+      <Snackbar
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Dodan unos!"
+        action={
+          <IconButton
+            size="small"
+            aria-label="close"
+            color="inherit"
+            onClick={handleClose}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        }
+      />
     </div>
   );
 }

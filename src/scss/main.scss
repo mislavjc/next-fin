@@ -1,3 +1,26 @@
+html {
+  scroll-behavior: smooth;
+  --scrollbarBG: #cfd8dc;
+  --thumbBG: #90a4ae;
+}
+
+body::-webkit-scrollbar {
+  width: 11px;
+}
+body {
+  scrollbar-width: thin;
+  scrollbar-color: var(--thumbBG) var(--scrollbarBG);
+  text-decoration: none;
+}
+body::-webkit-scrollbar-track {
+  background: var(--scrollbarBG);
+}
+body::-webkit-scrollbar-thumb {
+  background-color: var(--thumbBG);
+  border-radius: 6px;
+  border: 3px solid var(--scrollbarBG);
+}
+
 body {
   font-family: "Inter";
   font-weight: 400;
@@ -113,4 +136,18 @@ h1 {
   top: 150px;
   width: 600px;
   z-index: 10;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  div {
+    margin-right: 0.5rem;
+  }
+  .search {
+    margin-left: auto;
+    flex-grow: 2;
+  }
+  margin: 1rem 0;
 }

@@ -13,6 +13,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
+import Typography from "@material-ui/core/Typography";
+import { Toolbar } from "@/components/Toolbar";
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -76,6 +78,8 @@ export default function StickyHeadTable({ forms }) {
 
   return (
     <Container maxWidth="lg">
+      <Typography variant="h4" align="center">Tablični prikaz</Typography>
+      <Toolbar />
       <Paper>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">

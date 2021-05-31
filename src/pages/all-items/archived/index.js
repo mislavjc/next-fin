@@ -7,6 +7,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import { CardItem } from "@/components/CardItem";
 import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
+import { Toolbar } from "@/components/Toolbar";
 
 const cardVariants = {
   hidden: {
@@ -61,6 +62,7 @@ export default function archivedItems({ forms }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4" align="center">Arhivirani unosi</Typography>
+      <Toolbar />
       <Grid container spacing={4}>
         <AnimateSharedLayout>
           <AnimatePresence>

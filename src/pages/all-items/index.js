@@ -21,8 +21,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Snackbar from "@material-ui/core/Snackbar";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
-
+import { Toolbar } from "@/components/Toolbar";
 
 const cardVariants = {
   hidden: {
@@ -123,6 +122,7 @@ export default function allItems({ owner, types, forms }) {
         <Typography variant="h4" align="center">
           Unosi
         </Typography>
+        <Toolbar /> 
         {!forms.length && !showForm && (
           <div
             style={{
@@ -204,14 +204,19 @@ export default function allItems({ owner, types, forms }) {
                   />
                 </div>
               ))}
-              <Button onClick={clickHandler} variant="contained" size="large" color="primary">
+              <Button
+                onClick={clickHandler}
+                variant="contained"
+                size="large"
+                color="primary"
+              >
                 Spremi
               </Button>
             </Paper>
           </motion.div>
         )}
       </AnimatePresence>
-      <Backdrop style={{color: "#fff", zIndex: 9}} open={showForm} />
+      <Backdrop style={{ color: "#fff", zIndex: 9 }} open={showForm} />
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",

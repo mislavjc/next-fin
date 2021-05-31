@@ -13,13 +13,13 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import Fab from "@material-ui/core/Fab";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
-import SaveIcon from "@material-ui/icons/Save";
 import { useState } from "react";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
 import Tooltip from "@material-ui/core/Tooltip";
 import Snackbar from "@material-ui/core/Snackbar";
+import { Button } from "@material-ui/core";
 
 const cardVariants = {
   hidden: {
@@ -174,6 +174,21 @@ export default function allItems({ owner, types, forms }) {
             layoutId={"form-fab"}
           >
             <Paper style={{ padding: "1rem" }}>
+              <div style={{ display: "flex" }}>
+                <Typography variant="h5">Novi unos</Typography>
+                <Tooltip title="Zatvori">
+                  <IconButton
+                    style={{
+                      position: "relative",
+                      top: "-8px",
+                      marginLeft: "auto",
+                    }}
+                    onClick={() => setShowForm(false)}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
               {types.map((type) => (
                 <div style={{ marginBottom: "1rem" }} key={type._id}>
                   <Input
@@ -186,16 +201,9 @@ export default function allItems({ owner, types, forms }) {
                   />
                 </div>
               ))}
-              <Tooltip title="Zatvori">
-                <IconButton onClick={() => setShowForm(false)}>
-                  <CloseIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title="Spremi">
-                <IconButton onClick={clickHandler} style={{ float: "right" }}>
-                  <SaveIcon />
-                </IconButton>
-              </Tooltip>
+              <Button onClick={clickHandler} variant="contained" size="large" color="primary">
+                Spremi
+              </Button>
             </Paper>
           </motion.div>
         )}

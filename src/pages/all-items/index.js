@@ -19,7 +19,10 @@ import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
 import Tooltip from "@material-ui/core/Tooltip";
 import Snackbar from "@material-ui/core/Snackbar";
-import { Button } from "@material-ui/core";
+import Backdrop from "@material-ui/core/Backdrop";
+import Button from "@material-ui/core/Button";
+import { makeStyles } from "@material-ui/core/styles";
+
 
 const cardVariants = {
   hidden: {
@@ -208,6 +211,7 @@ export default function allItems({ owner, types, forms }) {
           </motion.div>
         )}
       </AnimatePresence>
+      <Backdrop style={{color: "#fff", zIndex: 9}} open={showForm} />
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",

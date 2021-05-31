@@ -110,6 +110,7 @@ h1 {
 .fab-form {
   position: absolute;
   left: calc(50% - 300px);
-  top: 200px;
+  top: 150px;
   width: 600px;
+  z-index: 10;
 }

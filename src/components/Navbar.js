@@ -13,7 +13,7 @@ import ListItemAvatar from "@material-ui/core/ListItemAvatar";
 import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-
+import GetAppIcon from "@material-ui/icons/GetApp";
 
 export const Navbar = () => {
   const [session, loading] = useSession();
@@ -35,87 +35,99 @@ export const Navbar = () => {
   }, [session]);
 
   return (
-    <>
-      <nav>
-        <img
-          className="logo"
-          src="/icons/logo.svg"
-          alt="logo"
-          width="40px"
-          height="40px"
-        />
-        <div>
-          <img src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
-          <div className="account">
-            {session && !loading ? (
-              <div>
-                <IconButton
-                  aria-label="account of current user"
-                  color="inherit"
-                  onClick={handleClick}
-                >
-                  <Avatar>{name}</Avatar>
-                </IconButton>
-                <Menu
-                  id="simple-menu"
-                  anchorEl={anchorEl}
-                  keepMounted
-                  open={Boolean(anchorEl)}
-                  onClose={handleClose}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "left",
-                  }}
-                  transformOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right",
-                  }}
-                >
-                  <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
-                    <Link href="/">
-                      <ListItem onClick={handleClose}>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <AccountCircleIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText primary="Račun" />
-                      </ListItem>
-                    </Link>
-                    <Divider variant="inset" component="li" />
-                    <Link href="/">
-                      <ListItem>
-                        <ListItemAvatar onClick={handleClose}>
-                          <Avatar>
-                            <SupervisorAccountIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary="Više računa"
-                          secondary="Dodajte račune"
-                        />
-                      </ListItem>
-                    </Link>
-                    <Divider variant="inset" component="li" />
-                    <ListItem onClick={signOut}>
+    <nav>
+      <img
+        className="logo"
+        src="/icons/logo.svg"
+        alt="logo"
+        width="40px"
+        height="40px"
+      />
+      <div>
+        <img src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
+        <div className="account">
+          {session && !loading ? (
+            <div>
+              <IconButton
+                aria-label="account of current user"
+                color="inherit"
+                onClick={handleClick}
+              >
+                <Avatar>{name}</Avatar>
+              </IconButton>
+              <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "bottom",
+                  horizontal: "right",
+                }}
+              >
+                <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
+                  <Link href="/">
+                    <ListItem onClick={handleClose}>
                       <ListItemAvatar>
                         <Avatar>
-                          <MeetingRoomIcon />
+                          <AccountCircleIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Odjava" />
+                      <ListItemText primary="Račun" />
                     </ListItem>
-                  </List>
-                </Menu>
-              </div>
-            ) : (
-              <Button variant="outlined" className="btn" onClick={signIn}>
-                Sign in
-              </Button>
-            )}
-          </div>
+                  </Link>
+                  <Divider variant="inset" component="li" />
+                  <Link href="/">
+                    <ListItem>
+                      <ListItemAvatar onClick={handleClose}>
+                        <Avatar>
+                          <SupervisorAccountIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Više računa"
+                        secondary="Dodajte račune"
+                      />
+                    </ListItem>
+                  </Link>
+                  <Divider variant="inset" component="li" />
+                  <Link href="/">
+                    <ListItem>
+                      <ListItemAvatar onClick={handleClose}>
+                        <Avatar>
+                          <GetAppIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary="Eksport podataka"
+                        secondary="Skinite sve unose"
+                      />
+                    </ListItem>
+                  </Link>
+                  <Divider variant="inset" component="li" />
+                  <ListItem onClick={signOut}>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <MeetingRoomIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary="Odjava" />
+                  </ListItem>
+                </List>
+              </Menu>
+            </div>
+          ) : (
+            <Button variant="outlined" className="btn" onClick={signIn}>
+              Sign in
+            </Button>
+          )}
         </div>
-      </nav>
-    </>
+      </div>
+    </nav>
   );
 };

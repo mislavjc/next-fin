@@ -1,16 +1,24 @@
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
-import AccountCircle from "@material-ui/icons/AccountCircle";
 import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuIcon from "@material-ui/icons/Menu";
+import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
+import AccountCircleIcon from "@material-ui/icons/AccountCircle";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import Avatar from "@material-ui/core/Avatar";
+import Divider from "@material-ui/core/Divider";
+import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+
 
 export const Navbar = () => {
   const [session, loading] = useSession();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [name, setName] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -19,6 +27,12 @@ export const Navbar = () => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    if (session) {
+      setName(session.user.email[0]);
+    }
+  }, [session]);
 
   return (
     <>
@@ -32,23 +46,67 @@ export const Navbar = () => {
         />
         <div>
           <img src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
-          <Link href="/">Naslovnica</Link>
-          <Link href="/form">Aplikacija</Link>
-          <Link href="/all-items">Svi</Link>
           <div className="account">
             {session && !loading ? (
               <div>
-                <Button variant="outlined" className="btn" onClick={signOut}>
-                  Sign out
-                </Button>
                 <IconButton
                   aria-label="account of current user"
-                  aria-controls="menu-appbar"
-                  aria-haspopup="true"
                   color="inherit"
+                  onClick={handleClick}
                 >
-                  <AccountCircle />
+                  <Avatar>{name}</Avatar>
                 </IconButton>
+                <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "bottom",
+                    horizontal: "right",
+                  }}
+                >
+                  <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
+                    <Link href="/">
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <AccountCircleIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary="Račun" />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <Link href="/">
+                      <ListItem>
+                        <ListItemAvatar onClick={handleClose}>
+                          <Avatar>
+                            <SupervisorAccountIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary="Više računa"
+                          secondary="Dodajte račune"
+                        />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <ListItem onClick={signOut}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <MeetingRoomIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText primary="Odjava" />
+                    </ListItem>
+                  </List>
+                </Menu>
               </div>
             ) : (
               <Button variant="outlined" className="btn" onClick={signIn}>
@@ -57,46 +115,6 @@ export const Navbar = () => {
             )}
           </div>
         </div>
-        <Button
-          aria-controls="simple-menu"
-          aria-haspopup="true"
-          onClick={handleClick}
-          className="nav-menu"
-        >
-          <MenuIcon />
-        </Button>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          keepMounted
-          open={Boolean(anchorEl)}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleClose}>
-            <Link href="/">Naslovnica</Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link href="/form">Aplikacija</Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <Link href="/all-items">Svi</Link>
-          </MenuItem>
-          <MenuItem onClick={handleClose}>
-            <div className="account">
-              {session && !loading ? (
-                <div>
-                  <Button variant="outlined" className="btn" onClick={signOut}>
-                    Sign out
-                  </Button>
-                </div>
-              ) : (
-                <Button variant="outlined" className="btn" onClick={signIn}>
-                  Sign in
-                </Button>
-              )}
-            </div>
-          </MenuItem>
-        </Menu>
       </nav>
     </>
   );

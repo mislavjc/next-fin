@@ -71,7 +71,7 @@ export const Navbar = () => {
                 }}
               >
                 <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
-                  <Link href="/">
+                  <Link href="/account">
                     <ListItem onClick={handleClose}>
                       <ListItemAvatar>
                         <Avatar>

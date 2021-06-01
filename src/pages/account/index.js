@@ -26,7 +26,20 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import CategoryIcon from "@material-ui/icons/Category";
 import FormatLineSpacingIcon from "@material-ui/icons/FormatLineSpacing";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
+import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import AddIcon from "@material-ui/icons/Add";
+import { motion, AnimateSharedLayout } from "framer-motion";
+import { useState } from "react";
+import Backdrop from "@material-ui/core/Backdrop";
+
+const containerVariants = {
+  hidden: {
+    opacity: 0,
+  },
+  visible: {
+    opacity: 1,
+  },
+};
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -44,8 +57,14 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.countDocuments({ owner: owner._id });
-  const forms = await Form.countDocuments({ owner: owner._id, archived: false });
-  const archived = await Form.countDocuments({ owner: owner._id, archived: true });
+  const forms = await Form.countDocuments({
+    owner: owner._id,
+    archived: false,
+  });
+  const archived = await Form.countDocuments({
+    owner: owner._id,
+    archived: true,
+  });
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -57,231 +76,284 @@ export async function getServerSideProps(context) {
 }
 
 export default function account({ owner, types, forms, archived }) {
+  const [paymentExpand, setPaymentExpand] = useState(false);
+
   return (
-    <Container maxWidth="md">
-      <div className="account-header">
-        <Avatar>{owner.email[0]}</Avatar>
-        <Typography variant="h5">Dobrodošao, {owner.email}</Typography>
-        <Typography variant="body1">Promjenite postavke računa</Typography>
-      </div>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <AccountCircleIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Korisničko ime"
-                  secondary={owner.email.split("@")[0]}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <PaymentIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Plaćanje"
-                  secondary="Mastercard **** **** **** 1234"
-                />
-              </ListItem>
-            </List>
-            <Divider />
-            <List>
-              <ListItem button>
-                <ListItemText primary="Promjenite metodu plaćanja" />
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <DataUsageIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Podatci"
-                  secondary="Iskorišteno 14/15 GB"
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <GetAppIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Eksport podataka"
-                  secondary="Preuzmite sve svoje podatke u CSV formatu"
-                />
-              </ListItem>
-            </List>
-            <Divider />
-            <List>
-              <ListItem button>
-                <ListItemText primary="Promjenite plan pretplate" />
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <StorageIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Unosi"
-                  secondary={<>Ukupno dodano {forms} unosa</>}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <ArchiveIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Arhivi"
-                  secondary={<>Arhivirano ukupno {archived} unosa</>}
-                />
-              </ListItem>
-            </List>
-            <Divider />
-            <List>
-              <Link href="/all-items">
+    <motion.div variants={containerVariants} initial="hidden" animate="visible">
+      <Container maxWidth="md">
+        <div className="account-header">
+          <Avatar>{owner.email[0]}</Avatar>
+          <Typography variant="h5">Dobrodošao, {owner.email}</Typography>
+          <Typography variant="body1">Promjenite postavke računa</Typography>
+        </div>
+        <Grid container spacing={3}>
+          <AnimateSharedLayout>
+            {paymentExpand ? (
+              <Grid item xs={12} md={6}>
+                <motion.div layoutId="payment" className="fab-form">
+                  <Paper>
+                    <List>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <AccountCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Korisničko ime"
+                          secondary={owner.email.split("@")[0]}
+                        />
+                      </ListItem>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <PaymentIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Odabrana metoda plaćanja"
+                          secondary="Mastercard **** **** **** 1234"
+                        />
+                      </ListItem>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <AccountBalanceWalletIcon />
+                        </ListItemIcon>
+                        <ListItemText primary="Dodaj metodu plaćanja" />
+                      </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                      <ListItem button onClick={() => setPaymentExpand(false)}>
+                        <ListItemText primary="Spremite promjene" />
+                      </ListItem>
+                    </List>
+                  </Paper>
+                </motion.div>
+              </Grid>
+            ) : (
+              <Grid item xs={12} md={6}>
+                <motion.div layoutId="payment">
+                  <Paper>
+                    <List>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <AccountCircleIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Korisničko ime"
+                          secondary={owner.email.split("@")[0]}
+                        />
+                      </ListItem>
+                      <ListItem button>
+                        <ListItemIcon>
+                          <PaymentIcon />
+                        </ListItemIcon>
+                        <ListItemText
+                          primary="Plaćanje"
+                          secondary="Mastercard **** **** **** 1234"
+                        />
+                      </ListItem>
+                    </List>
+                    <Divider />
+                    <List>
+                      <ListItem button onClick={() => setPaymentExpand(true)}>
+                        <ListItemText primary="Promjenite metodu plaćanja" />
+                      </ListItem>
+                    </List>
+                  </Paper>
+                </motion.div>
+              </Grid>
+            )}
+          </AnimateSharedLayout>
+          <Grid item xs={12} md={6}>
+            <Paper>
+              <List>
                 <ListItem button>
-                  <ListItemText primary="Pregled svih unosa" />
+                  <ListItemIcon>
+                    <DataUsageIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Podatci"
+                    secondary="Iskorišteno 14/15 GB"
+                  />
                 </ListItem>
-              </Link>
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <CategoryIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Polja za unos podataka"
-                  secondary={<>Odabrano {types} polja za unos podataka</>}
-                />
-              </ListItem>
-              <ListItem button>
-                <ListItemIcon>
-                  <FormatLineSpacingIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Raspored polja za unos"
-                  secondary="Promjenite raspored polja za unos"
-                />
-              </ListItem>
-            </List>
-            <Divider />
-            <List>
-              <ListItem button>
-                <ListItemText primary="Promjenite kategorije" />
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-        <Grid item xs={12}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemText
-                  primary={
-                    <Typography variant="h5">Dodani korisnici</Typography>
-                  }
-                  secondary="Popis korisnika u vašem poduzeću"
-                />
-              </ListItem>
-              <div className="members">
-                <div>
-                  <Avatar className="avatar">m</Avatar>
-                  <Typography variant="body1">
-                    {owner.email.split("@")[0]}
-                  </Typography>
-                  <Typography className="role" variant="body2">
-                    Admin
-                  </Typography>
+                <ListItem button>
+                  <ListItemIcon>
+                    <GetAppIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Eksport podataka"
+                    secondary="Preuzmite sve svoje podatke u CSV formatu"
+                  />
+                </ListItem>
+              </List>
+              <Divider />
+              <List>
+                <ListItem button>
+                  <ListItemText primary="Promjenite plan pretplate" />
+                </ListItem>
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <StorageIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Unosi"
+                    secondary={<>Ukupno dodano {forms} unosa</>}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <ArchiveIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Arhivi"
+                    secondary={<>Arhivirano ukupno {archived} unosa</>}
+                  />
+                </ListItem>
+              </List>
+              <Divider />
+              <List>
+                <Link href="/all-items">
+                  <ListItem button>
+                    <ListItemText primary="Pregled svih unosa" />
+                  </ListItem>
+                </Link>
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <Paper>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <CategoryIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Polja za unos podataka"
+                    secondary={<>Odabrano {types} polja za unos podataka</>}
+                  />
+                </ListItem>
+                <ListItem button>
+                  <ListItemIcon>
+                    <FormatLineSpacingIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Raspored polja za unos"
+                    secondary="Promjenite raspored polja za unos"
+                  />
+                </ListItem>
+              </List>
+              <Divider />
+              <List>
+                <ListItem button>
+                  <ListItemText primary="Promjenite kategorije" />
+                </ListItem>
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper>
+              <List>
+                <ListItem button>
+                  <ListItemText
+                    primary={
+                      <Typography variant="h5">Dodani korisnici</Typography>
+                    }
+                    secondary="Popis korisnika u vašem poduzeću"
+                  />
+                </ListItem>
+                <div className="members">
+                  <div>
+                    <Avatar className="avatar">m</Avatar>
+                    <Typography variant="body1">
+                      {owner.email.split("@")[0]}
+                    </Typography>
+                    <Typography className="role" variant="body2">
+                      Admin
+                    </Typography>
+                  </div>
+                  <div>
+                    <Avatar className="avatar">m</Avatar>
+                    <Typography variant="body1">
+                      {owner.email.split("@")[0]}
+                    </Typography>
+                    <Typography className="role" variant="body2">
+                      Admin
+                    </Typography>
+                  </div>
+                  <div>
+                    <Avatar className="avatar">m</Avatar>
+                    <Typography variant="body1">
+                      {owner.email.split("@")[0]}
+                    </Typography>
+                    <Typography className="role" variant="body2">
+                      Admin
+                    </Typography>
+                  </div>
+                  <div>
+                    <Avatar
+                      style={{ background: "#5E14FF" }}
+                      className="avatar"
+                    >
+                      <AddIcon />
+                    </Avatar>
+                    <Typography variant="body1">Dodajte račun</Typography>
+                  </div>
                 </div>
-                <div>
-                  <Avatar className="avatar">m</Avatar>
-                  <Typography variant="body1">
-                    {owner.email.split("@")[0]}
-                  </Typography>
-                  <Typography className="role" variant="body2">
-                    Admin
-                  </Typography>
-                </div>
-                <div>
-                  <Avatar className="avatar">m</Avatar>
-                  <Typography variant="body1">
-                    {owner.email.split("@")[0]}
-                  </Typography>
-                  <Typography className="role" variant="body2">
-                    Admin
-                  </Typography>
-                </div>
-                <div>
-                  <Avatar style={{ background: "#5E14FF" }} className="avatar">
-                    <AddIcon />
-                  </Avatar>
-                  <Typography variant="body1">Dodajte račun</Typography>
-                </div>
-              </div>
-              <Divider variant="middle" />
-              <ListItem button>
-                <ListItemIcon>
-                  <SupervisorAccountIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Računi"
-                  secondary="Promjenite role računa"
-                />
-              </ListItem>
-            </List>
-          </Paper>
+                <Divider variant="middle" />
+                <ListItem button>
+                  <ListItemIcon>
+                    <SupervisorAccountIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Računi"
+                    secondary="Promjenite role računa"
+                  />
+                </ListItem>
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper>
+              <List>
+                <ListItem button>
+                  <ListItemIcon>
+                    <HelpOutlineIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Podrška"
+                    secondary="Kontaktirajte nas za pomoć pri korištenju aplikacije"
+                  />
+                </ListItem>
+                <Divider variant="middle" />
+                <ListItem button>
+                  <ListItemIcon>
+                    <SearchIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Dokumentacija"
+                    secondary="Pretražite dokumentaciju korištenja aplikacije"
+                  />
+                </ListItem>
+                <Divider variant="middle" />
+                <ListItem button>
+                  <ListItemIcon>
+                    <FeedbackIcon />
+                  </ListItemIcon>
+                  <ListItemText
+                    primary="Povratna informacija"
+                    secondary="Pošaljite nam povratnu informaciju"
+                  />
+                </ListItem>
+              </List>
+            </Paper>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <Paper>
-            <List>
-              <ListItem button>
-                <ListItemIcon>
-                  <HelpOutlineIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Podrška"
-                  secondary="Kontaktirajte nas za pomoć pri korištenju aplikacije"
-                />
-              </ListItem>
-              <Divider variant="middle" />
-              <ListItem button>
-                <ListItemIcon>
-                  <SearchIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Dokumentacija"
-                  secondary="Pretražite dokumentaciju korištenja aplikacije"
-                />
-              </ListItem>
-              <Divider variant="middle" />
-              <ListItem button>
-                <ListItemIcon>
-                  <FeedbackIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Povratna informacija"
-                  secondary="Pošaljite nam povratnu informaciju"
-                />
-              </ListItem>
-            </List>
-          </Paper>
-        </Grid>
-      </Grid>
-    </Container>
+        <Backdrop style={{ color: "#fff", zIndex: 9 }} open={paymentExpand} />
+      </Container>
+    </motion.div>
   );
 }

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { signIn, signOut, useSession } from "next-auth/client";
 import Button from "@material-ui/core/Button";
@@ -14,11 +15,33 @@ import Avatar from "@material-ui/core/Avatar";
 import Divider from "@material-ui/core/Divider";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import GetAppIcon from "@material-ui/icons/GetApp";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
 
 export const Navbar = () => {
+  const router = useRouter();
   const [session, loading] = useSession();
   const [anchorEl, setAnchorEl] = useState(null);
   const [name, setName] = useState(null);
+  const [darkMode, setDarkMode] = useState("false");
+
+  const lightModeHandler = () => {
+    setDarkMode(false);
+    router.reload(window.location.pathname);
+  };
+
+  const darkModeHandler = () => {
+    setDarkMode(true);
+    router.reload(window.location.pathname);
+  };
+
+  useEffect(() => {
+    setDarkMode(localStorage.getItem("darkMode"));
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("darkMode", darkMode);
+  }, [darkMode]);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -48,6 +71,15 @@ export const Navbar = () => {
         <div className="account">
           {session && !loading ? (
             <div>
+              {darkMode === "true" ? (
+                <IconButton onClick={lightModeHandler}>
+                  <BrightnessHighIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={darkModeHandler}>
+                  <Brightness4Icon />
+                </IconButton>
+              )}
               <IconButton
                 aria-label="account of current user"
                 color="inherit"

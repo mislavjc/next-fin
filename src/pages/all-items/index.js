@@ -94,6 +94,7 @@ export default function allItems({ owner, types, forms }) {
   const [showForm, setShowForm] = useState(false);
   const [dataObj, setDataObj] = useState({});
   const [open, setOpen] = useState(false);
+  const [showMore, setShowMore] = useState({});
 
   const clickHandler = () => {
     setShowForm(false);
@@ -108,7 +109,7 @@ export default function allItems({ owner, types, forms }) {
       .then(setOpen(true));
   };
 
-  const handleClose = (event, reason) => {
+  const handleClose = (reason) => {
     if (reason === "clickaway") {
       return;
     }
@@ -122,7 +123,7 @@ export default function allItems({ owner, types, forms }) {
         <Typography variant="h4" align="center">
           Unosi
         </Typography>
-        <Toolbar /> 
+        <Toolbar />
         {!forms.length && !showForm && (
           <div
             style={{
@@ -140,16 +141,46 @@ export default function allItems({ owner, types, forms }) {
             <AnimatePresence>
               {forms.map((form, index) => (
                 <Grid item xs={12} md={6} lg={4} key={form._id}>
-                  <motion.div
-                    variants={cardVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    custom={index}
-                    layoutId={form._id}
-                  >
-                    <CardItem form={form} />
-                  </motion.div>
+                  {showMore[form._id] ? (
+                    <motion.div
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      custom={index}
+                      layoutId={form._id}
+                      className="fab-form"
+                    >
+                      <CardItem
+                        form={form}
+                        onClose={() => {
+                          setShowMore({ ...showMore, [form._id]: false });
+                        }}
+                        showBack={showMore[form._id]}
+                      />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      variants={cardVariants}
+                      initial="hidden"
+                      animate="visible"
+                      exit="exit"
+                      custom={index}
+                      layoutId={form._id}
+                      style={{ zIndex: 9 }}
+                    >
+                      <CardItem
+                        form={form}
+                        onOpen={() =>
+                          setShowMore({ ...showMore, [form._id]: true })
+                        }
+                      />
+                    </motion.div>
+                  )}
+                  <Backdrop
+                    style={{ color: "#fff", zIndex: 8 }}
+                    open={showMore[form._id] === true}
+                  />
                 </Grid>
               ))}
             </AnimatePresence>

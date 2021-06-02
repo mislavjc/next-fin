@@ -13,7 +13,7 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import Tooltip from "@material-ui/core/Tooltip";
 
-export const CardItem = ({ form }) => {
+export const CardItem = ({ form, onOpen, onClose, showBack }) => {
   const router = useRouter();
   const id = form._id;
   const clickHandler = () => {
@@ -39,15 +39,15 @@ export const CardItem = ({ form }) => {
         ))}
       </CardContent>
       <CardActions>
-        {router.pathname === "/all-items/[item]" ? (
+        {showBack ? (
           <Tooltip title="Nazad">
-            <IconButton onClick={() => router.back()}>
+            <IconButton onClick={onClose}>
               <KeyboardBackspaceIcon />
             </IconButton>
           </Tooltip>
         ) : (
           <Tooltip title="Više">
-            <IconButton onClick={clickHandler}>
+            <IconButton onClick={onOpen}>
               <MoreHorizIcon />
             </IconButton>
           </Tooltip>

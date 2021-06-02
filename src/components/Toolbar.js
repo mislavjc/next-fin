@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useState } from "react";
 import SearchIcon from "@material-ui/icons/Search";
 import InputBase from "@material-ui/core/InputBase";
 import Chip from "@material-ui/core/Chip";
@@ -9,15 +8,9 @@ import DashboardIcon from "@material-ui/icons/Dashboard";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
-import axios from 'axios'
 
-export const Toolbar = () => {
+export const Toolbar = ({search, setSearch}) => {
   const router = useRouter();
-  const [search, setSearch] = useState("");
-
-  const searchHandler = () => {
-    axios.get(`/api/search/${search}`)
-  };
 
   return (
     <div className="toolbar">
@@ -55,9 +48,7 @@ export const Toolbar = () => {
       </div>
       <Paper className="search">
         <IconButton
-          type="submit"
           aria-label="search"
-          onClick={searchHandler}
         >
           <SearchIcon />
         </IconButton>

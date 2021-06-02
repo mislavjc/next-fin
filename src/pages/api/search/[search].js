@@ -6,20 +6,23 @@ const searchHandler = async (req, res) => {
   dbConnect();
   if (req.method === "GET") {
     const { search } = req.query;
-    const forms = await Form.aggregate([
-      {
-        $lookup: {
-          from: "inputs",
-          localField: "inputs",
-          foreignField: "_id",
-          as: "inputsEmbeded",
+    if (search !== "") {
+      const forms = await Form.aggregate([
+        {
+          $lookup: {
+            from: "inputs",
+            localField: "inputs",
+            foreignField: "_id",
+            as: "inputs",
+          },
         },
-      },
-      {
-        $match: { "inputsEmbeded.value":  new RegExp(search) },
-      },
-    ]);
-    res.status(201).json({ message: "all ok" });
+        {
+          $match: { "inputs.value": new RegExp(search) },
+        },
+      ]);
+      res.send(forms);
+    }
+    res.status(200);
   }
 };
 

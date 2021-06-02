@@ -13,7 +13,7 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import Fab from "@material-ui/core/Fab";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
@@ -95,6 +95,16 @@ export default function allItems({ owner, types, forms }) {
   const [dataObj, setDataObj] = useState({});
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState({});
+  const [search, setSearch] = useState("");
+  const [entries, setEntries] = useState(forms)
+
+  useEffect(() => {
+    if (search !== "") {
+      axios.get(`/api/search/${search}`).then((res) => setEntries(res.data));
+    } else {
+      setEntries(forms)
+    }
+  }, [search]);
 
   const clickHandler = () => {
     setShowForm(false);
@@ -123,7 +133,7 @@ export default function allItems({ owner, types, forms }) {
         <Typography variant="h4" align="center">
           Unosi
         </Typography>
-        <Toolbar />
+        <Toolbar search={search} setSearch={setSearch} />
         {!forms.length && !showForm && (
           <div
             style={{
@@ -139,7 +149,7 @@ export default function allItems({ owner, types, forms }) {
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>
-              {forms.map((form, index) => (
+              {entries.map((form, index) => (
                 <Grid item xs={12} md={6} lg={4} key={form._id}>
                   {showMore[form._id] ? (
                     <motion.div
@@ -153,6 +163,7 @@ export default function allItems({ owner, types, forms }) {
                     >
                       <CardItem
                         form={form}
+                        types={types}
                         onClose={() => {
                           setShowMore({ ...showMore, [form._id]: false });
                         }}
@@ -171,6 +182,7 @@ export default function allItems({ owner, types, forms }) {
                     >
                       <CardItem
                         form={form}
+                        types={types}
                         onOpen={() =>
                           setShowMore({ ...showMore, [form._id]: true })
                         }

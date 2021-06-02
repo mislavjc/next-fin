@@ -12,12 +12,9 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import Tooltip from "@material-ui/core/Tooltip";
 
-export const CardItem = ({ form, onOpen, onClose, showBack }) => {
+export const CardItem = ({ form, onOpen, onClose, showBack, types }) => {
   const router = useRouter();
   const id = form._id;
-  const clickHandler = () => {
-    router.push(`/all-items/${form._id}`);
-  };
   const archiveHandler = () => {
     axios.get(`/api/archive/${id}`).then(router.push("/all-items"));
   };
@@ -31,9 +28,9 @@ export const CardItem = ({ form, onOpen, onClose, showBack }) => {
   return (
     <Card onClick={onOpen} className={!showBack ? "card" : null}>
       <CardContent>
-        {form.inputs.map((input) => (
+        {form.inputs.map((input, index) => (
           <Typography className="card-content" variant="body1" key={input._id}>
-            {input.type.name}: <span className="value">{input.value}</span>
+            {types[index].name}: <span className="value">{input.value}</span>
           </Typography>
         ))}
       </CardContent>
@@ -46,7 +43,7 @@ export const CardItem = ({ form, onOpen, onClose, showBack }) => {
           </Tooltip>
         )}
         <span style={{ marginLeft: "auto" }}>
-          <Tooltip title="Promjeni" >
+          <Tooltip title="Promjeni">
             <IconButton
               style={{ zIndex: 7 }}
               onClick={() => router.push(`/all-items/${form._id}/edit`)}

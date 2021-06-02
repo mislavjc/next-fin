@@ -11,15 +11,12 @@
     "@material-ui/core": "^4.11.4",
     "@material-ui/icons": "^4.11.2",
     "axios": "^0.21.1",
-    "formik": "^2.2.6",
-    "framer-motion": "^4.1.16",
-    "mongoose": "^5.12.9",
+    "framer-motion": "^4.1.17",
+    "mongoose": "^5.12.12",
     "next": "^10.2.3",
-    "next-auth": "^3.23.0",
-    "next-connect": "^0.10.1",
+    "next-auth": "^3.24.1",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "styled-jsx": "^3.4.4",
-    "yup": "^0.32.9"
+    "styled-jsx": "^3.4.4"
   }
 }

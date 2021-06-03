@@ -27,10 +27,17 @@ import CategoryIcon from "@material-ui/icons/Category";
 import FormatLineSpacingIcon from "@material-ui/icons/FormatLineSpacing";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
-import AddIcon from "@material-ui/icons/Add";
-import { motion, AnimateSharedLayout } from "framer-motion";
+import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
+import Tooltip from "@material-ui/core/Tooltip";
+import IconButton from "@material-ui/core/IconButton";
+import CloseIcon from "@material-ui/icons/Close";
+import TextField from "@material-ui/core/TextField";
+import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
+import ColorLensIcon from "@material-ui/icons/ColorLens";
+import axios from "axios";
+import Snackbar from "@material-ui/core/Snackbar";
 
 const containerVariants = {
   hidden: {
@@ -38,6 +45,19 @@ const containerVariants = {
   },
   visible: {
     opacity: 1,
+  },
+};
+
+const formVariants = {
+  hidden: {
+    y: -1000,
+  },
+  visible: {
+    y: 0,
+  },
+  exit: {
+    y: -1000,
+    opacity: 0,
   },
 };
 
@@ -77,6 +97,35 @@ export async function getServerSideProps(context) {
 
 export default function account({ owner, types, forms, archived }) {
   const [paymentExpand, setPaymentExpand] = useState(false);
+  const [showAccountInvite, setShowAccountInvite] = useState(false);
+  const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];
+  const [selected, setSelected] = useState(colors[0]);
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [open, setOpen] = useState(false);
+
+  const inviteHandler = () => {
+    axios
+      .post("/api/add-account", {
+        username,
+        email,
+        color: selected,
+      })
+      .then(
+        setOpen(true),
+        setShowAccountInvite(false),
+        setUsername(""),
+        setEmail("")
+      );
+  };
+
+  const handleClose = (reason) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   return (
     <motion.div variants={containerVariants} initial="hidden" animate="visible">
@@ -297,8 +346,9 @@ export default function account({ owner, types, forms, archived }) {
                     <Avatar
                       style={{ background: "#5E14FF" }}
                       className="avatar"
+                      onClick={() => setShowAccountInvite(true)}
                     >
-                      <AddIcon />
+                      +
                     </Avatar>
                     <Typography variant="body1">Dodajte račun</Typography>
                   </div>
@@ -352,7 +402,127 @@ export default function account({ owner, types, forms, archived }) {
             </Paper>
           </Grid>
         </Grid>
-        <Backdrop style={{ color: "#fff", zIndex: 9 }} open={paymentExpand} />
+        <AnimatePresence>
+          {showAccountInvite && (
+            <motion.div
+              variants={formVariants}
+              className="fab-form"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              layoutId={"form-fab"}
+            >
+              <Paper>
+                <List>
+                  <div style={{ display: "flex", padding: "1rem" }}>
+                    <Typography variant="h5">Unos novog računa</Typography>
+                    <Tooltip title="Zatvori">
+                      <IconButton
+                        style={{
+                          position: "relative",
+                          top: "-8px",
+                          marginLeft: "auto",
+                        }}
+                        onClick={() => setShowAccountInvite(false)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                  <ListItem>
+                    <ListItemIcon>
+                      <AccountCircleIcon />
+                    </ListItemIcon>
+                    <TextField
+                      id="username"
+                      label="Korisničko ime"
+                      variant="filled"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
+                      fullWidth
+                    />
+                  </ListItem>
+                  <Divider variant="middle" />
+                  <ListItem>
+                    <ListItemIcon>
+                      <AlternateEmailIcon />
+                    </ListItemIcon>
+                    <TextField
+                      id="email"
+                      type="email"
+                      label="Email adresa"
+                      variant="filled"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      fullWidth
+                    />
+                  </ListItem>
+                  <Divider variant="middle" />
+                  <ListItem>
+                    <ListItemIcon>
+                      <ColorLensIcon />
+                    </ListItemIcon>
+                    <AnimateSharedLayout>
+                      <ul className="color-picker">
+                        {colors.map((color) => (
+                          <li
+                            style={{ backgroundColor: color }}
+                            key={color}
+                            onClick={() => setSelected(color)}
+                          >
+                            {selected === color && (
+                              <motion.div
+                                layoutId="outline"
+                                className="outline"
+                                initial={false}
+                                animate={{ borderColor: color }}
+                                transition={{
+                                  type: "spring",
+                                  stiffness: 500,
+                                  damping: 30,
+                                }}
+                              />
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </AnimateSharedLayout>
+                  </ListItem>
+                </List>
+                <Divider />
+                <List>
+                  <ListItem button onClick={inviteHandler}>
+                    <ListItemText primary="Pošaljite pozivnicu" />
+                  </ListItem>
+                </List>
+              </Paper>
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <Backdrop
+          style={{ color: "#fff", zIndex: 9 }}
+          open={paymentExpand || showAccountInvite}
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: "bottom",
+            horizontal: "left",
+          }}
+          open={open}
+          autoHideDuration={6000}
+          onClose={handleClose}
+          message="Pozivnica poslana!"
+          action={
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleClose}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          }
+        />
       </Container>
     </motion.div>
   );

@@ -104,7 +104,7 @@ export default function allItems({ owner, types, forms }) {
     } else {
       setEntries(forms)
     }
-  }, [search]);
+  }, [search, forms]);
 
   const clickHandler = () => {
     setShowForm(false);

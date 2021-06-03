@@ -30,7 +30,7 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const forms = await Form.find({ owner: owner._id }).populate({
+  const forms = await Form.find({ option: owner.option }).populate({
     path: "inputs",
     populate: {
       path: "type",

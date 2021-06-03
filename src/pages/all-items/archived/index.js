@@ -71,15 +71,16 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const types = await Type.find({ owner: owner._id });
-  const forms = await Form.find({ owner: owner._id, archived: true }).populate(
-    {
-      path: "inputs",
-      populate: {
-        path: "type",
-      },
-    }
-  );
+  const types = await Type.find({ option: owner.option });
+  const forms = await Form.find({
+    option: owner.option,
+    archived: true,
+  }).populate({
+    path: "inputs",
+    populate: {
+      path: "type",
+    },
+  });
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -96,13 +97,13 @@ export default function allItems({ owner, types, forms }) {
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState({});
   const [search, setSearch] = useState("");
-  const [entries, setEntries] = useState(forms)
+  const [entries, setEntries] = useState(forms);
 
   useEffect(() => {
     if (search !== "") {
       axios.get(`/api/search/${search}`).then((res) => setEntries(res.data));
     } else {
-      setEntries(forms)
+      setEntries(forms);
     }
   }, [search, forms]);
 

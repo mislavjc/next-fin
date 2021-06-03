@@ -83,7 +83,7 @@ export default function Setup({ session }) {
       types: typeObj,
       additional: additionalObj,
     };
-    axios.post("/api/basic-options", values).then(router.push("/form"));
+    axios.post("/api/basic-options", values).then(router.push("/all-items"));
   };
   const categoryArr = [-1];
   useEffect(() => {

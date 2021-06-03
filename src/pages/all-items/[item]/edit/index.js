@@ -31,14 +31,14 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const types = await Type.find({ owner: owner._id });
+  const types = await Type.find({ option: owner.option });
   const form = await Form.findById(id).populate({
     path: "inputs",
     populate: {
       path: "type",
     },
   });
-  if (JSON.stringify(form.owner) !== JSON.stringify(owner.id)) {
+  if (JSON.stringify(form.option) !== JSON.stringify(owner.option)) {
     context.res.writeHead(302, { Location: "/api/auth/signin" });
     context.res.end();
     return {

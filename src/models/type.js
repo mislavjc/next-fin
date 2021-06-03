@@ -1,6 +1,7 @@
 import mongoose, { Schema } from "mongoose";
+import Option from "./option";
 
-const MODEL_NAME = "Type"
+const MODEL_NAME = "Type";
 
 const schema = new Schema({
   name: String,
@@ -11,7 +12,7 @@ const schema = new Schema({
     default: false,
   },
   additional: Schema.Types.Mixed,
-  owner: String,
+  option: { type: Schema.Types.ObjectId, ref: "Option" },
 });
 
 export default mongoose.models[MODEL_NAME] ||

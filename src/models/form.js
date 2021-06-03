@@ -1,10 +1,11 @@
 import mongoose, { Schema } from "mongoose";
-import Input from "./input"
+import Input from "./input";
+import Option from "./option";
 
-const MODEL_NAME = "Form"
+const MODEL_NAME = "Form";
 
 const schema = new Schema({
-  owner: String,
+  option: { type: Schema.Types.ObjectId, ref: "Option" },
   inputs: [{ type: Schema.Types.ObjectId, ref: "Input" }],
   attachments: [
     {
@@ -16,9 +17,8 @@ const schema = new Schema({
   archived: {
     type: Boolean,
     default: false,
-  }
+  },
 });
 
 export default mongoose.models[MODEL_NAME] ||
   mongoose.model(MODEL_NAME, schema, "forms");
-

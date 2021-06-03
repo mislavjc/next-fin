@@ -3,12 +3,15 @@ import mongoose, { Schema } from "mongoose";
 const MODEL_NAME = "Option";
 
 const schema = new Schema({
-  owner: String,
+  owner: [
+    {
+      type: String,
+    },
+  ],
   subscription: {
     type: String,
     default: "Bez pretplate",
   },
-  numOfCategories: Number,
   totalUsage: Number,
 });
 

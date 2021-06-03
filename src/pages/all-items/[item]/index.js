@@ -2,6 +2,7 @@ import { getSession } from "next-auth/client";
 import { dbConnect } from "@/middleware/db";
 import Form from "@/models/form";
 import User from "@/models/user";
+import Type from "@/models/type";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
@@ -23,13 +24,14 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
+  const types = await Type.find({option: owner.option})
   const form = await Form.findById(id).populate({
     path: "inputs",
     populate: {
       path: "type",
     },
   });
-  if (JSON.stringify(form.owner) !== JSON.stringify(owner.id)) {
+  if (JSON.stringify(form.option) !== JSON.stringify(owner.option)) {
     context.res.writeHead(302, { Location: "/api/auth/signin" });
     context.res.end();
     return {
@@ -41,19 +43,19 @@ export async function getServerSideProps(context) {
   }
   return {
     props: {
-      owner: JSON.parse(JSON.stringify(owner)),
+      types: JSON.parse(JSON.stringify(types)),
       form: JSON.parse(JSON.stringify(form)),
     },
   };
 }
 
-export default function Item({ form }) {
+export default function Item({ form, types }) {
   return (
     <Container maxWidth="lg">
       <Typography variant="h4">Unosi</Typography>
       <Grid container justify="center">
         <Grid item xs={12} md={8} lg={6}>
-          <CardItem form={form} />
+          <CardItem types={types} form={form} />
         </Grid>
       </Grid>
     </Container>

@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+import Option from "./option";
 
 const MODEL_NAME = "User";
 
@@ -16,6 +17,7 @@ const schema = new Schema({
   updatedAt: {
     type: Date,
   },
+  option: { type: Schema.Types.ObjectId, ref: "Option" },
 });
 
 export default mongoose.models[MODEL_NAME] ||

@@ -1,5 +1,5 @@
-import User from "@/models/user";
 import Type from "@/models/type";
+import Option from "@/models/option";
 import Input from "@/models/input";
 import Form from "@/models/form";
 
@@ -9,13 +9,13 @@ const createHandler = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
     const { currentUser, dataObj } = req.body;
-    const user = await User.findOne({ id: currentUser._id }).exec();
+    const option = await Option.findOne({ id: currentUser.option });
     const formArr = [];
     for (const [key, value] of Object.entries(dataObj)) {
       const type = await Type.findOne({ _id: key });
       const input = new Input({
         value,
-        owner: user.id,
+        option,
         type,
       });
       await input.save();
@@ -23,7 +23,7 @@ const createHandler = async (req, res) => {
     }
     const form = new Form({
       inputs: formArr,
-      owner: user.id,
+      option,
     });
     await form.save();
     await res.status(201).json({ message: "all ok" });

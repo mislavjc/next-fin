@@ -76,13 +76,13 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const types = await Type.countDocuments({ owner: owner._id });
+  const types = await Type.countDocuments({ option: owner.option });
   const forms = await Form.countDocuments({
-    owner: owner._id,
+    option: owner.option,
     archived: false,
   });
   const archived = await Form.countDocuments({
-    owner: owner._id,
+    option: owner.option,
     archived: true,
   });
   return {

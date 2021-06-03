@@ -18,6 +18,10 @@ const schema = new Schema({
     type: Date,
   },
   color: String,
+  create: Boolean,
+  delete: Boolean,
+  role: String,
+  username: String,
   option: { type: Schema.Types.ObjectId, ref: "Option" },
 });
 

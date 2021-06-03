@@ -8,11 +8,23 @@ const basicOptionsHandler = async (req, res) => {
   if (req.method === "POST") {
     const { currentUser, names, types, additional } = req.body;
     const user = await User.findOne({ email: currentUser.email });
-    const owner = [user.email];
+    const username = user.email.split("@")[0];
+    const acc = {};
+    acc[username] = {
+      email: user.email,
+      create: true,
+      delete: true,
+      role: "admin",
+      color: "#BDBDBD",
+    };
     const option = new Option({
-      owner,
+      owner: acc,
     });
     await option.save();
+    user.create = true;
+    user.delete = true;
+    user.role = "admin";
+    user.color = "#607d8b";
     user.option = option;
     await user.save();
     for (let i = 0; i < Object.keys(names).length; i++) {

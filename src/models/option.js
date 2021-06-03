@@ -3,11 +3,7 @@ import mongoose, { Schema } from "mongoose";
 const MODEL_NAME = "Option";
 
 const schema = new Schema({
-  owner: [
-    {
-      type: String,
-    },
-  ],
+  owner: Schema.Types.Mixed,
   subscription: {
     type: String,
     default: "Bez pretplate",

@@ -21,12 +21,10 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const option = await Option.findById(id)
   const owner = await User.findOne({ email: user.email });
-  for (let acc of option.owner) {
-    if (user.email === acc) {
-      owner.option = option;
-      await owner.save();
-      break;
-    }
+  const username = user.email.split("@")[0].replace(".", "");
+  if (username in option.owner) {
+    owner.option = option;
+    await owner.save();
   }
   return {
     props: {

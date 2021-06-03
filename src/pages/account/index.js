@@ -4,7 +4,6 @@ import { dbConnect } from "@/middleware/db";
 import Form from "@/models/form";
 import User from "@/models/user";
 import Type from "@/models/type";
-import Option from "@/models/option";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -17,7 +16,6 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import DataUsageIcon from "@material-ui/icons/DataUsage";
 import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import PaymentIcon from "@material-ui/icons/Payment";
 import StorageIcon from "@material-ui/icons/Storage";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
@@ -27,7 +25,6 @@ import GetAppIcon from "@material-ui/icons/GetApp";
 import CategoryIcon from "@material-ui/icons/Category";
 import FormatLineSpacingIcon from "@material-ui/icons/FormatLineSpacing";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -39,6 +36,11 @@ import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import ColorLensIcon from "@material-ui/icons/ColorLens";
 import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
+import WorkIcon from "@material-ui/icons/Work";
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
+import Switch from "@material-ui/core/Switch";
+import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 
 const containerVariants = {
   hidden: {
@@ -78,7 +80,6 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.countDocuments({ option: owner.option });
-  const option = await Option.findById(owner.option);
   const forms = await Form.countDocuments({
     option: owner.option,
     archived: false,
@@ -87,10 +88,23 @@ export async function getServerSideProps(context) {
     option: owner.option,
     archived: true,
   });
+  const accounts = await User.find({ option: owner.option });
+  const options = {}
+
+  for (let acc of accounts) {
+    options[acc.email] = {
+      role: acc.role,
+      color: acc.color,
+      delete: acc.delete,
+      create: acc.create
+    }
+  }
+
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
-      option: JSON.parse(JSON.stringify(option)),
+      accounts: JSON.parse(JSON.stringify(accounts)),
+      options,
       types,
       forms,
       archived,
@@ -98,12 +112,15 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function account({ owner, option, types, forms, archived }) {
+export default function account({ owner, types, forms, archived, accounts, options }) {
   const [accountPreferences, setAccountPrefrences] = useState(false);
   const [showAccountInvite, setShowAccountInvite] = useState(false);
   const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];
   const [selected, setSelected] = useState(owner.color || colors[0]);
   const [email, setEmail] = useState("");
+  const [role, setRole] = useState("");
+  const [add, setAdd] = useState(false);
+  const [del, setDel] = useState(false);
   const [open, setOpen] = useState(false);
 
   const inviteHandler = () => {
@@ -111,12 +128,11 @@ export default function account({ owner, option, types, forms, archived }) {
       .post("/api/add-account", {
         email,
         owner,
+        role,
+        add,
+        del,
       })
-      .then(
-        setOpen(true),
-        setShowAccountInvite(false),
-        setEmail("")
-      );
+      .then(setOpen(true), setShowAccountInvite(false), setEmail(""));
   };
 
   const themeHandler = () => {
@@ -346,12 +362,17 @@ export default function account({ owner, option, types, forms, archived }) {
                   />
                 </ListItem>
                 <div className="members">
-                  {option.owner.map((account) => (
-                    <div>
-                      <Avatar className="avatar">m</Avatar>
-                      <Typography variant="body1">{account}</Typography>
+                  {Object.entries(options).map(([key, value]) => (
+                    <div key={key}>
+                      <Avatar
+                        className="avatar"
+                        style={{ background: value.color }}
+                      >
+                        m
+                      </Avatar>
+                      <Typography variant="body1">{key}</Typography>
                       <Typography className="role" variant="body2">
-                        Admin
+                        {value.role}
                       </Typography>
                     </div>
                   ))}
@@ -457,7 +478,55 @@ export default function account({ owner, option, types, forms, archived }) {
                       fullWidth
                     />
                   </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <WorkIcon />
+                    </ListItemIcon>
+                    <TextField
+                      id="role"
+                      type="text"
+                      label="Naziv pozicije"
+                      variant="filled"
+                      value={role}
+                      onChange={(e) => setRole(e.target.value)}
+                      fullWidth
+                    />
+                  </ListItem>
                   <Divider variant="middle" />
+                  <ListItem>
+                    <ListItemIcon>
+                      <PlaylistAddIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Unos podataka"
+                      secondary="Dopuštenje za unos podataka"
+                    />
+                    <ListItemSecondaryAction>
+                      <Switch
+                        checked={add}
+                        onChange={() => setAdd(!add)}
+                        color="primary"
+                        inputProps={{ "aria-label": "checkbox" }}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                  <ListItem>
+                    <ListItemIcon>
+                      <DeleteSweepIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Brisanje podataka"
+                      secondary="Dopuštenje za brisanje podataka"
+                    />
+                    <ListItemSecondaryAction>
+                      <Switch
+                        checked={del}
+                        onChange={() => setDel(!del)}
+                        color="primary"
+                        inputProps={{ "aria-label": "checkbox" }}
+                      />
+                    </ListItemSecondaryAction>
+                  </ListItem>
                 </List>
                 <Divider />
                 <List>

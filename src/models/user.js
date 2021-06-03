@@ -17,6 +17,7 @@ const schema = new Schema({
   updatedAt: {
     type: Date,
   },
+  color: String,
   option: { type: Schema.Types.ObjectId, ref: "Option" },
 });
 

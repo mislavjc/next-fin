@@ -1,17 +1,20 @@
 import User from "@/models/user";
+import Option from "@/models/option";
 import { dbConnect } from "@/middleware/db";
 const mail = require('@sendgrid/mail')
 
 mail.setApiKey(process.env.SENDGRID_API_KEY)
 
-const basicOptionsHandler = async (req, res) => {
+const addAccountHandler =  async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
-    const { username, email, color } = req.body;
-    console.log(username, email, color)
+    const { email, owner } = req.body;
+    const option = await Option.findById(owner.option)
+    option.owner.push(email);
+    await option.save();
     const message = `
-      Name: ${username}\r\n
       Email: ${email}\r\n
+      Link: localhost:3000/invitation/${option._id}
       Message: test
     `
 
@@ -29,4 +32,4 @@ const basicOptionsHandler = async (req, res) => {
   }
 };
 
-export default basicOptionsHandler;
+export default addAccountHandler;

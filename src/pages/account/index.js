@@ -4,6 +4,7 @@ import { dbConnect } from "@/middleware/db";
 import Form from "@/models/form";
 import User from "@/models/user";
 import Type from "@/models/type";
+import Option from "@/models/option";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -28,7 +29,7 @@ import FormatLineSpacingIcon from "@material-ui/icons/FormatLineSpacing";
 import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import AccountBalanceWalletIcon from "@material-ui/icons/AccountBalanceWallet";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
 import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
@@ -77,6 +78,7 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.countDocuments({ option: owner.option });
+  const option = await Option.findById(owner.option);
   const forms = await Form.countDocuments({
     option: owner.option,
     archived: false,
@@ -88,6 +90,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
+      option: JSON.parse(JSON.stringify(option)),
       types,
       forms,
       archived,
@@ -95,29 +98,38 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function account({ owner, types, forms, archived }) {
-  const [paymentExpand, setPaymentExpand] = useState(false);
+export default function account({ owner, option, types, forms, archived }) {
+  const [accountPreferences, setAccountPrefrences] = useState(false);
   const [showAccountInvite, setShowAccountInvite] = useState(false);
   const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];
-  const [selected, setSelected] = useState(colors[0]);
-  const [username, setUsername] = useState("");
+  const [selected, setSelected] = useState(owner.color || colors[0]);
   const [email, setEmail] = useState("");
   const [open, setOpen] = useState(false);
 
   const inviteHandler = () => {
     axios
       .post("/api/add-account", {
-        username,
         email,
-        color: selected,
+        owner,
       })
       .then(
         setOpen(true),
         setShowAccountInvite(false),
-        setUsername(""),
         setEmail("")
       );
   };
+
+  const themeHandler = () => {
+    axios.post("/api/account/color", {
+      owner,
+      selected,
+    });
+    setAccountPrefrences(false);
+  };
+
+  useEffect(() => {
+    localStorage.setItem("theme", selected);
+  }, [selected]);
 
   const handleClose = (reason) => {
     if (reason === "clickaway") {
@@ -137,7 +149,7 @@ export default function account({ owner, types, forms, archived }) {
         </div>
         <Grid container spacing={3}>
           <AnimateSharedLayout>
-            {paymentExpand ? (
+            {accountPreferences ? (
               <Grid item xs={12} md={6}>
                 <motion.div layoutId="payment" className="fab-form">
                   <Paper>
@@ -151,25 +163,41 @@ export default function account({ owner, types, forms, archived }) {
                           secondary={owner.email.split("@")[0]}
                         />
                       </ListItem>
-                      <ListItem button>
+                      <Divider variant="middle" />
+                      <ListItem>
                         <ListItemIcon>
-                          <PaymentIcon />
+                          <ColorLensIcon />
                         </ListItemIcon>
-                        <ListItemText
-                          primary="Odabrana metoda plaćanja"
-                          secondary="Mastercard **** **** **** 1234"
-                        />
-                      </ListItem>
-                      <ListItem button>
-                        <ListItemIcon>
-                          <AccountBalanceWalletIcon />
-                        </ListItemIcon>
-                        <ListItemText primary="Dodaj metodu plaćanja" />
+                        <AnimateSharedLayout>
+                          <ul className="color-picker">
+                            {colors.map((color) => (
+                              <li
+                                style={{ backgroundColor: color }}
+                                key={color}
+                                onClick={() => setSelected(color)}
+                              >
+                                {selected === color && (
+                                  <motion.div
+                                    layoutId="outline"
+                                    className="outline"
+                                    initial={false}
+                                    animate={{ borderColor: color }}
+                                    transition={{
+                                      type: "spring",
+                                      stiffness: 500,
+                                      damping: 30,
+                                    }}
+                                  />
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </AnimateSharedLayout>
                       </ListItem>
                     </List>
                     <Divider />
                     <List>
-                      <ListItem button onClick={() => setPaymentExpand(false)}>
+                      <ListItem button onClick={themeHandler}>
                         <ListItemText primary="Spremite promjene" />
                       </ListItem>
                     </List>
@@ -192,18 +220,21 @@ export default function account({ owner, types, forms, archived }) {
                       </ListItem>
                       <ListItem button>
                         <ListItemIcon>
-                          <PaymentIcon />
+                          <ColorLensIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary="Plaćanje"
-                          secondary="Mastercard **** **** **** 1234"
+                          primary="Tema"
+                          secondary="Promjenite temu računa"
                         />
                       </ListItem>
                     </List>
                     <Divider />
                     <List>
-                      <ListItem button onClick={() => setPaymentExpand(true)}>
-                        <ListItemText primary="Promjenite metodu plaćanja" />
+                      <ListItem
+                        button
+                        onClick={() => setAccountPrefrences(true)}
+                      >
+                        <ListItemText primary="Promjenite temu računa" />
                       </ListItem>
                     </List>
                   </Paper>
@@ -315,33 +346,15 @@ export default function account({ owner, types, forms, archived }) {
                   />
                 </ListItem>
                 <div className="members">
-                  <div>
-                    <Avatar className="avatar">m</Avatar>
-                    <Typography variant="body1">
-                      {owner.email.split("@")[0]}
-                    </Typography>
-                    <Typography className="role" variant="body2">
-                      Admin
-                    </Typography>
-                  </div>
-                  <div>
-                    <Avatar className="avatar">m</Avatar>
-                    <Typography variant="body1">
-                      {owner.email.split("@")[0]}
-                    </Typography>
-                    <Typography className="role" variant="body2">
-                      Admin
-                    </Typography>
-                  </div>
-                  <div>
-                    <Avatar className="avatar">m</Avatar>
-                    <Typography variant="body1">
-                      {owner.email.split("@")[0]}
-                    </Typography>
-                    <Typography className="role" variant="body2">
-                      Admin
-                    </Typography>
-                  </div>
+                  {option.owner.map((account) => (
+                    <div>
+                      <Avatar className="avatar">m</Avatar>
+                      <Typography variant="body1">{account}</Typography>
+                      <Typography className="role" variant="body2">
+                        Admin
+                      </Typography>
+                    </div>
+                  ))}
                   <div>
                     <Avatar
                       style={{ background: "#5E14FF" }}
@@ -429,19 +442,6 @@ export default function account({ owner, types, forms, archived }) {
                       </IconButton>
                     </Tooltip>
                   </div>
-                  <ListItem>
-                    <ListItemIcon>
-                      <AccountCircleIcon />
-                    </ListItemIcon>
-                    <TextField
-                      id="username"
-                      label="Korisničko ime"
-                      variant="filled"
-                      value={username}
-                      onChange={(e) => setUsername(e.target.value)}
-                      fullWidth
-                    />
-                  </ListItem>
                   <Divider variant="middle" />
                   <ListItem>
                     <ListItemIcon>
@@ -458,36 +458,6 @@ export default function account({ owner, types, forms, archived }) {
                     />
                   </ListItem>
                   <Divider variant="middle" />
-                  <ListItem>
-                    <ListItemIcon>
-                      <ColorLensIcon />
-                    </ListItemIcon>
-                    <AnimateSharedLayout>
-                      <ul className="color-picker">
-                        {colors.map((color) => (
-                          <li
-                            style={{ backgroundColor: color }}
-                            key={color}
-                            onClick={() => setSelected(color)}
-                          >
-                            {selected === color && (
-                              <motion.div
-                                layoutId="outline"
-                                className="outline"
-                                initial={false}
-                                animate={{ borderColor: color }}
-                                transition={{
-                                  type: "spring",
-                                  stiffness: 500,
-                                  damping: 30,
-                                }}
-                              />
-                            )}
-                          </li>
-                        ))}
-                      </ul>
-                    </AnimateSharedLayout>
-                  </ListItem>
                 </List>
                 <Divider />
                 <List>
@@ -501,7 +471,7 @@ export default function account({ owner, types, forms, archived }) {
         </AnimatePresence>
         <Backdrop
           style={{ color: "#fff", zIndex: 9 }}
-          open={paymentExpand || showAccountInvite}
+          open={accountPreferences || showAccountInvite}
         />
         <Snackbar
           anchorOrigin={{

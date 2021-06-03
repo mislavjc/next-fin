@@ -17,6 +17,7 @@ import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
+import axios from "axios";
 
 export const Navbar = () => {
   const router = useRouter();
@@ -24,6 +25,7 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [name, setName] = useState(null);
   const [darkMode, setDarkMode] = useState("false");
+  const [color, setColor] = useState(null)
 
   const lightModeHandler = () => {
     setDarkMode(false);
@@ -37,6 +39,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     setDarkMode(localStorage.getItem("darkMode"));
+    setColor(localStorage.getItem("theme"))
   }, []);
 
   useEffect(() => {
@@ -82,10 +85,9 @@ export const Navbar = () => {
               )}
               <IconButton
                 aria-label="account of current user"
-                color="inherit"
                 onClick={handleClick}
               >
-                <Avatar>{name}</Avatar>
+                <Avatar style={{background: color}}>{name}</Avatar>
               </IconButton>
               <Menu
                 id="simple-menu"

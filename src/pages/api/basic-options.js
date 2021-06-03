@@ -8,7 +8,7 @@ const basicOptionsHandler = async (req, res) => {
   if (req.method === "POST") {
     const { currentUser, names, types, additional } = req.body;
     const user = await User.findOne({ email: currentUser.email });
-    const owner = [user.id];
+    const owner = [user.email];
     const option = new Option({
       owner,
     });

@@ -93,10 +93,10 @@ export async function getServerSideProps(context) {
 
   for (let acc of accounts) {
     options[acc.email] = {
-      role: acc.role,
-      color: acc.color,
-      delete: acc.delete,
-      create: acc.create
+      role: acc.role || "",
+      color: acc.color || "#607d8b",
+      delete: acc.delete || false,
+      create: acc.create || false,
     }
   }
 
@@ -112,7 +112,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function account({ owner, types, forms, archived, accounts, options }) {
+export default function account({ owner, types, forms, archived, options }) {
   const [accountPreferences, setAccountPrefrences] = useState(false);
   const [showAccountInvite, setShowAccountInvite] = useState(false);
   const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];

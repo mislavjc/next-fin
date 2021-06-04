@@ -11,13 +11,13 @@ const addAccountHandler = async (req, res) => {
     const { email, owner, role, add, del } = req.body;
     const option = await Option.findById(owner.option);
     const username = email.split("@")[0].replace(".", "");
-    const acc =  {...option.owner};
+    const acc = { ...option.owner };
     acc[username] = {
       create: add,
       delete: del,
       role,
-      color: "#BDBDBD"
-    }
+      color: "#607d8b",
+    };
     option.owner = acc;
     await option.save();
     const message = `

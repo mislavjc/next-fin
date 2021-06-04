@@ -72,14 +72,15 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
-  const forms = await Form.find({ option: owner.option, archived: false }).populate(
-    {
-      path: "inputs",
-      populate: {
-        path: "type",
-      },
-    }
-  );
+  const forms = await Form.find({
+    option: owner.option,
+    archived: false,
+  }).populate({
+    path: "inputs",
+    populate: {
+      path: "type",
+    },
+  });
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -96,27 +97,42 @@ export default function allItems({ owner, types, forms }) {
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState({});
   const [search, setSearch] = useState("");
-  const [entries, setEntries] = useState(forms)
+  const [entries, setEntries] = useState(forms);
+  const [message, setMessage] = useState("");
 
   useEffect(() => {
     if (search !== "") {
       axios.get(`/api/search/${search}`).then((res) => setEntries(res.data));
     } else {
-      setEntries(forms)
+      setEntries(forms);
     }
   }, [search, forms]);
 
+  const openFormHandler = () => {
+    if (owner.create) {
+      setShowForm(true);
+    } else {
+      setMessage("Nemate prava za dodavanje unosa!");
+      setOpen(true);
+    }
+  };
+
   const clickHandler = () => {
     setShowForm(false);
-    const currentUser = owner._id;
-    const values = {
-      currentUser,
-      dataObj,
-    };
-    axios
-      .post("/api/crud/create", values)
-      .then(router.push("/all-items"))
-      .then(setOpen(true));
+    if (owner.create) {
+      const currentUser = owner._id;
+      const values = {
+        currentUser,
+        dataObj,
+      };
+      axios
+        .post("/api/crud/create", values)
+        .then(router.push("/all-items"))
+        .then(setMessage("Dodan unos!"), setOpen(true));
+    } else {
+      setMessage("Nemate prava za dodavanje unosa!");
+      setOpen(true);
+    }
   };
 
   const handleClose = (reason) => {
@@ -164,6 +180,7 @@ export default function allItems({ owner, types, forms }) {
                       <CardItem
                         form={form}
                         types={types}
+                        owner={owner}
                         onClose={() => {
                           setShowMore({ ...showMore, [form._id]: false });
                         }}
@@ -183,6 +200,7 @@ export default function allItems({ owner, types, forms }) {
                       <CardItem
                         form={form}
                         types={types}
+                        owner={owner}
                         onOpen={() =>
                           setShowMore({ ...showMore, [form._id]: true })
                         }
@@ -200,7 +218,7 @@ export default function allItems({ owner, types, forms }) {
         </Grid>
         {!showForm && (
           <Fab
-            onClick={() => setShowForm(true)}
+            onClick={openFormHandler}
             color="secondary"
             aria-label="add"
             style={{ position: "fixed", right: "1rem", bottom: "1rem" }}
@@ -268,7 +286,7 @@ export default function allItems({ owner, types, forms }) {
         open={open}
         autoHideDuration={6000}
         onClose={handleClose}
-        message="Dodan unos!"
+        message={message}
         action={
           <IconButton
             size="small"

@@ -24,7 +24,17 @@ export async function getServerSideProps(context) {
   const username = user.email.split("@")[0].replace(".", "");
   if (username in option.owner) {
     owner.option = option;
+    owner.create = option.owner[username].create
+    owner.delete = option.owner[username].delete
+    owner.role = option.owner[username].role
+    owner.color = option.owner[username].color
     await owner.save();
+  } else {
+    return {
+      props: {
+        owner: false,
+      }
+    }
   }
   return {
     props: {
@@ -34,5 +44,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function invitation({ owner }) {
+  if (!owner) {
+    return <h1>Krivi link</h1>
+  }
   return <h1>{JSON.stringify(owner)}</h1>;
 }

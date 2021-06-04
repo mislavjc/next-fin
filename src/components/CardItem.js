@@ -12,17 +12,23 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import Tooltip from "@material-ui/core/Tooltip";
 
-export const CardItem = ({ form, onOpen, onClose, showBack, types }) => {
+export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
   const router = useRouter();
   const id = form._id;
   const archiveHandler = () => {
-    axios.get(`/api/archive/${id}`).then(router.push("/all-items"));
+    if (owner.delete) {
+      axios.get(`/api/archive/${id}`).then(router.push("/all-items"));
+    }
   };
   const unArchiveHandler = () => {
-    axios.post(`/api/archive/${id}`).then(router.push("/all-items/archived"));
+    if (owner.delete) {
+      axios.post(`/api/archive/${id}`).then(router.push("/all-items/archived"));
+    }
   };
   const deleteHandler = () => {
-    axios.delete(`/api/crud/${id}`).then(router.push("/all-items"));
+    if (owner.delete) {
+      axios.delete(`/api/crud/${id}`).then(router.push("/all-items"));
+    }
   };
 
   return (
@@ -43,16 +49,18 @@ export const CardItem = ({ form, onOpen, onClose, showBack, types }) => {
           </Tooltip>
         )}
         <span style={{ marginLeft: "auto" }}>
-          <Tooltip title="Promjeni">
-            <IconButton
-              style={{ zIndex: 7 }}
-              onClick={() => router.push(`/all-items/${form._id}/edit`)}
-              className="edit"
-            >
-              <EditIcon className="edit" />
-            </IconButton>
-          </Tooltip>
-          {showBack && (
+          {owner.create && (
+            <Tooltip title="Promjeni">
+              <IconButton
+                style={{ zIndex: 7 }}
+                onClick={() => router.push(`/all-items/${form._id}/edit`)}
+                className="edit"
+              >
+                <EditIcon className="edit" />
+              </IconButton>
+            </Tooltip>
+          )}
+          {showBack && owner.delete && (
             <>
               {form.archived ? (
                 <Tooltip title="Vrati iz arhiva">

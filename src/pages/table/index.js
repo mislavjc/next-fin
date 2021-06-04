@@ -4,6 +4,7 @@ import { getSession } from "next-auth/client";
 import { useRouter } from "next/router";
 import User from "@/models/user";
 import Form from "@/models/form";
+import Type from "@/models/type";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -36,18 +37,20 @@ export async function getServerSideProps(context) {
       path: "type",
     },
   });
+  const types = await Type.find({ option: owner.option });
   return {
     props: {
       forms: JSON.parse(JSON.stringify(forms)),
+      types: JSON.parse(JSON.stringify(types)),
     },
   };
 }
 
-export default function StickyHeadTable({ forms }) {
+export default function StickyHeadTable({ forms, types }) {
   const router = useRouter();
   const columns = [];
-  for (let i = 0; i < forms[0].inputs.length; i++) {
-    columns.push(forms[0].inputs[i]);
+  for (let i = 0; i < types.length; i++) {
+    columns.push(types[i]);
   }
 
   const rows = [];
@@ -78,7 +81,9 @@ export default function StickyHeadTable({ forms }) {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h4" align="center">Tablični prikaz</Typography>
+      <Typography variant="h4" align="center">
+        Tablični prikaz
+      </Typography>
       <Toolbar />
       <Paper>
         <TableContainer>
@@ -90,7 +95,7 @@ export default function StickyHeadTable({ forms }) {
                     key={column._id}
                     style={{ minWidth: column.minWidth }}
                   >
-                    {column.type.name}
+                    {column.name}
                   </TableCell>
                 ))}
               </TableRow>

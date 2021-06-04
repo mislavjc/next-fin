@@ -11,30 +11,41 @@ const addAccountHandler = async (req, res) => {
     const { email, owner, role, add, del } = req.body;
     const option = await Option.findById(owner.option);
     const username = email.split("@")[0].replace(".", "");
-    const acc = { ...option.owner };
-    acc[username] = {
-      create: add,
-      delete: del,
-      role,
-      color: "#607d8b",
-    };
-    option.owner = acc;
-    await option.save();
-    const message = `
+    if (username in option.owner) {
+      await User.findOneAndUpdate(
+        { email: email },
+        {
+          role: role,
+          create: add,
+          delete: del,
+        }
+      );
+    } else {
+      const acc = { ...option.owner };
+      acc[username] = {
+        create: add,
+        delete: del,
+        role,
+        color: "#607d8b",
+      };
+      option.owner = acc;
+      await option.save();
+      const message = `
       Email: ${email}\r\n
       Link: localhost:3000/invitation/${option._id}
       Message: test
     `;
 
-    const data = {
-      to: "mislavjc@gmail.com",
-      from: process.env.EMAIL_FROM,
-      subject: "Test slanja maila",
-      text: message,
-      html: message.replace(/\r\n/g, "<br>"),
-    };
+      const data = {
+        to: "mislavjc@gmail.com",
+        from: process.env.EMAIL_FROM,
+        subject: "Test slanja maila",
+        text: message,
+        html: message.replace(/\r\n/g, "<br>"),
+      };
 
-    mail.send(data);
+      mail.send(data);
+    }
 
     res.status(201).json({ message: "all ok" });
   }

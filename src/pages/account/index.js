@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import { getSession } from "next-auth/client";
 import Link from "next/link";
 import { dbConnect } from "@/middleware/db";
@@ -28,19 +29,12 @@ import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
-import Tooltip from "@material-ui/core/Tooltip";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
-import TextField from "@material-ui/core/TextField";
-import AlternateEmailIcon from "@material-ui/icons/AlternateEmail";
 import ColorLensIcon from "@material-ui/icons/ColorLens";
 import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
-import WorkIcon from "@material-ui/icons/Work";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
-import DeleteSweepIcon from "@material-ui/icons/DeleteSweep";
-import Switch from "@material-ui/core/Switch";
-import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
+import { Options } from "@/components/account/Options";
 
 const containerVariants = {
   hidden: {
@@ -89,7 +83,7 @@ export async function getServerSideProps(context) {
     archived: true,
   });
   const accounts = await User.find({ option: owner.option });
-  const options = {}
+  const options = {};
 
   for (let acc of accounts) {
     options[acc.email] = {
@@ -97,7 +91,7 @@ export async function getServerSideProps(context) {
       color: acc.color || "#607d8b",
       delete: acc.delete || false,
       create: acc.create || false,
-    }
+    };
   }
 
   return {
@@ -113,33 +107,34 @@ export async function getServerSideProps(context) {
 }
 
 export default function account({ owner, types, forms, archived, options }) {
+  const router = useRouter();
   const [accountPreferences, setAccountPrefrences] = useState(false);
   const [showAccountInvite, setShowAccountInvite] = useState(false);
+  const [showUserPermissions, setShowUserPermissions] = useState(false);
   const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];
   const [selected, setSelected] = useState(owner.color || colors[0]);
-  const [email, setEmail] = useState("");
-  const [role, setRole] = useState("");
-  const [add, setAdd] = useState(false);
-  const [del, setDel] = useState(false);
   const [open, setOpen] = useState(false);
+  const [message, setMessage] = useState("");
+  const [user, setUser] = useState({});
 
-  const inviteHandler = () => {
-    axios
-      .post("/api/add-account", {
-        email,
-        owner,
-        role,
-        add,
-        del,
-      })
-      .then(setOpen(true), setShowAccountInvite(false), setEmail(""));
+  const editAccountHandler = (key, value) => {
+    const obj = {
+      email: key,
+      ...value,
+    };
+    setUser(obj);
+    setShowUserPermissions(true);
   };
 
   const themeHandler = () => {
-    axios.post("/api/account/color", {
-      owner,
-      selected,
-    });
+    axios
+      .post("/api/account/color", {
+        owner,
+        selected,
+      })
+      .then(router.push("/account"));
+    setOpen(true);
+    setMessage("Promjene spremljene.");
     setAccountPrefrences(false);
   };
 
@@ -367,6 +362,7 @@ export default function account({ owner, types, forms, archived, options }) {
                       <Avatar
                         className="avatar"
                         style={{ background: value.color }}
+                        onClick={() => editAccountHandler(key, value)}
                       >
                         m
                       </Avatar>
@@ -446,101 +442,38 @@ export default function account({ owner, types, forms, archived, options }) {
               exit="exit"
               layoutId={"form-fab"}
             >
-              <Paper>
-                <List>
-                  <div style={{ display: "flex", padding: "1rem" }}>
-                    <Typography variant="h5">Unos novog računa</Typography>
-                    <Tooltip title="Zatvori">
-                      <IconButton
-                        style={{
-                          position: "relative",
-                          top: "-8px",
-                          marginLeft: "auto",
-                        }}
-                        onClick={() => setShowAccountInvite(false)}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  <Divider variant="middle" />
-                  <ListItem>
-                    <ListItemIcon>
-                      <AlternateEmailIcon />
-                    </ListItemIcon>
-                    <TextField
-                      id="email"
-                      type="email"
-                      label="Email adresa"
-                      variant="filled"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      fullWidth
-                    />
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <WorkIcon />
-                    </ListItemIcon>
-                    <TextField
-                      id="role"
-                      type="text"
-                      label="Naziv pozicije"
-                      variant="filled"
-                      value={role}
-                      onChange={(e) => setRole(e.target.value)}
-                      fullWidth
-                    />
-                  </ListItem>
-                  <Divider variant="middle" />
-                  <ListItem>
-                    <ListItemIcon>
-                      <PlaylistAddIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Unos podataka"
-                      secondary="Dopuštenje za unos podataka"
-                    />
-                    <ListItemSecondaryAction>
-                      <Switch
-                        checked={add}
-                        onChange={() => setAdd(!add)}
-                        color="primary"
-                        inputProps={{ "aria-label": "checkbox" }}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                  <ListItem>
-                    <ListItemIcon>
-                      <DeleteSweepIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Brisanje podataka"
-                      secondary="Dopuštenje za brisanje podataka"
-                    />
-                    <ListItemSecondaryAction>
-                      <Switch
-                        checked={del}
-                        onChange={() => setDel(!del)}
-                        color="primary"
-                        inputProps={{ "aria-label": "checkbox" }}
-                      />
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                </List>
-                <Divider />
-                <List>
-                  <ListItem button onClick={inviteHandler}>
-                    <ListItemText primary="Pošaljite pozivnicu" />
-                  </ListItem>
-                </List>
-              </Paper>
+              <Options
+                setShowOptions={setShowAccountInvite}
+                setOpen={setOpen}
+                owner={owner}
+                setMessage={setMessage}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
+        <AnimatePresence>
+          {showUserPermissions && (
+            <motion.div
+              variants={formVariants}
+              className="fab-form"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              layoutId={"form-fab"}
+            >
+              <Options
+                setShowOptions={setShowUserPermissions}
+                setOpen={setOpen}
+                owner={owner}
+                user={user}
+                setMessage={setMessage}
+              />
             </motion.div>
           )}
         </AnimatePresence>
         <Backdrop
           style={{ color: "#fff", zIndex: 9 }}
-          open={accountPreferences || showAccountInvite}
+          open={accountPreferences || showAccountInvite || showUserPermissions}
         />
         <Snackbar
           anchorOrigin={{
@@ -550,7 +483,7 @@ export default function account({ owner, types, forms, archived, options }) {
           open={open}
           autoHideDuration={6000}
           onClose={handleClose}
-          message="Pozivnica poslana!"
+          message={message}
           action={
             <IconButton
               size="small"

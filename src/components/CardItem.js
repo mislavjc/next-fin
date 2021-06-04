@@ -1,6 +1,3 @@
-import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
 import Typography from "@material-ui/core/Typography";
 import { useRouter } from "next/router";
 import axios from "axios";
@@ -11,6 +8,10 @@ import KeyboardBackspaceIcon from "@material-ui/icons/KeyboardBackspace";
 import ArchiveIcon from "@material-ui/icons/Archive";
 import UnarchiveIcon from "@material-ui/icons/Unarchive";
 import Tooltip from "@material-ui/core/Tooltip";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import Divider from "@material-ui/core/Divider";
+import Paper from "@material-ui/core/Paper";
 
 export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
   const router = useRouter();
@@ -32,58 +33,84 @@ export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
   };
 
   return (
-    <Card onClick={onOpen} className={!showBack ? "card" : null}>
-      <CardContent>
+    <Paper>
+      <List>
         {form.inputs.map((input, index) => (
-          <Typography className="card-content" variant="body1" key={input._id}>
-            {types[index].name}: <span className="value">{input.value}</span>
-          </Typography>
-        ))}
-      </CardContent>
-      <CardActions>
-        {showBack && (
-          <Tooltip title="Nazad">
-            <IconButton onClick={onClose}>
-              <KeyboardBackspaceIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-        <span style={{ marginLeft: "auto" }}>
-          {owner.create && (
-            <Tooltip title="Promjeni">
-              <IconButton
-                style={{ zIndex: 7 }}
-                onClick={() => router.push(`/all-items/${form._id}/edit`)}
-                className="edit"
+          <span key={input._id}>
+            <ListItem
+              button
+              onClick={onOpen}
+              className={!showBack ? "card" : null}
+              key={input._id}
+            >
+              <span
+                style={{
+                  overflowWrap: "break-word",
+                  width: "25%",
+                }}
               >
-                <EditIcon className="edit" />
+                <Typography variant="overline">{types[index].name}</Typography>
+              </span>
+              <Divider orientation="vertical" flexItem />
+              <Typography
+                variant="body1"
+                style={{
+                  overflowWrap: "break-word",
+                  width: "75%",
+                  paddingLeft: "0.5rem",
+                }}
+              >
+                {input.value}
+              </Typography>
+            </ListItem>
+            <Divider />
+          </span>
+        ))}
+        <ListItem>
+          {showBack && (
+            <Tooltip title="Nazad">
+              <IconButton onClick={onClose}>
+                <KeyboardBackspaceIcon />
               </IconButton>
             </Tooltip>
           )}
-          {showBack && owner.delete && (
-            <>
-              {form.archived ? (
-                <Tooltip title="Vrati iz arhiva">
-                  <IconButton onClick={unArchiveHandler}>
-                    <UnarchiveIcon />
-                  </IconButton>
-                </Tooltip>
-              ) : (
-                <Tooltip title="Arhiviraj">
-                  <IconButton onClick={archiveHandler}>
-                    <ArchiveIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
-              <Tooltip title="Obriši">
-                <IconButton onClick={deleteHandler}>
-                  <DeleteIcon />
+          <span style={{ marginLeft: "auto" }}>
+            {owner.create && (
+              <Tooltip title="Promjeni">
+                <IconButton
+                  style={{ zIndex: 7 }}
+                  onClick={() => router.push(`/all-items/${form._id}/edit`)}
+                  className="edit"
+                >
+                  <EditIcon className="edit" />
                 </IconButton>
               </Tooltip>
-            </>
-          )}
-        </span>
-      </CardActions>
-    </Card>
+            )}
+            {showBack && owner.delete && (
+              <>
+                {form.archived ? (
+                  <Tooltip title="Vrati iz arhiva">
+                    <IconButton onClick={unArchiveHandler}>
+                      <UnarchiveIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Arhiviraj">
+                    <IconButton onClick={archiveHandler}>
+                      <ArchiveIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                <Tooltip title="Obriši">
+                  <IconButton onClick={deleteHandler}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+              </>
+            )}
+          </span>
+        </ListItem>
+      </List>
+    </Paper>
   );
 };

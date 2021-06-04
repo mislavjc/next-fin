@@ -26,6 +26,7 @@ const basicOptionsHandler = async (req, res) => {
     user.role = "admin";
     user.color = "#607d8b";
     user.option = option;
+    user.admin = true;
     await user.save();
     for (let i = 0; i < Object.keys(names).length; i++) {
       const field = {

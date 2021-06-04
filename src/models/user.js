@@ -22,6 +22,10 @@ const schema = new Schema({
   delete: Boolean,
   role: String,
   username: String,
+  admin: {
+    type: Boolean,
+    default: false,
+  },
   option: { type: Schema.Types.ObjectId, ref: "Option" },
 });
 

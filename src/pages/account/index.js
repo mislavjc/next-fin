@@ -118,12 +118,14 @@ export default function account({ owner, types, forms, archived, options }) {
   const [user, setUser] = useState({});
 
   const editAccountHandler = (key, value) => {
-    const obj = {
-      email: key,
-      ...value,
-    };
-    setUser(obj);
-    setShowUserPermissions(true);
+    if (owner.admin) {
+      const obj = {
+        email: key,
+        ...value,
+      };
+      setUser(obj);
+      setShowUserPermissions(true);
+    }
   };
 
   const themeHandler = () => {
@@ -356,43 +358,42 @@ export default function account({ owner, types, forms, archived, options }) {
                     secondary="Popis korisnika u vašem poduzeću"
                   />
                 </ListItem>
-                <div className="members">
+                <Grid container spacing={4} className="members">
                   {Object.entries(options).map(([key, value]) => (
-                    <div key={key}>
+                    <Grid
+                      item
+                      xs={4}
+                      md={3}
+                      lg={2}
+                      key={key}
+                      className={owner.admin ? "card" : null}
+                    >
                       <Avatar
                         className="avatar"
                         style={{ background: value.color }}
                         onClick={() => editAccountHandler(key, value)}
                       >
-                        m
+                        {key[0]}
                       </Avatar>
-                      <Typography variant="body1">{key}</Typography>
-                      <Typography className="role" variant="body2">
-                        {value.role}
+                      <Typography variant="body1">
+                        {key.split("@")[0]}
                       </Typography>
-                    </div>
+                      <Typography variant="body2">{value.role}</Typography>
+                    </Grid>
                   ))}
-                  <div>
-                    <Avatar
-                      style={{ background: "#5E14FF" }}
-                      className="avatar"
-                      onClick={() => setShowAccountInvite(true)}
-                    >
-                      +
-                    </Avatar>
-                    <Typography variant="body1">Dodajte račun</Typography>
-                  </div>
-                </div>
-                <Divider variant="middle" />
-                <ListItem button>
-                  <ListItemIcon>
-                    <SupervisorAccountIcon />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary="Računi"
-                    secondary="Promjenite role računa"
-                  />
-                </ListItem>
+                  {owner.admin && (
+                    <Grid item xs={4} md={3} lg={2} className="card">
+                      <Avatar
+                        style={{ background: "#5E14FF" }}
+                        className="avatar"
+                        onClick={() => setShowAccountInvite(true)}
+                      >
+                        +
+                      </Avatar>
+                      <Typography variant="body1">Dodajte račun</Typography>
+                    </Grid>
+                  )}
+                </Grid>
               </List>
             </Paper>
           </Grid>

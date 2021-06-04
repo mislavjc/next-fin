@@ -25,7 +25,6 @@ import FeedbackIcon from "@material-ui/icons/Feedback";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import CategoryIcon from "@material-ui/icons/Category";
 import FormatLineSpacingIcon from "@material-ui/icons/FormatLineSpacing";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import { motion, AnimateSharedLayout, AnimatePresence } from "framer-motion";
 import { useState, useEffect } from "react";
 import Backdrop from "@material-ui/core/Backdrop";
@@ -35,6 +34,7 @@ import ColorLensIcon from "@material-ui/icons/ColorLens";
 import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import { Options } from "@/components/account/Options";
+import { EditTypes } from "@/components/account/EditTypes";
 
 const containerVariants = {
   hidden: {
@@ -73,7 +73,8 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
-  const types = await Type.countDocuments({ option: owner.option });
+  const typeCount = await Type.countDocuments({ option: owner.option });
+  const types = await Type.find({ option: owner.option });
   const forms = await Form.countDocuments({
     option: owner.option,
     archived: false,
@@ -84,6 +85,20 @@ export async function getServerSideProps(context) {
   });
   const accounts = await User.find({ option: owner.option });
   const options = {};
+
+  const typeNames = {};
+  const typeTypes = {};
+  const typeAdditional = {};
+  const typeIdArr = [];
+
+  for (let i = 0; i < types.length; i++) {
+    typeNames[i] = types[i].name;
+    typeTypes[i] = types[i].type;
+    if (types[i].additional) {
+      typeAdditional[i] = types[i].additional;
+    }
+    typeIdArr.push(types[i]._id)
+  }
 
   for (let acc of accounts) {
     options[acc.email] = {
@@ -98,19 +113,35 @@ export async function getServerSideProps(context) {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
       accounts: JSON.parse(JSON.stringify(accounts)),
+      types: JSON.parse(JSON.stringify(types)),
+      typeIdArr: JSON.parse(JSON.stringify(typeIdArr)),
       options,
-      types,
+      typeCount,
+      typeNames,
+      typeTypes,
+      typeAdditional,
       forms,
       archived,
     },
   };
 }
 
-export default function account({ owner, types, forms, archived, options }) {
+export default function account({
+  owner,
+  typeCount,
+  typeNames,
+  typeTypes,
+  typeAdditional,
+  typeIdArr,
+  forms,
+  archived,
+  options,
+}) {
   const router = useRouter();
   const [accountPreferences, setAccountPrefrences] = useState(false);
   const [showAccountInvite, setShowAccountInvite] = useState(false);
   const [showUserPermissions, setShowUserPermissions] = useState(false);
+  const [showEditCategories, setShowEditCategories] = useState(false);
   const colors = ["#673ab7", "#2196f3", "#f44336", "#009688", "#607d8b"];
   const [selected, setSelected] = useState(owner.color || colors[0]);
   const [open, setOpen] = useState(false);
@@ -326,7 +357,7 @@ export default function account({ owner, types, forms, archived, options }) {
                   </ListItemIcon>
                   <ListItemText
                     primary="Polja za unos podataka"
-                    secondary={<>Odabrano {types} polja za unos podataka</>}
+                    secondary={<>Odabrano {typeCount} polja za unos podataka</>}
                   />
                 </ListItem>
                 <ListItem button>
@@ -341,7 +372,7 @@ export default function account({ owner, types, forms, archived, options }) {
               </List>
               <Divider />
               <List>
-                <ListItem button>
+                <ListItem disabled={!typeCount} onClick={() => setShowEditCategories(true)} button>
                   <ListItemText primary="Promjenite kategorije" />
                 </ListItem>
               </List>
@@ -472,9 +503,39 @@ export default function account({ owner, types, forms, archived, options }) {
             </motion.div>
           )}
         </AnimatePresence>
+        <AnimatePresence>
+          {showEditCategories && (
+            <motion.div
+              variants={formVariants}
+              className="fab-form"
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              layoutId={"form-fab"}
+            >
+              <EditTypes
+                setShowEditCategories={setShowEditCategories}
+                setOpen={setOpen}
+                owner={owner}
+                user={user}
+                typeNames={typeNames}
+                typeTypes={typeTypes}
+                typeAdditional={typeAdditional}
+                typeCount={typeCount}
+                typeIdArr={typeIdArr}
+                setMessage={setMessage}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
         <Backdrop
           style={{ color: "#fff", zIndex: 9 }}
-          open={accountPreferences || showAccountInvite || showUserPermissions}
+          open={
+            accountPreferences ||
+            showAccountInvite ||
+            showUserPermissions ||
+            showEditCategories
+          }
         />
         <Snackbar
           anchorOrigin={{

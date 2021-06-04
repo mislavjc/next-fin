@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 
-export const Additional = ({ category, setAdditionalObj, additionalObj }) => {
-  const [name, setName] = useState("");
-
-  useEffect(() => {
-    additionalObj[category] = name;
-    setAdditionalObj(additionalObj);
-  }, [name]);
-
+export const Additional = ({ category, value, onChange }) => {
   return (
     <TextField
       fullWidth
@@ -17,8 +10,8 @@ export const Additional = ({ category, setAdditionalObj, additionalObj }) => {
       id={`id${category}`}
       name="categoryNames"
       label="Kategorije za izbornik"
-      value={name}
-      onChange={(e) => setName(e.target.value)}
+      value={value ? value : ""}
+      onChange={(e) => onChange(e.target.value)}
     />
   );
 };

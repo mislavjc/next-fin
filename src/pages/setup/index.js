@@ -11,6 +11,7 @@ import { motion, AnimateSharedLayout } from "framer-motion";
 import axios from "axios";
 import Container from "@material-ui/core/Container";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
+import Chip from "@material-ui/core/Chip";
 
 const containerVariants = {
   hidden: {
@@ -66,12 +67,31 @@ export default function Setup({ session }) {
   const [typeObj, setTypeObj] = useState({});
   const [additionalObj, setAdditionalObj] = useState({});
   const [arr, setArr] = useState([]);
+  const [additionalArr, setAdditionalArr] = useState({});
 
   const removeHandler = (index) => {
     delete nameObj[index];
     delete typeObj[index];
     delete additionalObj[index];
+    delete additionalArr[index];
     setCount(count - 1);
+  };
+
+  const additionalHandler = (index) => {
+    if (!additionalArr[index]) {
+      additionalArr[index] = [additionalObj[index]];
+      setAdditionalArr(additionalArr);
+    } else {
+      additionalArr[index].push(additionalObj[index]);
+      setAdditionalArr(additionalArr);
+      console.log(additionalArr);
+    }
+    setAdditionalObj({ ...additionalObj, [index]: "" });
+  };
+
+  const chipHandler = (index, i) => {
+    additionalArr[index].splice(i, 1);
+    setAdditionalArr(additionalArr);
   };
 
   const clickHandler = (e) => {
@@ -81,7 +101,7 @@ export default function Setup({ session }) {
       currentUser,
       names: nameObj,
       types: typeObj,
-      additional: additionalObj,
+      additional: additionalArr,
     };
     axios.post("/api/basic-options", values).then(router.push("/all-items"));
   };
@@ -134,11 +154,40 @@ export default function Setup({ session }) {
                         style={{ marginTop: "1rem", marginLeft: "0" }}
                         variants={inputVariants}
                       >
-                        <Additional
-                          category={index}
-                          setAdditionalObj={setAdditionalObj}
-                          additionalObj={additionalObj}
-                        />
+                        <div style={{ display: "flex", marginBottom: "1rem" }}>
+                          <Additional
+                            category={index}
+                            value={additionalObj[index]}
+                            onChange={(val) => {
+                              setAdditionalObj({
+                                ...additionalObj,
+                                [index]: val,
+                              });
+                            }}
+                          />
+                          <Button
+                            variant="outlined"
+                            color="primary"
+                            size="small"
+                            onClick={() => additionalHandler(index)}
+                          >
+                            Dodaj kategoriju
+                          </Button>
+                        </div>
+                        {additionalArr[index] &&
+                          additionalArr[index].map((additional, i) => (
+                            <motion.span
+                              variants={inputVariants}
+                              key={additional}
+                            >
+                              <Chip
+                                color="primary"
+                                variant="outlined"
+                                label={additional}
+                                onDelete={() => chipHandler(index, i)}
+                              />
+                            </motion.span>
+                          ))}
                       </motion.div>
                     )}
                     {index === arr.length - 1 && (
@@ -166,7 +215,7 @@ export default function Setup({ session }) {
                     onClick={clickHandler}
                     disableElevation
                   >
-                    Submit
+                    Spremi
                   </Button>
                 </motion.div>
               </AnimateSharedLayout>

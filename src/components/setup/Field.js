@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 
 export const Field = ({ category, setNameObj, nameObj }) => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState(nameObj[category] || "");
 
   useEffect(() => {
     nameObj[category] = name;

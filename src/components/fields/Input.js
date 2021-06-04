@@ -35,7 +35,7 @@ export const Input = ({
   if (type === "dropdown") {
     return (
       <FormControl variant="filled" fullWidth>
-        <InputLabel id={`labelid${id}`}>Tip</InputLabel>
+        <InputLabel id={`labelid${id}`}>{name}</InputLabel>
         <Select
           value={value ? value : ""}
           onChange={(e) => setValue(e.target.value)}

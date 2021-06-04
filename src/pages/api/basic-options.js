@@ -35,8 +35,7 @@ const basicOptionsHandler = async (req, res) => {
         option: option,
       };
       if (additional[i.toString()]) {
-        const dropdownArr = additional[i.toString()].split(",");
-        field.additional = dropdownArr;
+        field.additional = additional[i.toString()];
       }
       const type = new Type(field);
       await type.save();

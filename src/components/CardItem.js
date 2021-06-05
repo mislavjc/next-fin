@@ -13,7 +13,16 @@ import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
 
-export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
+export const CardItem = ({
+  form,
+  onOpen,
+  onClose,
+  showBack,
+  types,
+  owner,
+  setShowEditForm,
+  setInitialValue,
+}) => {
   const router = useRouter();
   const id = form._id;
   const archiveHandler = () => {
@@ -30,6 +39,11 @@ export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
     if (owner.delete) {
       axios.delete(`/api/crud/${id}`).then(router.push("/all-items"));
     }
+  };
+
+  const editHandler = () => {
+    setInitialValue(form);
+    setShowEditForm(true);
   };
 
   return (
@@ -78,7 +92,7 @@ export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
               <Tooltip title="Promjeni">
                 <IconButton
                   style={{ zIndex: 7 }}
-                  onClick={() => router.push(`/all-items/${form._id}/edit`)}
+                  onClick={editHandler}
                   className="edit"
                 >
                   <EditIcon className="edit" />

@@ -100,6 +100,8 @@ export default function allItems({ owner, types, forms }) {
   const [entries, setEntries] = useState(forms);
   const [message, setMessage] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [initialValue, setInitialValue] = useState({});
 
   useEffect(() => {
     if (search !== "") {
@@ -149,6 +151,38 @@ export default function allItems({ owner, types, forms }) {
     }
   };
 
+  const editHandler = () => {
+    setIsSubmitted(true);
+    let isSubmittable = true;
+    for (let i = 0; i < types.length; i++) {
+      if (!dataObj[types[i]._id] && types[i].required) {
+        isSubmittable = false;
+      }
+    }
+    if (isSubmittable) {
+      setShowEditForm(false);
+      if (owner.create) {
+        const currentUser = owner._id;
+        const values = {
+          currentUser,
+          dataObj,
+          form: initialValue._id,
+        };
+        axios
+          .put("/api/crud/edit", values)
+          .then(router.push("/all-items"))
+          .then(
+            setMessage("Uspješno promjenjen unos!"),
+            setOpen(true),
+            setIsSubmitted(false)
+          );
+      } else {
+        setMessage("Nemate prava za promjenu unosa!");
+        setOpen(true);
+      }
+    }
+  };
+
   const handleClose = (reason) => {
     if (reason === "clickaway") {
       return;
@@ -170,7 +204,9 @@ export default function allItems({ owner, types, forms }) {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h2">Dodajte unos pritiskom na plus</Typography>
+            <Typography variant="h2" color="textPrimary">
+              Dodajte unos pritiskom na plus
+            </Typography>
           </div>
         )}
         <Grid container spacing={4}>
@@ -192,6 +228,8 @@ export default function allItems({ owner, types, forms }) {
                         form={form}
                         types={types}
                         owner={owner}
+                        setShowEditForm={setShowEditForm}
+                        setInitialValue={setInitialValue}
                         onClose={() => {
                           setShowMore({ ...showMore, [form._id]: false });
                         }}
@@ -212,6 +250,8 @@ export default function allItems({ owner, types, forms }) {
                         form={form}
                         types={types}
                         owner={owner}
+                        setShowEditForm={setShowEditForm}
+                        setInitialValue={setInitialValue}
                         onOpen={() =>
                           setShowMore({ ...showMore, [form._id]: true })
                         }
@@ -293,7 +333,66 @@ export default function allItems({ owner, types, forms }) {
           </motion.div>
         )}
       </AnimatePresence>
-      <Backdrop style={{ color: "#fff", zIndex: 9 }} open={showForm} />
+      <AnimatePresence>
+        {showEditForm && (
+          <motion.div
+            variants={formVariants}
+            className="fab-form"
+            initial="hidden"
+            animate="visible"
+            exit="exit"
+            layoutId={"form-fab"}
+          >
+            <Paper style={{ padding: "1rem" }}>
+              <div style={{ display: "flex" }}>
+                <Typography variant="h5">Novi unos</Typography>
+                <Tooltip title="Zatvori">
+                  <IconButton
+                    style={{
+                      position: "relative",
+                      top: "-8px",
+                      marginLeft: "auto",
+                    }}
+                    onClick={() => {
+                      setShowForm(false), setShowEditForm(false);
+                    }}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
+              {types.map((type) => (
+                <div style={{ marginBottom: "1rem" }} key={type._id}>
+                  <Input
+                    name={type.name}
+                    type={type.type}
+                    required={type.required}
+                    currency={type.currency}
+                    id={type._id}
+                    dataObj={dataObj}
+                    setDataObj={setDataObj}
+                    initialValue={initialValue}
+                    additional={type.additional || null}
+                    isSubmitted={isSubmitted}
+                  />
+                </div>
+              ))}
+              <Button
+                onClick={editHandler}
+                variant="contained"
+                size="large"
+                color="primary"
+              >
+                Spremi
+              </Button>
+            </Paper>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <Backdrop
+        style={{ color: "#fff", zIndex: 9 }}
+        open={showForm || showEditForm}
+      />
       <Snackbar
         anchorOrigin={{
           vertical: "bottom",

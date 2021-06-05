@@ -33,13 +33,13 @@ const addAccountHandler = async (req, res) => {
       const message = `
       Email: ${email}\r\n
       Link: localhost:3000/invitation/${option._id}
-      Message: test
+      Message: Kopirajte link
     `;
 
       const data = {
-        to: "mislavjc@gmail.com",
+        to: email,
         from: process.env.EMAIL_FROM,
-        subject: "Test slanja maila",
+        subject: "Invite za FIN",
         text: message,
         html: message.replace(/\r\n/g, "<br>"),
       };

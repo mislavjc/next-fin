@@ -163,6 +163,7 @@ export const EditTypes = ({
                     )}
                     <FormControlLabel
                       value="top"
+                      className="required-switch"
                       control={
                         <Switch
                           checked={requiredObj[index] === true}

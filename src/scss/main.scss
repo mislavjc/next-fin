@@ -142,6 +142,13 @@ h1 {
   z-index: 10;
 }
 
+.edit-categories {
+  position: fixed;
+  top: 100px;
+  @include form(700px);
+  z-index: 10;
+}
+
 .setup-fields {
   display: flex;
   .type {
@@ -168,16 +175,29 @@ h1 {
     .currency {
       margin-top: 1rem;
       margin-left: 0;
+      width: 100%;
     }
   }
   .overscroll {
     max-height: 60vh;
     overflow: scroll;
   }
+  .required-switch {
+    margin-top: 1rem;
+  }
+}
+
+@media (min-width: 520px) and (max-width: 760px) {
+  .edit-categories {
+    @include form(520px);
+  }
 }
 
 @media (min-width: 375px) and (max-width: 520px) {
   .fab-form {
+    @include form(360px);
+  }
+  .edit-categories {
     @include form(360px);
   }
 }
@@ -186,16 +206,25 @@ h1 {
   .fab-form {
     @include form(270px);
   }
+  .edit-categories {
+    @include form(270px);
+  }
 }
 
 @media (min-width: 320px) and (max-width: 374px) {
   .fab-form {
     @include form(310px);
   }
+  .edit-categories {
+    @include form(310px);
+  }
 }
 
 @media (max-width: 275px) {
   .fab-form {
+    @include form(180px);
+  }
+  .edit-categories {
     @include form(180px);
   }
 }

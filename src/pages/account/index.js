@@ -527,7 +527,7 @@ export default function account({
           {showEditCategories && (
             <motion.div
               variants={formVariants}
-              className="fab-form"
+              className="edit-categories"
               initial="hidden"
               animate="visible"
               exit="exit"

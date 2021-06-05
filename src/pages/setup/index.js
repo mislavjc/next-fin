@@ -236,6 +236,7 @@ export default function Setup({ session }) {
                       )}
                       <FormControlLabel
                         value="top"
+                        className="required-switch"
                         control={
                           <Switch
                             checked={requiredObj[index] === true}

@@ -130,12 +130,62 @@ h1 {
   border: 1px solid black;
 }
 
+@mixin form($width) {
+  width: $width;
+  left: calc(50% - #{$width / 2});
+}
+
 .fab-form {
   position: fixed;
-  left: calc(50% - 250px);
-  top: 150px;
-  width: 500px;
+  top: 100px;
+  @include form(500px);
   z-index: 10;
+}
+
+.setup-fields {
+  display: flex;
+  .type {
+    min-width: 10rem;
+    margin-left: 1rem;
+  }
+}
+
+.list-form {
+  padding: 0 1rem;
+}
+
+@media (max-width: 520px) {
+  .setup-fields {
+    flex-direction: column;
+    .type {
+      margin-top: 1rem;
+      margin-left: 0;
+    }
+  }
+}
+
+@media (min-width: 375px) and (max-width: 520px) {
+  .fab-form {
+    @include form(360px);
+  }
+}
+
+@media (min-width: 280px) and (max-width: 320px) {
+  .fab-form {
+    @include form(270px);
+  }
+}
+
+@media (min-width: 320px) and (max-width: 374px) {
+  .fab-form {
+    @include form(310px);
+  }
+}
+
+@media (max-width: 275px) {
+  .fab-form {
+    @include form(180px);
+  }
 }
 
 .toolbar {

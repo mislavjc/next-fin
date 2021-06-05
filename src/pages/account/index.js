@@ -188,8 +188,8 @@ export default function account({
       <Container maxWidth="md">
         <div className="account-header">
           <Avatar>{owner.email[0]}</Avatar>
-          <Typography variant="h5">Dobrodošao, {owner.email}</Typography>
-          <Typography variant="body1">Promjenite postavke računa</Typography>
+          <Typography variant="h5" align="center">Dobrodošao, {owner.email}</Typography>
+          <Typography variant="body1" align="center">Promjenite postavke računa</Typography>
         </div>
         <Grid container spacing={3}>
           <AnimateSharedLayout>

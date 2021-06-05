@@ -22,6 +22,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import { Toolbar } from "@/components/Toolbar";
+import ArchiveIcon from "@material-ui/icons/Archive";
 
 const cardVariants = {
   hidden: {
@@ -159,7 +160,10 @@ export default function allItems({ owner, types, forms }) {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h2">Dodajte unos pritiskom na plus</Typography>
+            <Typography variant="h2" align="center">
+              Arhiviranje podataka pokreće se pritiskom
+              <ArchiveIcon fontSize="inherit" />
+            </Typography>
           </div>
         )}
         <Grid container spacing={4}>

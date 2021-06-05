@@ -132,7 +132,7 @@ export default function Setup({ session }) {
                     <Typography variant="h6">
                       Kategorija {category + 2}
                     </Typography>
-                    <div style={{ display: "flex" }}>
+                    <div className="setup-fields">
                       <Field
                         category={index}
                         setNameObj={setNameObj}

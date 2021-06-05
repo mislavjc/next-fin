@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import TextField from "@material-ui/core/TextField";
 
 export const Additional = ({ category, value, onChange }) => {
@@ -7,9 +6,9 @@ export const Additional = ({ category, value, onChange }) => {
       fullWidth
       variant="filled"
       type="text"
-      id={`id${category}`}
+      id={`id${category}dropdown`}
       name="categoryNames"
-      label="Kategorije za izbornik"
+      label="Kategorija za izbornik"
       value={value ? value : ""}
       onChange={(e) => onChange(e.target.value)}
     />

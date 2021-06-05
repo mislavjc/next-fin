@@ -121,7 +121,7 @@ export const EditTypes = ({
         <div style={{ maxHeight: "60vh", overflowY: "scroll" }}>
           <AnimateSharedLayout>
             {arr.map((category, index) => (
-              <ListItem key={category}>
+              <div className="list-form" key={category}>
                 <motion.div
                   variants={inputVariants}
                   style={{ marginTop: "1rem" }}
@@ -130,7 +130,7 @@ export const EditTypes = ({
                   <Typography variant="h6">
                     Kategorija {category + 1}
                   </Typography>
-                  <div style={{ display: "flex" }}>
+                  <div className="setup-fields">
                     <Field
                       category={index}
                       setNameObj={setNameObj}
@@ -167,9 +167,10 @@ export const EditTypes = ({
                           variant="outlined"
                           color="primary"
                           size="small"
+                          style={{marginLeft: "1rem"}}
                           onClick={() => additionalHandler(index)}
                         >
-                          Dodaj kategoriju
+                          Dodaj
                         </Button>
                       </div>
                       {additionalArr[index] &&
@@ -198,7 +199,7 @@ export const EditTypes = ({
                     </div>
                   )}
                 </motion.div>
-              </ListItem>
+              </div>
             ))}
           </AnimateSharedLayout>
         </div>

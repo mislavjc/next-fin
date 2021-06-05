@@ -7,7 +7,7 @@ export const Type = ({ category, value, onChange }) => {
   return (
     <FormControl
       variant="filled"
-      style={{ minWidth: "10rem", marginLeft: "1rem" }}
+      className="type"
     >
       <InputLabel id={`labelid${category}`}>Tip</InputLabel>
       <Select

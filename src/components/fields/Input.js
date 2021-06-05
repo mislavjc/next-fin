@@ -13,6 +13,8 @@ export const Input = ({
   setDataObj,
   initialValue,
   additional,
+  required,
+  isSubmitted,
 }) => {
   let valueId = id;
   const inputValue = () => {
@@ -27,14 +29,21 @@ export const Input = ({
     return "";
   };
   const [value, setValue] = useState(inputValue());
+  const [error, setError] = useState(false);
+  const errorMessage = "Polje ne smije biti prazno.";
 
   useEffect(() => {
+    if (isSubmitted && value === "" && required) {
+      setError(true);
+    } else {
+      setError(false);
+    }
     dataObj[valueId] = value;
     setDataObj(dataObj);
-  }, [value]);
+  }, [value, isSubmitted]);
   if (type === "dropdown") {
     return (
-      <FormControl variant="filled" fullWidth>
+      <FormControl variant="filled" fullWidth error={error}>
         <InputLabel id={`labelid${id}`}>{name}</InputLabel>
         <Select
           value={value ? value : ""}
@@ -54,6 +63,8 @@ export const Input = ({
   if (type === "date") {
     return (
       <TextField
+        error={error}
+        helperText={error ? errorMessage : null}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         fullWidth
@@ -71,6 +82,8 @@ export const Input = ({
   if (type === "textarea") {
     return (
       <TextField
+        error={error}
+        helperText={error ? errorMessage : null}
         value={value}
         onChange={(e) => setValue(e.target.value)}
         fullWidth
@@ -86,6 +99,8 @@ export const Input = ({
   }
   return (
     <TextField
+      error={error}
+      helperText={error ? errorMessage : null}
       value={value}
       onChange={(e) => setValue(e.target.value)}
       fullWidth

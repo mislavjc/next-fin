@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import Paper from "@material-ui/core/Paper";
 import Tooltip from "@material-ui/core/Tooltip";
 import List from "@material-ui/core/List";
@@ -17,6 +16,8 @@ import ButtonGroup from "@material-ui/core/ButtonGroup";
 import Button from "@material-ui/core/Button";
 import { Additional } from "@/components/setup/Additional";
 import Chip from "@material-ui/core/Chip";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const inputVariants = {
   hidden: {
@@ -41,12 +42,14 @@ export const EditTypes = ({
   typeCount,
   typeNames,
   typeTypes,
+  typeRequired,
   typeAdditional,
   typeIdArr,
   setMessage,
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
+  const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
   const [count, setCount] = useState(typeCount);
   const [arr, setArr] = useState([]);
@@ -74,6 +77,7 @@ export const EditTypes = ({
       owner,
       names: nameObj,
       types: typeObj,
+      required: requiredObj,
       additional: additionalArr,
       typeIdArr,
       count,
@@ -142,6 +146,23 @@ export const EditTypes = ({
                           [index]: val,
                         });
                       }}
+                    />
+                    <FormControlLabel
+                      value="top"
+                      control={
+                        <Switch
+                          checked={requiredObj[index] === true}
+                          color="primary"
+                          onChange={() =>
+                            setRequiredObj({
+                              ...requiredObj,
+                              [index]: !requiredObj[index],
+                            })
+                          }
+                        />
+                      }
+                      label="Obavezno"
+                      labelPlacement="top"
                     />
                   </div>
                   {typeObj[index] == "dropdown" && (

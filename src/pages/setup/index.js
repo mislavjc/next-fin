@@ -27,6 +27,8 @@ import ListItem from "@material-ui/core/ListItem";
 import Backdrop from "@material-ui/core/Backdrop";
 import TextField from "@material-ui/core/TextField";
 import CloseIcon from "@material-ui/icons/Close";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch from "@material-ui/core/Switch";
 
 const form = [
   {
@@ -114,6 +116,7 @@ export default function Setup({ session }) {
   const router = useRouter();
   const [nameObj, setNameObj] = useState({});
   const [typeObj, setTypeObj] = useState({});
+  const [requiredObj, setRequiredObj] = useState({});
   const [additionalObj, setAdditionalObj] = useState({});
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState({});
@@ -124,6 +127,7 @@ export default function Setup({ session }) {
     delete typeObj[index];
     delete additionalObj[index];
     delete additionalArr[index];
+    delete requiredObj[index];
     setCount(count - 1);
   };
 
@@ -152,6 +156,7 @@ export default function Setup({ session }) {
       names: nameObj,
       types: typeObj,
       additional: additionalArr,
+      required: requiredObj,
     };
     axios.post("/api/basic-options", values).then(router.push("/all-items"));
   };
@@ -213,6 +218,23 @@ export default function Setup({ session }) {
                             [index]: val,
                           });
                         }}
+                      />
+                      <FormControlLabel
+                        value="top"
+                        control={
+                          <Switch
+                            checked={requiredObj[index] === true}
+                            color="primary"
+                            onChange={() =>
+                              setRequiredObj({
+                                ...requiredObj,
+                                [index]: !requiredObj[index],
+                              })
+                            }
+                          />
+                        }
+                        label="Obavezno"
+                        labelPlacement="top"
                       />
                     </div>
                     {typeObj[index] == "dropdown" && (

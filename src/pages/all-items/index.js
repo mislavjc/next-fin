@@ -99,6 +99,7 @@ export default function allItems({ owner, types, forms }) {
   const [search, setSearch] = useState("");
   const [entries, setEntries] = useState(forms);
   const [message, setMessage] = useState("");
+  const [isSubmitted, setIsSubmitted] = useState(false);
 
   useEffect(() => {
     if (search !== "") {
@@ -118,20 +119,33 @@ export default function allItems({ owner, types, forms }) {
   };
 
   const clickHandler = () => {
-    setShowForm(false);
-    if (owner.create) {
-      const currentUser = owner._id;
-      const values = {
-        currentUser,
-        dataObj,
-      };
-      axios
-        .post("/api/crud/create", values)
-        .then(router.push("/all-items"))
-        .then(setMessage("Dodan unos!"), setOpen(true));
-    } else {
-      setMessage("Nemate prava za dodavanje unosa!");
-      setOpen(true);
+    setIsSubmitted(true);
+    let isSubmittable = true;
+    for (let i = 0; i < types.length; i++) {
+      if (!dataObj[types[i]._id] && types[i].required) {
+        isSubmittable = false;
+      }
+    }
+    if (isSubmittable) {
+      setShowForm(false);
+      if (owner.create) {
+        const currentUser = owner._id;
+        const values = {
+          currentUser,
+          dataObj,
+        };
+        axios
+          .post("/api/crud/create", values)
+          .then(router.push("/all-items"))
+          .then(
+            setMessage("Dodan unos!"),
+            setOpen(true),
+            setIsSubmitted(false)
+          );
+      } else {
+        setMessage("Nemate prava za dodavanje unosa!");
+        setOpen(true);
+      }
     }
   };
 
@@ -244,7 +258,9 @@ export default function allItems({ owner, types, forms }) {
                       top: "-8px",
                       marginLeft: "auto",
                     }}
-                    onClick={() => setShowForm(false)}
+                    onClick={() => {
+                      setShowForm(false), setIsSubmitted(false);
+                    }}
                   >
                     <CloseIcon />
                   </IconButton>
@@ -255,10 +271,12 @@ export default function allItems({ owner, types, forms }) {
                   <Input
                     name={type.name}
                     type={type.type}
+                    required={type.required}
                     id={type._id}
                     dataObj={dataObj}
                     setDataObj={setDataObj}
                     additional={type.additional || null}
+                    isSubmitted={isSubmitted}
                   />
                 </div>
               ))}

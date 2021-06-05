@@ -8,7 +8,7 @@ import { dbConnect } from "@/middleware/db";
 const createHandler = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
-    const { currentUser, dataObj } = req.body;
+    const { currentUser, dataObj, attachments } = req.body;
     const option = await Option.findOne({ id: currentUser.option });
     const formArr = [];
     for (const [key, value] of Object.entries(dataObj)) {
@@ -24,6 +24,7 @@ const createHandler = async (req, res) => {
     const form = new Form({
       inputs: formArr,
       option,
+      attachments
     });
     await form.save();
     await res.status(201).json({ message: "all ok" });

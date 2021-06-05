@@ -304,3 +304,19 @@ h1 {
     border-radius: 50%;
   }
 }
+
+.attachments {
+  display: block;
+  margin-bottom: 1rem;
+  content: 'Select some files';
+  background: linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 5px 8px;
+  outline: none;
+  white-space: nowrap;
+  cursor: pointer;
+  &::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+}

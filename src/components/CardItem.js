@@ -81,6 +81,26 @@ export const CardItem = ({
             <Divider />
           </span>
         ))}
+        {showBack &&
+          form.attachments.length > 0 &&
+          form.attachments.map((attachment) => (
+            <ListItem key={attachment.filename} className="overscroll">
+              {attachment.url.slice(attachment.url.length - 3) === "pdf" ? (
+                <iframe
+                  height="450px"
+                  width="100%"
+                  src={attachment.url}
+                  type="application/pdf"
+                />
+              ) : (
+                <img
+                  src={attachment.url}
+                  alt={attachment.filename}
+                  style={{ maxWidth: "100%", maxHeight: "450px" }}
+                />
+              )}
+            </ListItem>
+          ))}
         <ListItem>
           {showBack && (
             <Tooltip title="Nazad">

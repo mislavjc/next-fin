@@ -115,9 +115,9 @@ export const Navbar = () => {
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
-                  <Link href="/">
-                    <ListItem>
-                      <ListItemAvatar onClick={handleClose}>
+                  <Link href="/account">
+                    <ListItem onClick={handleClose}>
+                      <ListItemAvatar>
                         <Avatar>
                           <SupervisorAccountIcon />
                         </Avatar>
@@ -129,9 +129,9 @@ export const Navbar = () => {
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
-                  <Link href="/">
-                    <ListItem>
-                      <ListItemAvatar onClick={handleClose}>
+                  <Link href="/account">
+                    <ListItem disabled onClick={handleClose}>
+                      <ListItemAvatar >
                         <Avatar>
                           <GetAppIcon />
                         </Avatar>
@@ -156,7 +156,7 @@ export const Navbar = () => {
             </div>
           ) : (
             <Button variant="outlined" className="btn" onClick={signIn}>
-              Sign in
+              Prijavite se
             </Button>
           )}
         </div>

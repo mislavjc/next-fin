@@ -42,6 +42,9 @@ const basicOptionsHandler = async (req, res) => {
       if (currency[i.toString()]) {
         field.currency = currency[i.toString()];
       }
+      if (type.currency && type.type !== "currency") {
+        field.currency = undefined;
+      }
       const type = new Type(field);
       await type.save();
     }

@@ -73,7 +73,9 @@ export const CardItem = ({
                   paddingLeft: "0.5rem",
                 }}
               >
-                {input.value}
+                {types[index].currency === "£" ? types[index].currency : null}{" "}
+                {input.value}{" "}
+                {types[index].currency !== "£" ? types[index].currency : null}
               </Typography>
             </ListItem>
             <Divider />

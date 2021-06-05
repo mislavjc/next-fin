@@ -6,7 +6,7 @@ import { dbConnect } from "@/middleware/db";
 const updateTypes = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
-    const { owner, names, types, additional, typeIdArr, count, required } =
+    const { owner, names, types, additional, typeIdArr, count, required, currency } =
       req.body;
     const user = await User.findOne({ email: owner.email });
     const option = await Option.findById(user.option);
@@ -17,6 +17,9 @@ const updateTypes = async (req, res) => {
       type.required = required[i.toString()] || false;
       if (additional[i.toString()]) {
         type.additional = additional[i.toString()];
+      }
+      if (currency[i.toString()]) {
+        type.currency = currency[i.toString()];
       }
       await type.save();
     }
@@ -31,6 +34,9 @@ const updateTypes = async (req, res) => {
         if (additional[i.toString()]) {
           const dropdownArr = additional[i.toString()].split(",");
           field.additional = dropdownArr;
+        }
+        if (currency[i.toString()]) {
+          field.currency = currency[i.toString()];
         }
         const type = new Type(field);
         await type.save();

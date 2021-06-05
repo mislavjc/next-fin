@@ -11,6 +11,7 @@ const schema = new Schema({
     type: Boolean,
     default: false,
   },
+  currency: String,
   additional: Schema.Types.Mixed,
   option: { type: Schema.Types.ObjectId, ref: "Option" },
 });

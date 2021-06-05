@@ -89,6 +89,7 @@ export async function getServerSideProps(context) {
   const typeNames = {};
   const typeTypes = {};
   const typeRequired = {};
+  const typeCurrency = {};
   const typeAdditional = {};
   const typeIdArr = [];
 
@@ -98,6 +99,9 @@ export async function getServerSideProps(context) {
     typeRequired[i] = types[i].required;
     if (types[i].additional) {
       typeAdditional[i] = types[i].additional;
+    }
+    if (types[i].currency) {
+      typeCurrency[i] = types[i].currency;
     }
     typeIdArr.push(types[i]._id);
   }
@@ -122,6 +126,7 @@ export async function getServerSideProps(context) {
       typeNames,
       typeTypes,
       typeRequired,
+      typeCurrency,
       typeAdditional,
       forms,
       archived,
@@ -135,6 +140,7 @@ export default function account({
   typeNames,
   typeTypes,
   typeRequired,
+  typeCurrency,
   typeAdditional,
   typeIdArr,
   forms,
@@ -535,6 +541,7 @@ export default function account({
                 typeNames={typeNames}
                 typeTypes={typeTypes}
                 typeRequired={typeRequired}
+                typeCurrency={typeCurrency}
                 typeAdditional={typeAdditional}
                 typeCount={typeCount}
                 typeIdArr={typeIdArr}

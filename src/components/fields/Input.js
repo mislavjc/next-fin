@@ -4,6 +4,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import { useState, useEffect } from "react";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 export const Input = ({
   name,
@@ -13,6 +14,7 @@ export const Input = ({
   setDataObj,
   initialValue,
   additional,
+  currency,
   required,
   isSubmitted,
 }) => {
@@ -94,6 +96,35 @@ export const Input = ({
         label={name}
         multiline
         rows={4}
+      />
+    );
+  }
+  if (type === "currency") {
+    return (
+      <TextField
+        error={error}
+        helperText={error ? errorMessage : null}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+        fullWidth
+        variant="filled"
+        type={type}
+        id={name}
+        name={name}
+        label={name}
+        InputProps={
+          currency !== "£"
+            ? {
+                endAdornment: (
+                  <InputAdornment position="end">{currency}</InputAdornment>
+                ),
+              }
+            : {
+                startAdornment: (
+                  <InputAdornment position="start">{currency}</InputAdornment>
+                ),
+              }
+        }
       />
     );
   }

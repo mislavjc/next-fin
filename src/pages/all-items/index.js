@@ -272,6 +272,7 @@ export default function allItems({ owner, types, forms }) {
                     name={type.name}
                     type={type.type}
                     required={type.required}
+                    currency={type.currency}
                     id={type._id}
                     dataObj={dataObj}
                     setDataObj={setDataObj}

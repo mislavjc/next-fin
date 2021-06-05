@@ -18,6 +18,7 @@ import { Additional } from "@/components/setup/Additional";
 import Chip from "@material-ui/core/Chip";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { Currency } from "@/components/setup/Currency";
 
 const inputVariants = {
   hidden: {
@@ -43,6 +44,7 @@ export const EditTypes = ({
   typeNames,
   typeTypes,
   typeRequired,
+  typeCurrency,
   typeAdditional,
   typeIdArr,
   setMessage,
@@ -51,6 +53,7 @@ export const EditTypes = ({
   const [typeObj, setTypeObj] = useState(typeTypes);
   const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
+  const [currencyObj, setCurrencyObj] = useState(typeCurrency);
   const [count, setCount] = useState(typeCount);
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState(typeAdditional || {});
@@ -78,6 +81,7 @@ export const EditTypes = ({
       names: nameObj,
       types: typeObj,
       required: requiredObj,
+      currency: currencyObj,
       additional: additionalArr,
       typeIdArr,
       count,
@@ -147,6 +151,16 @@ export const EditTypes = ({
                         });
                       }}
                     />
+                    {typeObj[index] === "currency" && (
+                      <motion.div variants={inputVariants}>
+                        <Currency
+                          value={currencyObj[index]}
+                          onChange={(val) => {
+                            setCurrencyObj({ ...currencyObj, [index]: val });
+                          }}
+                        />
+                      </motion.div>
+                    )}
                     <FormControlLabel
                       value="top"
                       control={

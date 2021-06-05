@@ -5,13 +5,10 @@ import Select from "@material-ui/core/Select";
 
 export const Type = ({ category, value, onChange }) => {
   return (
-    <FormControl
-      variant="filled"
-      className="type"
-    >
+    <FormControl variant="filled" className="type">
       <InputLabel id={`labelid${category}`}>Tip</InputLabel>
       <Select
-        value={value ? value : ''}
+        value={value ? value : ""}
         onChange={(e) => onChange(e.target.value)}
         labelId={`labelid${category}`}
         id={`id${category}`}
@@ -20,8 +17,7 @@ export const Type = ({ category, value, onChange }) => {
         <MenuItem value={"date"}>Datum</MenuItem>
         <MenuItem value={"number"}>Broj</MenuItem>
         <MenuItem value={"dropdown"}>Izbornik</MenuItem>
-        <MenuItem value={"decimal"}>Decimalni broj</MenuItem>
-        <MenuItem value={"tracking"}>Tracking broj</MenuItem>
+        <MenuItem value={"currency"}>Cijena</MenuItem>
       </Select>
     </FormControl>
   );

@@ -6,7 +6,8 @@ import { dbConnect } from "@/middleware/db";
 const basicOptionsHandler = async (req, res) => {
   dbConnect();
   if (req.method === "POST") {
-    const { currentUser, names, types, additional, required } = req.body;
+    const { currentUser, names, types, additional, required, currency } =
+      req.body;
     const user = await User.findOne({ email: currentUser.email });
     const username = user.email.split("@")[0];
     const acc = {};
@@ -37,6 +38,9 @@ const basicOptionsHandler = async (req, res) => {
       };
       if (additional[i.toString()]) {
         field.additional = additional[i.toString()];
+      }
+      if (currency[i.toString()]) {
+        field.currency = currency[i.toString()];
       }
       const type = new Type(field);
       await type.save();

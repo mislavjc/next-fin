@@ -145,8 +145,12 @@ h1 {
 .setup-fields {
   display: flex;
   .type {
-    min-width: 10rem;
+    min-width: 7rem;
     margin-left: 1rem;
+  }
+  .currency {
+    margin-left: 1rem;
+    min-width: 6rem;
   }
 }
 
@@ -158,6 +162,10 @@ h1 {
   .setup-fields {
     flex-direction: column;
     .type {
+      margin-top: 1rem;
+      margin-left: 0;
+    }
+    .currency {
       margin-top: 1rem;
       margin-left: 0;
     }

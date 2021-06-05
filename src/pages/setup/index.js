@@ -29,6 +29,7 @@ import TextField from "@material-ui/core/TextField";
 import CloseIcon from "@material-ui/icons/Close";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Switch from "@material-ui/core/Switch";
+import { Currency } from "@/components/setup/Currency";
 
 const form = [
   {
@@ -118,6 +119,7 @@ export default function Setup({ session }) {
   const [typeObj, setTypeObj] = useState({});
   const [requiredObj, setRequiredObj] = useState({});
   const [additionalObj, setAdditionalObj] = useState({});
+  const [currencyObj, setCurrencyObj] = useState({});
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState({});
   const [showExample, setShowExample] = useState(false);
@@ -157,6 +159,7 @@ export default function Setup({ session }) {
       types: typeObj,
       additional: additionalArr,
       required: requiredObj,
+      currency: currencyObj,
     };
     axios.post("/api/basic-options", values).then(router.push("/all-items"));
   };
@@ -219,6 +222,18 @@ export default function Setup({ session }) {
                           });
                         }}
                       />
+                      {typeObj[index] === "currency" && (
+                        <motion.div
+                          variants={inputVariants}
+                        >
+                          <Currency
+                            value={currencyObj[index]}
+                            onChange={(val) => {
+                              setCurrencyObj({ ...currencyObj, [index]: val });
+                            }}
+                          />
+                        </motion.div>
+                      )}
                       <FormControlLabel
                         value="top"
                         control={

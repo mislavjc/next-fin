@@ -41,7 +41,6 @@ export const CardItem = ({ form, onOpen, onClose, showBack, types, owner }) => {
               button
               onClick={onOpen}
               className={!showBack ? "card" : null}
-              key={input._id}
             >
               <span
                 style={{

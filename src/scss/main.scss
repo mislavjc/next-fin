@@ -162,6 +162,10 @@ h1 {
       margin-left: 0;
     }
   }
+  .overscroll {
+    max-height: 60vh;
+    overflow: scroll;
+  }
 }
 
 @media (min-width: 375px) and (max-width: 520px) {

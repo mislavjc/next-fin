@@ -89,7 +89,7 @@ export const EditTypes = ({
 
   const categoryArr = [];
   useEffect(() => {
-    if (count < 5) {
+    if (count < 20) {
       for (let i = 0; i < count; i++) {
         categoryArr.push(i);
       }
@@ -118,7 +118,7 @@ export const EditTypes = ({
           </Tooltip>
         </div>
         <Divider variant="middle" />
-        <div style={{ maxHeight: "60vh", overflowY: "scroll" }}>
+        <div className="overscroll">
           <AnimateSharedLayout>
             {arr.map((category, index) => (
               <div className="list-form" key={category}>
@@ -127,9 +127,6 @@ export const EditTypes = ({
                   style={{ marginTop: "1rem" }}
                   layoutId={index}
                 >
-                  <Typography variant="h6">
-                    Kategorija {category + 1}
-                  </Typography>
                   <div className="setup-fields">
                     <Field
                       category={index}
@@ -167,7 +164,7 @@ export const EditTypes = ({
                           variant="outlined"
                           color="primary"
                           size="small"
-                          style={{marginLeft: "1rem"}}
+                          style={{ marginLeft: "1rem" }}
                           onClick={() => additionalHandler(index)}
                         >
                           Dodaj
@@ -192,11 +189,14 @@ export const EditTypes = ({
                   {index === arr.length - 1 && (
                     <div style={{ marginTop: "0.5rem" }}>
                       <ButtonGroup color="primary" variant="outlined">
-                        {count < 4 && (
+                        {count < 20 && (
                           <Button onClick={() => setCount(count + 1)}>+</Button>
                         )}
                       </ButtonGroup>
                     </div>
+                  )}
+                  {index !== arr.length - 1 && (
+                    <Divider style={{ marginTop: "1rem" }} />
                   )}
                 </motion.div>
               </div>

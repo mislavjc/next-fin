@@ -97,7 +97,7 @@ export async function getServerSideProps(context) {
     if (types[i].additional) {
       typeAdditional[i] = types[i].additional;
     }
-    typeIdArr.push(types[i]._id)
+    typeIdArr.push(types[i]._id);
   }
 
   for (let acc of accounts) {
@@ -188,8 +188,12 @@ export default function account({
       <Container maxWidth="md">
         <div className="account-header">
           <Avatar>{owner.email[0]}</Avatar>
-          <Typography variant="h5" align="center">Dobrodošao, {owner.email}</Typography>
-          <Typography variant="body1" align="center">Promjenite postavke računa</Typography>
+          <Typography variant="h5" align="center" color="textPrimary">
+            Dobrodošao, {owner.email}
+          </Typography>
+          <Typography variant="body1" align="center" color="textSecondary">
+            Promjenite postavke računa
+          </Typography>
         </div>
         <Grid container spacing={3}>
           <AnimateSharedLayout>
@@ -372,7 +376,11 @@ export default function account({
               </List>
               <Divider />
               <List>
-                <ListItem disabled={!typeCount} onClick={() => setShowEditCategories(true)} button>
+                <ListItem
+                  disabled={!typeCount}
+                  onClick={() => setShowEditCategories(true)}
+                  button
+                >
                   <ListItemText primary="Promjenite kategorije" />
                 </ListItem>
               </List>
@@ -409,7 +417,9 @@ export default function account({
                       <Typography variant="body1">
                         {key.split("@")[0]}
                       </Typography>
-                      <Typography variant="body2">{value.role}</Typography>
+                      <Typography variant="button" color="textSecondary">
+                        {value.role}
+                      </Typography>
                     </Grid>
                   ))}
                   {owner.admin && (

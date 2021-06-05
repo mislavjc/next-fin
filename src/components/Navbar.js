@@ -17,7 +17,6 @@ import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
 import GetAppIcon from "@material-ui/icons/GetApp";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
 import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
-import axios from "axios";
 
 export const Navbar = () => {
   const router = useRouter();

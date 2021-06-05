@@ -28,6 +28,9 @@ const darkTheme = createMuiTheme({
   ...theme,
   palette: {
     type: "dark",
+    primary: {
+      main: deepPurple[100],
+    },
   },
 });
 
@@ -102,7 +105,7 @@ export default function App({ Component, pageProps }) {
       </Provider>
       <style jsx global>{`
         body {
-          background: ${darkMode === 'true' ? "#333" : "white"};
+          background: ${darkMode === "true" ? "#333" : "white"};
         }
       `}</style>
     </>

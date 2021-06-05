@@ -147,9 +147,6 @@ export default function allItems({ owner, types, forms }) {
   return (
     <div style={{ position: "relative" }}>
       <Container maxWidth="lg">
-        <Typography variant="h4" align="center">
-          Unosi
-        </Typography>
         <Toolbar search={search} setSearch={setSearch} />
         {!forms.length && !showForm && (
           <div
@@ -160,7 +157,7 @@ export default function allItems({ owner, types, forms }) {
               justifyContent: "center",
             }}
           >
-            <Typography variant="h2" align="center">
+            <Typography variant="h2" align="center" color="textPrimary">
               Arhiviranje podataka pokreće se pritiskom
               <ArchiveIcon fontSize="inherit" />
             </Typography>
@@ -223,7 +220,7 @@ export default function allItems({ owner, types, forms }) {
         {!showForm && (
           <Fab
             onClick={openFormHandler}
-            color="secondary"
+            color="primary"
             aria-label="add"
             style={{ position: "fixed", right: "1rem", bottom: "1rem" }}
           >

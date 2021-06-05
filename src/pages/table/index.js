@@ -81,9 +81,6 @@ export default function StickyHeadTable({ forms, types }) {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h4" align="center">
-        Tablični prikaz
-      </Typography>
       <Toolbar />
       <Paper>
         <TableContainer>

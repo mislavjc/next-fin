@@ -91,17 +91,6 @@ nav {
   }
 }
 
-.container {
-  max-width: 1200ox;
-  display: flex;
-  justify-content: center;
-}
-
-.card-content {
-  display: block;
-  border-bottom: 1px solid rgb(170, 170, 170);
-}
-
 h1 {
   font-weight: 700;
 }
@@ -113,21 +102,13 @@ h1 {
     font-weight: 700;
   }
   h2 {
-    margin-top: 1rem;
+    margin: 1rem 0;
     font-weight: 300;
-  }
-  button {
-    margin: 0 auto;
   }
   a {
     text-decoration: none;
-    color: white;
+    color: inherit;
   }
-}
-
-.container-bg {
-  background-color: rgba(255, 255, 255, 0.555);
-  border: 1px solid black;
 }
 
 @mixin form($width) {

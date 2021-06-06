@@ -24,7 +24,7 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [name, setName] = useState(null);
   const [darkMode, setDarkMode] = useState("false");
-  const [color, setColor] = useState(null)
+  const [color, setColor] = useState(null);
 
   const lightModeHandler = () => {
     setDarkMode(false);
@@ -38,7 +38,7 @@ export const Navbar = () => {
 
   useEffect(() => {
     setDarkMode(localStorage.getItem("darkMode"));
-    setColor(localStorage.getItem("theme"))
+    setColor(localStorage.getItem("theme"));
   }, []);
 
   useEffect(() => {
@@ -86,7 +86,7 @@ export const Navbar = () => {
                 aria-label="account of current user"
                 onClick={handleClick}
               >
-                <Avatar style={{background: color}}>{name}</Avatar>
+                <Avatar style={{ background: color }}>{name}</Avatar>
               </IconButton>
               <Menu
                 id="simple-menu"
@@ -130,8 +130,8 @@ export const Navbar = () => {
                   </Link>
                   <Divider variant="inset" component="li" />
                   <Link href="/account">
-                    <ListItem disabled onClick={handleClose}>
-                      <ListItemAvatar >
+                    <ListItem onClick={handleClose}>
+                      <ListItemAvatar>
                         <Avatar>
                           <GetAppIcon />
                         </Avatar>

@@ -35,6 +35,7 @@ import axios from "axios";
 import Snackbar from "@material-ui/core/Snackbar";
 import { Options } from "@/components/account/Options";
 import { EditTypes } from "@/components/account/EditTypes";
+import CsvDownloader from "react-csv-downloader";
 
 const containerVariants = {
   hidden: {
@@ -83,6 +84,22 @@ export async function getServerSideProps(context) {
     option: owner.option,
     archived: true,
   });
+  const formData = await Form.find({
+    option: owner.option,
+  }).populate({
+    path: "inputs",
+    populate: {
+      path: "type",
+    },
+  });
+  const datas = [];
+  for (let form of formData) {
+    const obj = {};
+    for (let input of form.inputs) {
+      obj[input.type.name] = input.value;
+    }
+    datas.push(obj);
+  }
   const accounts = await User.find({ option: owner.option });
   const options = {};
 
@@ -121,6 +138,7 @@ export async function getServerSideProps(context) {
       accounts: JSON.parse(JSON.stringify(accounts)),
       types: JSON.parse(JSON.stringify(types)),
       typeIdArr: JSON.parse(JSON.stringify(typeIdArr)),
+      datas: JSON.parse(JSON.stringify(datas)),
       options,
       typeCount,
       typeNames,
@@ -136,6 +154,7 @@ export async function getServerSideProps(context) {
 
 export default function account({
   owner,
+  datas,
   typeCount,
   typeNames,
   typeTypes,
@@ -316,15 +335,22 @@ export default function account({
                   <ListItemIcon>
                     <GetAppIcon />
                   </ListItemIcon>
-                  <ListItemText
-                    primary="Eksport podataka"
-                    secondary="Preuzmite sve svoje podatke u CSV formatu"
-                  />
+                  <CsvDownloader
+                    filename="unosi"
+                    extension=".csv"
+                    separator=";"
+                    datas={datas}
+                  >
+                    <ListItemText
+                      primary="Eksport podataka"
+                      secondary="Preuzmite sve svoje podatke u CSV formatu"
+                    />
+                  </CsvDownloader>
                 </ListItem>
               </List>
               <Divider />
               <List>
-                <ListItem button>
+                <ListItem disabled button>
                   <ListItemText primary="Promjenite plan pretplate" />
                 </ListItem>
               </List>
@@ -374,7 +400,7 @@ export default function account({
                     secondary={<>Odabrano {typeCount} polja za unos podataka</>}
                   />
                 </ListItem>
-                <ListItem button>
+                <ListItem disabled button>
                   <ListItemIcon>
                     <FormatLineSpacingIcon />
                   </ListItemIcon>

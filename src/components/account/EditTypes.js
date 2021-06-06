@@ -97,7 +97,7 @@ export const EditTypes = ({
 
   const categoryArr = [];
   useEffect(() => {
-    if (count < 20) {
+    if (count < 19) {
       for (let i = 0; i < count; i++) {
         categoryArr.push(i);
       }
@@ -108,7 +108,7 @@ export const EditTypes = ({
   return (
     <Paper>
       <List>
-        <div style={{ display: "flex", padding: "1rem" }}>
+        <div style={{ display: "flex", padding: "1rem 1rem 0 1rem" }}>
           <Typography variant="h5">
             {user ? "Promjena postavki" : "Unos novog računa"}
           </Typography>
@@ -125,6 +125,15 @@ export const EditTypes = ({
             </IconButton>
           </Tooltip>
         </div>
+        <Typography
+          variant="overline"
+          color="textSecondary"
+          display="block"
+          gutterBottom
+          style={{ paddingLeft: "1rem" }}
+        >
+          Iskorišteno {count} / 20
+        </Typography>
         <Divider variant="middle" />
         <div className="overscroll">
           <AnimateSharedLayout>
@@ -225,7 +234,7 @@ export const EditTypes = ({
                   {index === arr.length - 1 && (
                     <div style={{ marginTop: "0.5rem" }}>
                       <ButtonGroup color="primary" variant="outlined">
-                        {count < 20 && (
+                        {count < 19 && (
                           <Button onClick={() => setCount(count + 1)}>+</Button>
                         )}
                       </ButtonGroup>

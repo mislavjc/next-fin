@@ -165,7 +165,7 @@ export default function Setup({ session }) {
   };
   const categoryArr = [-1];
   useEffect(() => {
-    if (count < 20) {
+    if (count < 19) {
       for (let i = 0; i < count; i++) {
         categoryArr.push(i);
       }
@@ -195,9 +195,18 @@ export default function Setup({ session }) {
                   variant="button"
                   color="textSecondary"
                   onClick={() => setShowExample(true)}
+                  gutterBottom
                 >
                   Primjer
                   <HelpOutlineIcon fontSize="inherit" />
+                </Typography>
+                <Typography
+                  variant="overline"
+                  color="textSecondary"
+                  display="block"
+                  gutterBottom
+                >
+                  Iskorišteno {count + 1} / 20
                 </Typography>
                 {arr.map((category, index) => (
                   <motion.div
@@ -223,9 +232,7 @@ export default function Setup({ session }) {
                         }}
                       />
                       {typeObj[index] === "currency" && (
-                        <motion.div
-                          variants={inputVariants}
-                        >
+                        <motion.div variants={inputVariants}>
                           <Currency
                             value={currencyObj[index]}
                             onChange={(val) => {
@@ -298,7 +305,7 @@ export default function Setup({ session }) {
                     {index === arr.length - 1 && (
                       <div style={{ marginTop: "0.5rem" }}>
                         <ButtonGroup color="primary" variant="outlined">
-                          {count < 20 && (
+                          {count < 19 && (
                             <Button onClick={() => setCount(count + 1)}>
                               +
                             </Button>

@@ -114,6 +114,7 @@ export default function allItems({
   const [showEditForm, setShowEditForm] = useState(false);
   const [initialValue, setInitialValue] = useState({});
   const attachments = [];
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (search !== "") {
@@ -135,9 +136,11 @@ export default function allItems({
   const fileSelect = useRef(null);
 
   const handleFiles = (files) => {
+    setIsUploading(true);
     for (let i = 0; i < files.length; i++) {
       attachments.push(uploadFile(files[i], cloudinaryUrl, cloudinaryPreset));
     }
+    setIsUploading(false);
   };
 
   const clickHandler = () => {
@@ -344,19 +347,28 @@ export default function allItems({
                   />
                 </div>
               ))}
-              <input
-                ref={fileSelect}
-                className="attachments"
-                type="file"
-                accept="image/*, .pdf"
-                onChange={(e) => handleFiles(e.target.files)}
-                multiple
-              />
+              <div style={{ marginBottom: "1rem" }}>
+                <input
+                  style={{ display: "none" }}
+                  accept="image/*, .pdf"
+                  onChange={(e) => handleFiles(e.target.files)}
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  ref={fileSelect}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" component="span">
+                    Dodaj datoteku
+                  </Button>
+                </label>
+              </div>
               <Button
                 onClick={clickHandler}
                 variant="contained"
                 size="large"
                 color="primary"
+                disabled={isUploading ? true : false}
               >
                 Spremi
               </Button>

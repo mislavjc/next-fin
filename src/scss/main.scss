@@ -306,6 +306,7 @@ h1 {
   position: fixed !important;
   bottom: 1rem;
   right: 1rem;
+  z-index: 6;
 }
 
 @media (max-width: 600px) {

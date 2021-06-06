@@ -360,7 +360,7 @@ export default function allItems({
                   ref={fileSelect}
                 />
                 <label htmlFor="contained-button-file">
-                  <Button variant="contained" component="span">
+                  <Button variant="outlined" color="primary" component="span">
                     Dodaj datoteku
                   </Button>
                 </label>

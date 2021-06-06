@@ -13,7 +13,7 @@ import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
 import Fab from "@material-ui/core/Fab";
 import IconButton from "@material-ui/core/IconButton";
 import AddIcon from "@material-ui/icons/Add";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CloseIcon from "@material-ui/icons/Close";
@@ -22,6 +22,7 @@ import Snackbar from "@material-ui/core/Snackbar";
 import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import { Toolbar } from "@/components/Toolbar";
+import { uploadFile } from "@/middleware/uploadFile";
 
 const cardVariants = {
   hidden: {
@@ -69,12 +70,14 @@ export async function getServerSideProps(context) {
       },
     };
   }
+  const cloudinaryUrl = process.env.CLOUDINARY_URL;
+  const cloudinaryPreset = process.env.CLOUDINARY_UNSIGNED_UPLOAD_PRESET;
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
   const forms = await Form.find({
     option: owner.option,
-    archived: true,
+    archived: false,
   }).populate({
     path: "inputs",
     populate: {
@@ -86,11 +89,19 @@ export async function getServerSideProps(context) {
       owner: JSON.parse(JSON.stringify(owner)),
       types: JSON.parse(JSON.stringify(types)),
       forms: JSON.parse(JSON.stringify(forms)),
+      cloudinaryUrl,
+      cloudinaryPreset,
     },
   };
 }
 
-export default function archivedItems({ owner, types, forms }) {
+export default function allItems({
+  owner,
+  types,
+  forms,
+  cloudinaryUrl,
+  cloudinaryPreset,
+}) {
   const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [dataObj, setDataObj] = useState({});
@@ -102,6 +113,8 @@ export default function archivedItems({ owner, types, forms }) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [initialValue, setInitialValue] = useState({});
+  const attachments = [];
+  const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
     if (search !== "") {
@@ -120,6 +133,16 @@ export default function archivedItems({ owner, types, forms }) {
     }
   };
 
+  const fileSelect = useRef(null);
+
+  const handleFiles = (files) => {
+    setIsUploading(true);
+    for (let i = 0; i < files.length; i++) {
+      attachments.push(uploadFile(files[i], cloudinaryUrl, cloudinaryPreset));
+    }
+    setIsUploading(false);
+  };
+
   const clickHandler = () => {
     setIsSubmitted(true);
     let isSubmittable = true;
@@ -136,6 +159,9 @@ export default function archivedItems({ owner, types, forms }) {
           currentUser,
           dataObj,
         };
+        if (attachments.length > 0) {
+          values.attachments = attachments;
+        }
         axios
           .post("/api/crud/create", values)
           .then(router.push("/all-items"))
@@ -155,7 +181,7 @@ export default function archivedItems({ owner, types, forms }) {
     setIsSubmitted(true);
     let isSubmittable = true;
     for (let i = 0; i < types.length; i++) {
-      if (!dataObj[types[i]._id] && types[i].required) {
+      if (dataObj[types[i]._id] === "" && types[i].required) {
         isSubmittable = false;
       }
     }
@@ -272,7 +298,7 @@ export default function archivedItems({ owner, types, forms }) {
             onClick={openFormHandler}
             color="primary"
             aria-label="add"
-            style={{ position: "fixed", right: "1rem", bottom: "1rem" }}
+            className="fab"
           >
             <AddIcon />
           </Fab>
@@ -321,11 +347,28 @@ export default function archivedItems({ owner, types, forms }) {
                   />
                 </div>
               ))}
+              <div style={{ marginBottom: "1rem" }}>
+                <input
+                  style={{ display: "none" }}
+                  accept="image/*, .pdf"
+                  onChange={(e) => handleFiles(e.target.files)}
+                  id="contained-button-file"
+                  multiple
+                  type="file"
+                  ref={fileSelect}
+                />
+                <label htmlFor="contained-button-file">
+                  <Button variant="contained" component="span">
+                    Dodaj datoteku
+                  </Button>
+                </label>
+              </div>
               <Button
                 onClick={clickHandler}
                 variant="contained"
                 size="large"
                 color="primary"
+                disabled={isUploading ? true : false}
               >
                 Spremi
               </Button>
@@ -345,7 +388,7 @@ export default function archivedItems({ owner, types, forms }) {
           >
             <Paper style={{ padding: "1rem" }}>
               <div style={{ display: "flex" }}>
-                <Typography variant="h5">Novi unos</Typography>
+                <Typography variant="h5">Promjeni unos</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{

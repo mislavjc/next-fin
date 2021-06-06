@@ -2,6 +2,7 @@ import Head from "next/head";
 import { Provider } from "next-auth/client";
 import "@/css/main.min.css";
 import { Navbar } from "@/components/Navbar";
+import {BottomNav} from "@/components/BottomNav";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core";
 import { deepPurple } from "@material-ui/core/colors";
 import { useState, useEffect } from "react";
@@ -101,6 +102,7 @@ export default function App({ Component, pageProps }) {
         <ThemeProvider theme={themeConfig}>
           <Navbar />
           <Component {...pageProps} />
+          <BottomNav />
         </ThemeProvider>
       </Provider>
       <style jsx global>{`

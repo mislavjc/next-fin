@@ -53,6 +53,7 @@ export const Toolbar = ({search, setSearch}) => {
           <SearchIcon />
         </IconButton>
         <InputBase
+          className="search"
           placeholder="Pretražite unose"
           inputProps={{ "aria-label": "pretražite unose" }}
           value={search}

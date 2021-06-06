@@ -48,7 +48,7 @@ export const CardItem = ({
   };
 
   return (
-    <Paper>
+    <Paper className="overscroll-card">
       <List>
         {form.inputs.map((input, index) => (
           <span key={input._id}>
@@ -87,7 +87,7 @@ export const CardItem = ({
         {showBack &&
           form.attachments.length > 0 &&
           form.attachments.map((attachment) => (
-            <ListItem key={attachment.filename} className="overscroll">
+            <ListItem key={attachment.filename}>
               {attachment.url.slice(attachment.url.length - 3) === "pdf" ? (
                 <iframe
                   height="450px"

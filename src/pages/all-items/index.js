@@ -298,7 +298,7 @@ export default function allItems({
             onClick={openFormHandler}
             color="primary"
             aria-label="add"
-            style={{ position: "fixed", right: "1rem", bottom: "1rem" }}
+            className="fab"
           >
             <AddIcon />
           </Fab>

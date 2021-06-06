@@ -6,7 +6,7 @@ import Option from "@/models/option";
 
 export async function getServerSideProps(context) {
   dbConnect();
-  const {option: id} = context.query
+  const { option: id } = context.query;
   const session = await getSession(context);
   if (!session) {
     context.res.writeHead(302, { Location: "/api/auth/signin" });
@@ -19,22 +19,22 @@ export async function getServerSideProps(context) {
     };
   }
   const { user } = session;
-  const option = await Option.findById(id)
+  const option = await Option.findById(id);
   const owner = await User.findOne({ email: user.email });
   const username = user.email.split("@")[0].replace(".", "");
   if (username in option.owner) {
     owner.option = option;
-    owner.create = option.owner[username].create
-    owner.delete = option.owner[username].delete
-    owner.role = option.owner[username].role
-    owner.color = option.owner[username].color
+    owner.create = option.owner[username].create;
+    owner.delete = option.owner[username].delete;
+    owner.role = option.owner[username].role;
+    owner.color = option.owner[username].color;
     await owner.save();
   } else {
     return {
       props: {
         owner: false,
-      }
-    }
+      },
+    };
   }
   return {
     props: {
@@ -44,8 +44,7 @@ export async function getServerSideProps(context) {
 }
 
 export default function invitation({ owner }) {
-  if (!owner) {
-    return <h1>Krivi link</h1>
-  }
+  const router = useRouter();
+  router.push("/all-items");
   return <h1>{JSON.stringify(owner)}</h1>;
 }

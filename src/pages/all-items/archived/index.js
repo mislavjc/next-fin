@@ -77,7 +77,7 @@ export async function getServerSideProps(context) {
   const types = await Type.find({ option: owner.option });
   const forms = await Form.find({
     option: owner.option,
-    archived: false,
+    archived: true,
   }).populate({
     path: "inputs",
     populate: {

@@ -14,8 +14,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import Container from "@material-ui/core/Container";
-import Typography from "@material-ui/core/Typography";
 import { Toolbar } from "@/components/Toolbar";
+import dayjs from "dayjs";
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -79,9 +79,11 @@ export default function StickyHeadTable({ forms, types }) {
     setPage(0);
   };
 
+  const [search, setSearch] = useState("");
+
   return (
     <Container maxWidth="lg">
-      <Toolbar />
+      <Toolbar search={search} setSearch={setSearch} />
       <Paper>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">
@@ -115,6 +117,8 @@ export default function StickyHeadTable({ forms, types }) {
                           <TableCell key={index}>
                             {column.format && typeof value === "number"
                               ? column.format(value)
+                              : column.type === "date"
+                              ? dayjs(value).format("DD.MM.YYYY")
                               : value}
                           </TableCell>
                         );

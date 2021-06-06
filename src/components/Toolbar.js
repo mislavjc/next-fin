@@ -9,7 +9,7 @@ import ArchiveIcon from "@material-ui/icons/Archive";
 import Paper from "@material-ui/core/Paper";
 import IconButton from "@material-ui/core/IconButton";
 
-export const Toolbar = ({search, setSearch}) => {
+export const Toolbar = ({ search, setSearch, owner }) => {
   const router = useRouter();
 
   return (
@@ -47,12 +47,11 @@ export const Toolbar = ({search, setSearch}) => {
         </Link>
       </div>
       <Paper className="search">
-        <IconButton
-          aria-label="search"
-        >
+        <IconButton aria-label="search">
           <SearchIcon />
         </IconButton>
         <InputBase
+          disabled={!owner.option}
           className="search"
           placeholder="Pretražite unose"
           inputProps={{ "aria-label": "pretražite unose" }}

@@ -42,11 +42,12 @@ export async function getServerSideProps(context) {
     props: {
       forms: JSON.parse(JSON.stringify(forms)),
       types: JSON.parse(JSON.stringify(types)),
+      owner: JSON.parse(JSON.stringify(owner)),
     },
   };
 }
 
-export default function StickyHeadTable({ forms, types }) {
+export default function StickyHeadTable({ forms, types, owner }) {
   const router = useRouter();
   const columns = [];
   for (let i = 0; i < types.length; i++) {
@@ -83,7 +84,7 @@ export default function StickyHeadTable({ forms, types }) {
 
   return (
     <Container maxWidth="lg">
-      <Toolbar search={search} setSearch={setSearch} />
+      <Toolbar search={search} setSearch={setSearch} owner={owner} />
       <Paper>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">

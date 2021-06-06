@@ -222,7 +222,7 @@ export default function allItems({
   return (
     <div style={{ position: "relative" }}>
       <Container maxWidth="lg">
-        <Toolbar search={search} setSearch={setSearch} />
+        <Toolbar search={search} setSearch={setSearch} owner={owner} />
         {!forms.length && !showForm && (
           <div
             style={{

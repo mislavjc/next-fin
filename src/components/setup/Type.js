@@ -17,7 +17,7 @@ export const Type = ({ category, value, onChange }) => {
         <MenuItem value={"date"}>Datum</MenuItem>
         <MenuItem value={"number"}>Broj</MenuItem>
         <MenuItem value={"dropdown"}>Izbornik</MenuItem>
-        <MenuItem value={"currency"}>Cijena</MenuItem>
+        <MenuItem value={"currency"}>Iznos</MenuItem>
         <MenuItem value={"textarea"}>Blok teksta</MenuItem>
       </Select>
     </FormControl>

@@ -118,7 +118,9 @@ export default function allItems({
 
   useEffect(() => {
     if (search !== "") {
-      axios.get(`/api/search/${search}`).then((res) => setEntries(res.data));
+      axios
+        .get(`/api/${search}/${owner.option}`)
+        .then((res) => setEntries(res.data));
     } else {
       setEntries(forms);
     }

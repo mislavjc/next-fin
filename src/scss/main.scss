@@ -159,13 +159,14 @@ h1 {
       width: 100%;
     }
   }
-  .overscroll {
-    max-height: 60vh;
-    overflow: scroll;
-  }
   .required-switch {
     margin-top: 1rem;
   }
+}
+
+.overscroll {
+  max-height: 60vh;
+  overflow-y: scroll;
 }
 
 @media (min-width: 520px) and (max-width: 760px) {

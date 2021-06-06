@@ -12,6 +12,7 @@ import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import Divider from "@material-ui/core/Divider";
 import Paper from "@material-ui/core/Paper";
+import dayjs from "dayjs";
 
 export const CardItem = ({
   form,
@@ -74,7 +75,9 @@ export const CardItem = ({
                 }}
               >
                 {types[index].currency === "£" ? types[index].currency : null}{" "}
-                {input.value}{" "}
+                {types[index].type === "date"
+                  ? dayjs(input.value).format("DD.MM.YYYY")
+                  : input.value}{" "}
                 {types[index].currency !== "£" ? types[index].currency : null}
               </Typography>
             </ListItem>

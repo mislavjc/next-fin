@@ -6,6 +6,12 @@ import Select from "@material-ui/core/Select";
 import { useState, useEffect } from "react";
 import InputAdornment from "@material-ui/core/InputAdornment";
 
+import DayJsUtils from "@date-io/dayjs";
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from "@material-ui/pickers";
+
 export const Input = ({
   name,
   type,
@@ -33,6 +39,12 @@ export const Input = ({
   const [value, setValue] = useState(inputValue());
   const [error, setError] = useState(false);
   const errorMessage = "Polje ne smije biti prazno.";
+  const [selectedDate, handleDateChange] = useState(value || new Date());
+
+  useEffect(() => {
+    dataObj[valueId] = selectedDate;
+    setDataObj(dataObj);
+  }, [selectedDate, handleDateChange]);
 
   useEffect(() => {
     if (isSubmitted && value === "" && required) {
@@ -64,21 +76,23 @@ export const Input = ({
   }
   if (type === "date") {
     return (
-      <TextField
-        error={error}
-        helperText={error ? errorMessage : null}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-        fullWidth
-        variant="filled"
-        type={type}
-        id={name}
-        name={name}
-        label={name}
-        InputLabelProps={{
-          shrink: true,
-        }}
-      />
+      <MuiPickersUtilsProvider utils={DayJsUtils}>
+        <KeyboardDatePicker
+          disableToolbar
+          inputVariant="filled"
+          format="DD.MM.YYYY"
+          error={error}
+          helperText={error ? errorMessage : null}
+          fullWidth
+          id={name}
+          label={name}
+          value={selectedDate}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            "aria-label": "change date",
+          }}
+        />
+      </MuiPickersUtilsProvider>
     );
   }
   if (type === "textarea") {
@@ -136,7 +150,6 @@ export const Input = ({
       onChange={(e) => setValue(e.target.value)}
       fullWidth
       variant="filled"
-      type={type}
       id={name}
       name={name}
       label={name}

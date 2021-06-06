@@ -17,10 +17,16 @@
 npm install
 ```
 
-## Usage
+## Usage (development)
 
 ```sh
 npm run dev
+```
+
+## Usage (production)
+
+```sh
+npm run mongo && npm run build && npm start
 ```
 
 ## Author
@@ -34,6 +40,3 @@ npm run dev
 
 Contributions, issues and feature requests are welcome!<br />Feel free to check [issues page](https://github.com/mislavjc/next-fin/issues). 
 
-## Show your support
-
-Give a ⭐️ if this project helped you!

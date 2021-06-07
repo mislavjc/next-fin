@@ -1,4 +1,5 @@
 import Form from "@/models/form";
+import Type from "@/models/type";
 import mongoose from "mongoose";
 
 import { dbConnect } from "@/middleware/db";
@@ -7,7 +8,7 @@ const searchHandler = async (req, res) => {
   dbConnect();
   if (req.method === "GET") {
     const { search, option } = req.query;
-    if (search !== "") {
+    if (search !== "" && !search.includes("+")) {
       const forms = await Form.aggregate([
         {
           $lookup: {
@@ -24,7 +25,18 @@ const searchHandler = async (req, res) => {
           },
         },
       ]);
-      res.send(forms);
+      const result = await Type.populate(forms, { path: "inputs.type" });
+      res.send(result);
+    } else {
+      const allForms = await Form.find({
+        option: mongoose.Types.ObjectId(option),
+      }).populate({
+        path: "inputs",
+        populate: {
+          path: "type",
+        },
+      });
+      res.send(allForms);
     }
     res.status(200);
   }

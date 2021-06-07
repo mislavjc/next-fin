@@ -254,7 +254,6 @@ export default function allItems({
                     >
                       <CardItem
                         form={form}
-                        types={types}
                         owner={owner}
                         setShowEditForm={setShowEditForm}
                         setInitialValue={setInitialValue}

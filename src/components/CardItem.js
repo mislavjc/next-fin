@@ -19,7 +19,6 @@ export const CardItem = ({
   onOpen,
   onClose,
   showBack,
-  types,
   owner,
   setShowEditForm,
   setInitialValue,
@@ -50,7 +49,7 @@ export const CardItem = ({
   return (
     <Paper className="overscroll-card">
       <List>
-        {form.inputs.map((input, index) => (
+        {form.inputs.map((input) => (
           <span key={input._id}>
             <ListItem
               button
@@ -63,7 +62,7 @@ export const CardItem = ({
                   width: "25%",
                 }}
               >
-                <Typography variant="overline">{types[index].name}</Typography>
+                <Typography variant="overline">{input.type.name}</Typography>
               </span>
               <Divider orientation="vertical" flexItem />
               <Typography
@@ -74,11 +73,11 @@ export const CardItem = ({
                   paddingLeft: "0.5rem",
                 }}
               >
-                {types[index].currency === "£" ? types[index].currency : null}{" "}
-                {types[index].type === "date"
+                {input.type.currency === "£" ? input.type.currency : null}{" "}
+                {input.type.type === "date"
                   ? dayjs(input.value).format("DD.MM.YYYY")
                   : input.value}{" "}
-                {types[index].currency !== "£" ? types[index].currency : null}
+                {input.type.currency !== "£" ? input.type.currency : null}
               </Typography>
             </ListItem>
             <Divider />
@@ -116,7 +115,6 @@ export const CardItem = ({
             {owner.create && (
               <Tooltip title="Promjeni">
                 <IconButton
-                  style={{ zIndex: 7 }}
                   onClick={editHandler}
                   className="edit"
                 >

@@ -24,6 +24,8 @@ body::-webkit-scrollbar-thumb {
 body {
   font-family: "Inter";
   font-weight: 400;
+  margin: 0;
+  margin-bottom: 5rem;
 }
 
 html {
@@ -221,6 +223,7 @@ h1 {
   .search {
     margin-left: auto;
     flex-grow: 2;
+    margin-right: 0;
   }
   margin: 1rem 0;
 }

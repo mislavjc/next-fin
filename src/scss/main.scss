@@ -341,3 +341,13 @@ h1 {
 ::-webkit-scrollbar {
   width: 0;
 }
+
+.wrapper {
+  input[type="file"] {
+    opacity: 0;
+    width: 10rem;
+    height: 5rem;
+  }
+  display: flex;
+  justify-content: center;
+}

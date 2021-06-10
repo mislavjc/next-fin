@@ -151,6 +151,7 @@ export const Input = ({
       fullWidth
       variant="filled"
       id={name}
+      type={type}
       name={name}
       label={name}
     />

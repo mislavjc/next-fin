@@ -49,40 +49,42 @@ export const CardItem = ({
   return (
     <Paper className="overscroll-card">
       <List>
-        {form.inputs.map((input) => (
-          <span key={input._id}>
-            <ListItem
-              button
-              onClick={onOpen}
-              className={!showBack ? "card" : null}
-            >
-              <span
-                style={{
-                  overflowWrap: "break-word",
-                  width: "25%",
-                }}
+        {form.inputs.map((input) => {
+          if (input.type) {
+            return <span key={input._id}>
+              <ListItem
+                button
+                onClick={onOpen}
+                className={!showBack ? "card" : null}
               >
-                <Typography variant="overline">{input.type.name}</Typography>
-              </span>
-              <Divider orientation="vertical" flexItem />
-              <Typography
-                variant="body1"
-                style={{
-                  overflowWrap: "break-word",
-                  width: "75%",
-                  paddingLeft: "0.5rem",
-                }}
-              >
-                {input.type.currency === "£" ? input.type.currency : null}{" "}
-                {input.type.type === "date"
-                  ? dayjs(input.value).format("DD.MM.YYYY")
-                  : input.value}{" "}
-                {input.type.currency !== "£" ? input.type.currency : null}
-              </Typography>
-            </ListItem>
-            <Divider />
-          </span>
-        ))}
+                <span
+                  style={{
+                    overflowWrap: "break-word",
+                    width: "25%",
+                  }}
+                >
+                  <Typography variant="overline">{input.type.name}</Typography>
+                </span>
+                <Divider orientation="vertical" flexItem />
+                <Typography
+                  variant="body1"
+                  style={{
+                    overflowWrap: "break-word",
+                    width: "75%",
+                    paddingLeft: "0.5rem",
+                  }}
+                >
+                  {input.type.currency === "£" ? input.type.currency : null}{" "}
+                  {input.type.type === "date"
+                    ? dayjs(input.value).format("DD.MM.YYYY")
+                    : input.value}{" "}
+                  {input.type.currency !== "£" ? input.type.currency : null}
+                </Typography>
+              </ListItem>
+              <Divider />
+            </span>
+          }
+        })}
         {showBack &&
           form.attachments.length > 0 &&
           form.attachments.map((attachment) => (

@@ -104,7 +104,7 @@ export const Navbar = () => {
                 }}
               >
                 <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
-                  <Link href="/account">
+                  <Link href="/account" passHref>
                     <ListItem onClick={handleClose}>
                       <ListItemAvatar>
                         <Avatar>
@@ -115,7 +115,7 @@ export const Navbar = () => {
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
-                  <Link href="/account">
+                  <Link href="/account" passHref>
                     <ListItem onClick={handleClose}>
                       <ListItemAvatar>
                         <Avatar>
@@ -129,7 +129,7 @@ export const Navbar = () => {
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
-                  <Link href="/account">
+                  <Link href="/account" passHref>
                     <ListItem onClick={handleClose}>
                       <ListItemAvatar>
                         <Avatar>

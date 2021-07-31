@@ -1,7 +1,7 @@
 import NextAuth from 'next-auth';
 import Providers from 'next-auth/providers';
 
-const options = {
+export default NextAuth({
   providers: [
     Providers.Email({
       server: process.env.SMTP_SERVER,
@@ -9,5 +9,4 @@ const options = {
     }),
   ],
   database: process.env.DB_CONN_STR,
-};
-export default (req, res) => NextAuth(req, res, options);
+});

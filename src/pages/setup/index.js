@@ -171,7 +171,7 @@ export default function Setup({ session }) {
       }
       setArr(categoryArr);
     }
-  }, [count]);
+  }, [count, categoryArr]);
 
   return (
     <motion.div

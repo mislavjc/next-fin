@@ -1,24 +1,24 @@
-import { useState, useEffect } from "react";
-import Paper from "@material-ui/core/Paper";
-import Tooltip from "@material-ui/core/Tooltip";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import Divider from "@material-ui/core/Divider";
-import Typography from "@material-ui/core/Typography";
-import IconButton from "@material-ui/core/IconButton";
-import CloseIcon from "@material-ui/icons/Close";
-import axios from "axios";
-import { motion, AnimateSharedLayout } from "framer-motion";
-import { Field } from "@/components/setup/Field";
-import { Type } from "@/components/setup/Type";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Button from "@material-ui/core/Button";
-import { Additional } from "@/components/setup/Additional";
-import Chip from "@material-ui/core/Chip";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
-import { Currency } from "@/components/setup/Currency";
+import { useState, useEffect } from 'react';
+import Paper from '@material-ui/core/Paper';
+import Tooltip from '@material-ui/core/Tooltip';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
+import axios from 'axios';
+import { motion, AnimateSharedLayout } from 'framer-motion';
+import { Field } from '@/components/setup/Field';
+import { Type } from '@/components/setup/Type';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import Button from '@material-ui/core/Button';
+import { Additional } from '@/components/setup/Additional';
+import Chip from '@material-ui/core/Chip';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import { Currency } from '@/components/setup/Currency';
 
 const inputVariants = {
   hidden: {
@@ -29,7 +29,7 @@ const inputVariants = {
     y: 0,
     opacity: 1,
     transition: {
-      type: "tween",
+      type: 'tween',
       stiffness: 100,
     },
   },
@@ -67,7 +67,7 @@ export const EditTypes = ({
       setAdditionalArr(additionalArr);
       console.log(additionalArr);
     }
-    setAdditionalObj({ ...additionalObj, [index]: "" });
+    setAdditionalObj({ ...additionalObj, [index]: '' });
   };
 
   const chipHandler = (index, i) => {
@@ -87,11 +87,11 @@ export const EditTypes = ({
       count,
     };
     axios
-      .post("/api/account/update-types", values)
+      .post('/api/account/update-types', values)
       .then(
         setShowEditCategories(false),
         setOpen(true),
-        setMessage("Uspješno promjenjene postavke.")
+        setMessage('Uspješno promjenjene postavke.')
       );
   };
 
@@ -103,21 +103,21 @@ export const EditTypes = ({
       }
       setArr(categoryArr);
     }
-  }, [count]);
+  }, [count, categoryArr]);
 
   return (
     <Paper>
       <List>
-        <div style={{ display: "flex", padding: "1rem 1rem 0 1rem" }}>
+        <div style={{ display: 'flex', padding: '1rem 1rem 0 1rem' }}>
           <Typography variant="h5">
-            {user ? "Promjena postavki" : "Unos novog računa"}
+            {user ? 'Promjena postavki' : 'Unos novog računa'}
           </Typography>
           <Tooltip title="Zatvori">
             <IconButton
               style={{
-                position: "relative",
-                top: "-8px",
-                marginLeft: "auto",
+                position: 'relative',
+                top: '-8px',
+                marginLeft: 'auto',
               }}
               onClick={() => setShowEditCategories(false)}
             >
@@ -130,7 +130,7 @@ export const EditTypes = ({
           color="textSecondary"
           display="block"
           gutterBottom
-          style={{ paddingLeft: "1rem" }}
+          style={{ paddingLeft: '1rem' }}
         >
           Iskorišteno {count} / 20
         </Typography>
@@ -141,7 +141,7 @@ export const EditTypes = ({
               <div className="list-form" key={category}>
                 <motion.div
                   variants={inputVariants}
-                  style={{ marginTop: "1rem" }}
+                  style={{ marginTop: '1rem' }}
                   layoutId={index}
                 >
                   <div className="setup-fields">
@@ -160,7 +160,7 @@ export const EditTypes = ({
                         });
                       }}
                     />
-                    {typeObj[index] === "currency" && (
+                    {typeObj[index] === 'currency' && (
                       <motion.div variants={inputVariants}>
                         <Currency
                           value={currencyObj[index]}
@@ -189,12 +189,12 @@ export const EditTypes = ({
                       labelPlacement="top"
                     />
                   </div>
-                  {typeObj[index] == "dropdown" && (
+                  {typeObj[index] == 'dropdown' && (
                     <motion.div
-                      style={{ marginTop: "1rem", marginLeft: "0" }}
+                      style={{ marginTop: '1rem', marginLeft: '0' }}
                       variants={inputVariants}
                     >
-                      <div style={{ display: "flex", marginBottom: "1rem" }}>
+                      <div style={{ display: 'flex', marginBottom: '1rem' }}>
                         <Additional
                           category={index}
                           value={additionalObj[index]}
@@ -209,7 +209,7 @@ export const EditTypes = ({
                           variant="outlined"
                           color="primary"
                           size="small"
-                          style={{ marginLeft: "1rem" }}
+                          style={{ marginLeft: '1rem' }}
                           onClick={() => additionalHandler(index)}
                         >
                           Dodaj
@@ -232,7 +232,7 @@ export const EditTypes = ({
                     </motion.div>
                   )}
                   {index === arr.length - 1 && (
-                    <div style={{ marginTop: "0.5rem" }}>
+                    <div style={{ marginTop: '0.5rem' }}>
                       <ButtonGroup color="primary" variant="outlined">
                         {count < 19 && (
                           <Button onClick={() => setCount(count + 1)}>+</Button>
@@ -241,7 +241,7 @@ export const EditTypes = ({
                     </div>
                   )}
                   {index !== arr.length - 1 && (
-                    <Divider style={{ marginTop: "1rem" }} />
+                    <Divider style={{ marginTop: '1rem' }} />
                   )}
                 </motion.div>
               </div>

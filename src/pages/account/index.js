@@ -152,7 +152,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function account({
+export default function Account({
   owner,
   datas,
   typeCount,
@@ -380,7 +380,7 @@ export default function account({
               </List>
               <Divider />
               <List>
-                <Link href="/all-items">
+                <Link href="/all-items" passHref>
                   <ListItem button>
                     <ListItemText primary="Pregled svih unosa" />
                   </ListItem>

@@ -22,7 +22,7 @@ body::-webkit-scrollbar-thumb {
 }
 
 body {
-  font-family: "Inter";
+  font-family: 'Inter';
   font-weight: 400;
   margin: 0;
   margin-bottom: 5rem;
@@ -38,7 +38,7 @@ html {
   display: inline-block;
   text-decoration: none;
   &::after {
-    content: "";
+    content: '';
     display: block;
     width: 0;
     height: 2px;
@@ -293,7 +293,7 @@ h1 {
 .attachments {
   display: block;
   margin-bottom: 1rem;
-  content: "Select some files";
+  content: 'Select some files';
   border: 1px solid #999;
   border-radius: 3px;
   padding: 5px 8px;
@@ -343,7 +343,7 @@ h1 {
 }
 
 .wrapper {
-  input[type="file"] {
+  input[type='file'] {
     opacity: 0;
     width: 10rem;
     height: 5rem;

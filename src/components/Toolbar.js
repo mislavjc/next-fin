@@ -15,7 +15,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
   return (
     <div className="toolbar">
       <div>
-        <Link href="/all-items">
+        <Link href="/all-items" passHref>
           <Chip
             icon={<DashboardIcon />}
             label="Kartični pregled"
@@ -25,7 +25,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
         </Link>
       </div>
       <div>
-        <Link href="/table">
+        <Link href="/table" passHref>
           <Chip
             icon={<TocIcon />}
             label="Tablični pregled"
@@ -35,7 +35,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
         </Link>
       </div>
       <div>
-        <Link href="/all-items/archived">
+        <Link href="/all-items/archived" passHref>
           <Chip
             icon={<ArchiveIcon />}
             label="Arhivirani unosi"

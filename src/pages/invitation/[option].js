@@ -43,7 +43,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function invitation({ owner }) {
+export default function Invitation({ owner }) {
   const router = useRouter();
   router.push("/all-items");
   return <h1>{JSON.stringify(owner)}</h1>;

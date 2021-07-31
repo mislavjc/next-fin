@@ -95,7 +95,7 @@ export async function getServerSideProps(context) {
   };
 }
 
-export default function allItems({
+export default function Archivedtems({
   owner,
   types,
   forms,
@@ -124,7 +124,7 @@ export default function allItems({
     } else {
       setEntries(forms);
     }
-  }, [search, forms]);
+  }, [search, forms, owner.option]);
 
   const openFormHandler = () => {
     if (owner.create) {

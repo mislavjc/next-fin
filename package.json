@@ -25,8 +25,8 @@
     "react-csv-downloader": "^2.7.0",
     "react-csv-reader": "^3.3.1",
     "react-dom": "17.0.2",
-    "sass": "^1.37.0",
-    "styled-jsx": "^3.4.4"
+    "sass": "^1.37.5",
+    "styled-jsx": "^3.4.6"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

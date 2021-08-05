@@ -1,29 +1,29 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { signIn, signOut, useSession } from "next-auth/client";
-import Button from "@material-ui/core/Button";
-import IconButton from "@material-ui/core/IconButton";
-import Menu from "@material-ui/core/Menu";
-import MeetingRoomIcon from "@material-ui/icons/MeetingRoom";
-import AccountCircleIcon from "@material-ui/icons/AccountCircle";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
-import Avatar from "@material-ui/core/Avatar";
-import Divider from "@material-ui/core/Divider";
-import SupervisorAccountIcon from "@material-ui/icons/SupervisorAccount";
-import GetAppIcon from "@material-ui/icons/GetApp";
-import Brightness4Icon from "@material-ui/icons/Brightness4";
-import BrightnessHighIcon from "@material-ui/icons/BrightnessHigh";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { signIn, signOut, useSession } from 'next-auth/client';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import Menu from '@material-ui/core/Menu';
+import MeetingRoomIcon from '@material-ui/icons/MeetingRoom';
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Avatar from '@material-ui/core/Avatar';
+import Divider from '@material-ui/core/Divider';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import GetAppIcon from '@material-ui/icons/GetApp';
+import Brightness4Icon from '@material-ui/icons/Brightness4';
+import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 
 export const Navbar = () => {
   const router = useRouter();
   const [session, loading] = useSession();
   const [anchorEl, setAnchorEl] = useState(null);
   const [name, setName] = useState(null);
-  const [darkMode, setDarkMode] = useState("false");
+  const [darkMode, setDarkMode] = useState('false');
   const [color, setColor] = useState(null);
 
   const lightModeHandler = () => {
@@ -37,12 +37,12 @@ export const Navbar = () => {
   };
 
   useEffect(() => {
-    setDarkMode(localStorage.getItem("darkMode"));
-    setColor(localStorage.getItem("theme"));
+    setDarkMode(localStorage.getItem('darkMode'));
+    setColor(localStorage.getItem('theme'));
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
+    localStorage.setItem('darkMode', darkMode);
   }, [darkMode]);
 
   const handleClick = (event) => {
@@ -73,7 +73,7 @@ export const Navbar = () => {
         <div className="account">
           {session && !loading ? (
             <div>
-              {darkMode === "true" ? (
+              {darkMode === 'true' ? (
                 <IconButton onClick={lightModeHandler}>
                   <BrightnessHighIcon />
                 </IconButton>
@@ -95,15 +95,15 @@ export const Navbar = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "left",
+                  vertical: 'top',
+                  horizontal: 'left',
                 }}
                 transformOrigin={{
-                  vertical: "bottom",
-                  horizontal: "right",
+                  vertical: 'bottom',
+                  horizontal: 'right',
                 }}
               >
-                <List style={{ paddingRight: "1rem", cursor: "pointer" }}>
+                <List style={{ paddingRight: '1rem', cursor: 'pointer' }}>
                   <Link href="/account" passHref>
                     <ListItem onClick={handleClose}>
                       <ListItemAvatar>

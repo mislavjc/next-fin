@@ -44,7 +44,7 @@ export const Input = ({
   useEffect(() => {
     dataObj[valueId] = selectedDate;
     setDataObj(dataObj);
-  }, [selectedDate, handleDateChange, dataObj, setDataObj, valueId]);
+  }, [selectedDate, handleDateChange]);
 
   useEffect(() => {
     if (isSubmitted && value === '' && required) {
@@ -54,7 +54,7 @@ export const Input = ({
     }
     dataObj[valueId] = value;
     setDataObj(dataObj);
-  }, [value, isSubmitted, dataObj, setDataObj, required, valueId]);
+  }, [value, isSubmitted]);
   if (type === 'dropdown') {
     return (
       <FormControl variant="filled" fullWidth error={error}>

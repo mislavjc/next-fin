@@ -23,39 +23,7 @@ import Backdrop from "@material-ui/core/Backdrop";
 import Button from "@material-ui/core/Button";
 import { Toolbar } from "@/components/Toolbar";
 import { uploadFile } from "@/middleware/uploadFile";
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: -50,
-  },
-  visible: (index) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: index * 0.01,
-    },
-  }),
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.1,
-    },
-  },
-};
-
-const formVariants = {
-  hidden: {
-    y: -1000,
-  },
-  visible: {
-    y: 0,
-  },
-  exit: {
-    y: -1000,
-    opacity: 0,
-  },
-};
+import { formVariants, cardVariants } from '@/lib/framer';
 
 export async function getServerSideProps(context) {
   dbConnect();

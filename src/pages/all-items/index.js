@@ -1,67 +1,35 @@
-import { getSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import { dbConnect } from "@/middleware/db";
-import Form from "@/models/form";
-import User from "@/models/user";
-import Type from "@/models/type";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { CardItem } from "@/components/CardItem";
-import { Input } from "@/components/fields/Input";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
-import Fab from "@material-ui/core/Fab";
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CloseIcon from "@material-ui/icons/Close";
-import Tooltip from "@material-ui/core/Tooltip";
-import Snackbar from "@material-ui/core/Snackbar";
-import Backdrop from "@material-ui/core/Backdrop";
-import Button from "@material-ui/core/Button";
-import { Toolbar } from "@/components/Toolbar";
-import { uploadFile } from "@/middleware/uploadFile";
-
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: -50,
-  },
-  visible: (index) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: index * 0.01,
-    },
-  }),
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.1,
-    },
-  },
-};
-
-const formVariants = {
-  hidden: {
-    y: -1000,
-  },
-  visible: {
-    y: 0,
-  },
-  exit: {
-    y: -1000,
-    opacity: 0,
-  },
-};
+import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import { dbConnect } from '@/middleware/db';
+import Form from '@/models/form';
+import User from '@/models/user';
+import Type from '@/models/type';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import { CardItem } from '@/components/CardItem';
+import { Input } from '@/components/fields/Input';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
+import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
+import Snackbar from '@material-ui/core/Snackbar';
+import Backdrop from '@material-ui/core/Backdrop';
+import Button from '@material-ui/core/Button';
+import { Toolbar } from '@/components/Toolbar';
+import { uploadFile } from '@/middleware/uploadFile';
+import { formVariants, cardVariants } from '@/lib/framer';
 
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -79,9 +47,9 @@ export async function getServerSideProps(context) {
     option: owner.option,
     archived: false,
   }).populate({
-    path: "inputs",
+    path: 'inputs',
     populate: {
-      path: "type",
+      path: 'type',
     },
   });
   return {
@@ -107,9 +75,9 @@ export default function AllItems({
   const [dataObj, setDataObj] = useState({});
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState({});
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [entries, setEntries] = useState(forms);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [initialValue, setInitialValue] = useState({});
@@ -117,7 +85,7 @@ export default function AllItems({
   const [isUploading, setIsUploading] = useState(false);
 
   useEffect(() => {
-    if (search !== "") {
+    if (search !== '') {
       axios
         .get(`/api/${search}/${owner.option}`)
         .then((res) => setEntries(res.data));
@@ -130,7 +98,7 @@ export default function AllItems({
     if (owner.create) {
       setShowForm(true);
     } else {
-      setMessage("Nemate prava za dodavanje unosa!");
+      setMessage('Nemate prava za dodavanje unosa!');
       setOpen(true);
     }
   };
@@ -165,15 +133,15 @@ export default function AllItems({
           values.attachments = attachments;
         }
         axios
-          .post("/api/crud/create", values)
-          .then(router.push("/all-items"))
+          .post('/api/crud/create', values)
+          .then(router.push('/all-items'))
           .then(
-            setMessage("Dodan unos!"),
+            setMessage('Dodan unos!'),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage("Nemate prava za dodavanje unosa!");
+        setMessage('Nemate prava za dodavanje unosa!');
         setOpen(true);
       }
     }
@@ -183,7 +151,7 @@ export default function AllItems({
     setIsSubmitted(true);
     let isSubmittable = true;
     for (let i = 0; i < types.length; i++) {
-      if (dataObj[types[i]._id] === "" && types[i].required) {
+      if (dataObj[types[i]._id] === '' && types[i].required) {
         isSubmittable = false;
       }
     }
@@ -197,22 +165,22 @@ export default function AllItems({
           form: initialValue._id,
         };
         axios
-          .put("/api/crud/edit", values)
-          .then(router.push("/all-items"))
+          .put('/api/crud/edit', values)
+          .then(router.push('/all-items'))
           .then(
-            setMessage("Uspješno promjenjen unos!"),
+            setMessage('Uspješno promjenjen unos!'),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage("Nemate prava za promjenu unosa!");
+        setMessage('Nemate prava za promjenu unosa!');
         setOpen(true);
       }
     }
   };
 
   const handleClose = (reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -220,16 +188,16 @@ export default function AllItems({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: 'relative' }}>
       <Container maxWidth="lg">
         <Toolbar search={search} setSearch={setSearch} owner={owner} />
         {!forms.length && !showForm && (
           <div
             style={{
-              height: "80vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              height: '80vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Typography variant="h2" color="textPrimary">
@@ -286,7 +254,7 @@ export default function AllItems({
                     </motion.div>
                   )}
                   <Backdrop
-                    style={{ color: "#fff", zIndex: 8 }}
+                    style={{ color: '#fff', zIndex: 8 }}
                     open={showMore[form._id] === true}
                   />
                 </Grid>
@@ -313,17 +281,17 @@ export default function AllItems({
             initial="hidden"
             animate="visible"
             exit="exit"
-            layoutId={"form-fab"}
+            layoutId={'form-fab'}
           >
-            <Paper style={{ padding: "1rem" }}>
-              <div style={{ display: "flex" }}>
+            <Paper style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex' }}>
                 <Typography variant="h5">Novi unos</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
-                      position: "relative",
-                      top: "-8px",
-                      marginLeft: "auto",
+                      position: 'relative',
+                      top: '-8px',
+                      marginLeft: 'auto',
                     }}
                     onClick={() => {
                       setShowForm(false), setIsSubmitted(false);
@@ -334,7 +302,7 @@ export default function AllItems({
                 </Tooltip>
               </div>
               {types.map((type) => (
-                <div style={{ marginBottom: "1rem" }} key={type._id}>
+                <div style={{ marginBottom: '1rem' }} key={type._id}>
                   <Input
                     name={type.name}
                     type={type.type}
@@ -348,9 +316,9 @@ export default function AllItems({
                   />
                 </div>
               ))}
-              <div style={{ marginBottom: "1rem" }}>
+              <div style={{ marginBottom: '1rem' }}>
                 <input
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   accept="image/*, .pdf"
                   onChange={(e) => handleFiles(e.target.files)}
                   id="contained-button-file"
@@ -385,17 +353,17 @@ export default function AllItems({
             initial="hidden"
             animate="visible"
             exit="exit"
-            layoutId={"form-fab"}
+            layoutId={'form-fab'}
           >
-            <Paper style={{ padding: "1rem" }}>
-              <div style={{ display: "flex" }}>
+            <Paper style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex' }}>
                 <Typography variant="h5">Promjeni unos</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
-                      position: "relative",
-                      top: "-8px",
-                      marginLeft: "auto",
+                      position: 'relative',
+                      top: '-8px',
+                      marginLeft: 'auto',
                     }}
                     onClick={() => {
                       setShowForm(false), setShowEditForm(false);
@@ -406,7 +374,7 @@ export default function AllItems({
                 </Tooltip>
               </div>
               {types.map((type) => (
-                <div style={{ marginBottom: "1rem" }} key={type._id}>
+                <div style={{ marginBottom: '1rem' }} key={type._id}>
                   <Input
                     name={type.name}
                     type={type.type}
@@ -434,13 +402,13 @@ export default function AllItems({
         )}
       </AnimatePresence>
       <Backdrop
-        style={{ color: "#fff", zIndex: 9 }}
+        style={{ color: '#fff', zIndex: 9 }}
         open={showForm || showEditForm}
       />
       <Snackbar
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         open={open}
         autoHideDuration={6000}

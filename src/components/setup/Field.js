@@ -7,7 +7,7 @@ export const Field = ({ category, setNameObj, nameObj }) => {
   useEffect(() => {
     nameObj[category] = name;
     setNameObj(nameObj);
-  }, [name, category, nameObj, setNameObj]);
+  }, [name]);
 
   return (
     <TextField

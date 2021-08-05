@@ -19,21 +19,7 @@ import Chip from '@material-ui/core/Chip';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import { Currency } from '@/components/setup/Currency';
-
-const inputVariants = {
-  hidden: {
-    y: 50,
-    opacity: 0,
-  },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: 'tween',
-      stiffness: 100,
-    },
-  },
-};
+import { inputVariants } from '@/lib/framer';
 
 export const EditTypes = ({
   setShowEditCategories,
@@ -103,7 +89,7 @@ export const EditTypes = ({
       }
       setArr(categoryArr);
     }
-  }, [count, categoryArr]);
+  }, [count]);
 
   return (
     <Paper>

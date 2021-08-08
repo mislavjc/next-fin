@@ -34,6 +34,9 @@ export const Input = ({
         }
       }
     }
+    if (type === 'date') {
+      return new Date();
+    }
     return '';
   };
   const [value, setValue] = useState(inputValue());
@@ -81,8 +84,6 @@ export const Input = ({
           disableToolbar
           inputVariant="filled"
           format="DD.MM.YYYY"
-          error={error}
-          helperText={error ? errorMessage : null}
           fullWidth
           id={name}
           label={name}

@@ -83,7 +83,6 @@ export default function AllItems({
   const [initialValue, setInitialValue] = useState({});
   const attachments = [];
   const [isUploading, setIsUploading] = useState(false);
-  const [formIndex, setFormIndex] = useState(0);
 
   useEffect(() => {
     if (search !== '') {
@@ -225,8 +224,6 @@ export default function AllItems({
                       <CardItem
                         form={form}
                         owner={owner}
-                        index={index}
-                        setFormIndex={setFormIndex}
                         setShowEditForm={setShowEditForm}
                         setInitialValue={setInitialValue}
                         onClose={() => {
@@ -249,8 +246,6 @@ export default function AllItems({
                         form={form}
                         types={types}
                         owner={owner}
-                        index={index}
-                        setFormIndex={setFormIndex}
                         setShowEditForm={setShowEditForm}
                         setInitialValue={setInitialValue}
                         onOpen={() =>

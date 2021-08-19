@@ -22,8 +22,6 @@ export const CardItem = ({
   showBack,
   owner,
   setShowEditForm,
-  setFormIndex,
-  index,
   setInitialValue,
 }) => {
   const router = useRouter();
@@ -47,7 +45,6 @@ export const CardItem = ({
   const editHandler = () => {
     setInitialValue(form);
     setShowEditForm(true);
-    setFormIndex(index);
   };
 
   return (

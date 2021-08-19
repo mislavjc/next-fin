@@ -125,111 +125,102 @@ export const EditTypes = ({
           <AnimateSharedLayout>
             {arr.map((category, index) => (
               <div className="list-form" key={category}>
-                <motion.div
-                  variants={inputVariants}
-                  style={{ marginTop: '1rem' }}
-                  layoutId={index}
-                >
-                  <div className="setup-fields">
-                    <Field
-                      category={index}
-                      setNameObj={setNameObj}
-                      nameObj={nameObj}
-                    />
-                    <Type
-                      category={index}
-                      value={typeObj[index]}
-                      onChange={(val) => {
-                        setTypeObj({
-                          ...typeObj,
-                          [index]: val,
-                        });
-                      }}
-                    />
-                    {typeObj[index] === 'currency' && (
-                      <motion.div variants={inputVariants}>
-                        <Currency
-                          value={currencyObj[index]}
-                          onChange={(val) => {
-                            setCurrencyObj({ ...currencyObj, [index]: val });
-                          }}
-                        />
-                      </motion.div>
-                    )}
-                    <FormControlLabel
-                      value="top"
-                      className="required-switch"
-                      control={
-                        <Switch
-                          checked={requiredObj[index] === true}
-                          color="primary"
-                          onChange={() =>
-                            setRequiredObj({
-                              ...requiredObj,
-                              [index]: !requiredObj[index],
-                            })
-                          }
-                        />
-                      }
-                      label="Obavezno"
-                      labelPlacement="top"
-                    />
-                  </div>
-                  {typeObj[index] == 'dropdown' && (
-                    <motion.div
-                      style={{ marginTop: '1rem', marginLeft: '0' }}
-                      variants={inputVariants}
-                    >
-                      <div style={{ display: 'flex', marginBottom: '1rem' }}>
-                        <Additional
-                          category={index}
-                          value={additionalObj[index]}
-                          onChange={(val) => {
-                            setAdditionalObj({
-                              ...additionalObj,
-                              [index]: val,
-                            });
-                          }}
-                        />
-                        <Button
-                          variant="outlined"
-                          color="primary"
-                          size="small"
-                          style={{ marginLeft: '1rem' }}
-                          onClick={() => additionalHandler(index)}
-                        >
-                          Dodaj
-                        </Button>
-                      </div>
-                      {additionalArr[index] &&
-                        additionalArr[index].map((additional, i) => (
-                          <motion.span
-                            variants={inputVariants}
-                            key={additional}
-                          >
-                            <Chip
-                              color="primary"
-                              variant="outlined"
-                              label={additional}
-                              onDelete={() => chipHandler(index, i)}
-                            />
-                          </motion.span>
-                        ))}
+                <div className="setup-fields" style={{ marginTop: '1rem' }}>
+                  <Field
+                    category={index}
+                    setNameObj={setNameObj}
+                    nameObj={nameObj}
+                  />
+                  <Type
+                    category={index}
+                    value={typeObj[index]}
+                    onChange={(val) => {
+                      setTypeObj({
+                        ...typeObj,
+                        [index]: val,
+                      });
+                    }}
+                  />
+                  {typeObj[index] === 'currency' && (
+                    <motion.div variants={inputVariants}>
+                      <Currency
+                        value={currencyObj[index]}
+                        onChange={(val) => {
+                          setCurrencyObj({ ...currencyObj, [index]: val });
+                        }}
+                      />
                     </motion.div>
                   )}
-                  {index === arr.length - 1 && (
-                    <div style={{ marginTop: '0.5rem' }}>
-                      <ButtonGroup color="primary" variant="outlined">
-                        {count < 19 && (
-                          <Button onClick={() => setCount(count + 1)}>+</Button>
-                        )}
-                      </ButtonGroup>
+                  <FormControlLabel
+                    value="top"
+                    className="required-switch"
+                    control={
+                      <Switch
+                        checked={requiredObj[index] === true}
+                        color="primary"
+                        onChange={() =>
+                          setRequiredObj({
+                            ...requiredObj,
+                            [index]: !requiredObj[index],
+                          })
+                        }
+                      />
+                    }
+                    label="Obavezno"
+                    labelPlacement="top"
+                  />
+                </div>
+                {typeObj[index] == 'dropdown' && (
+                  <motion.div
+                    style={{ marginTop: '1rem', marginLeft: '0' }}
+                    variants={inputVariants}
+                  >
+                    <div style={{ display: 'flex', marginBottom: '1rem' }}>
+                      <Additional
+                        category={index}
+                        value={additionalObj[index]}
+                        onChange={(val) => {
+                          setAdditionalObj({
+                            ...additionalObj,
+                            [index]: val,
+                          });
+                        }}
+                      />
+                      <Button
+                        variant="outlined"
+                        color="primary"
+                        size="small"
+                        style={{ marginLeft: '1rem' }}
+                        onClick={() => additionalHandler(index)}
+                      >
+                        Dodaj
+                      </Button>
                     </div>
-                  )}
-                  {index !== arr.length - 1 && (
-                    <Divider style={{ marginTop: '1rem' }} />
-                  )}
-                </motion.div>
+                    {additionalArr[index] &&
+                      additionalArr[index].map((additional, i) => (
+                        <motion.span variants={inputVariants} key={additional}>
+                          <Chip
+                            color="primary"
+                            variant="outlined"
+                            label={additional}
+                            onDelete={() => chipHandler(index, i)}
+                          />
+                        </motion.span>
+                      ))}
+                  </motion.div>
+                )}
+                {index === arr.length - 1 && (
+                  <div style={{ marginTop: '0.5rem' }}>
+                    <ButtonGroup color="primary" variant="outlined">
+                      {count < 19 && (
+                        <Button onClick={() => setCount(count + 1)}>+</Button>
+                      )}
+                    </ButtonGroup>
+                  </div>
+                )}
+                {index !== arr.length - 1 && (
+                  <Divider style={{ marginTop: '1rem' }} />
+                )}
               </div>
             ))}
           </AnimateSharedLayout>

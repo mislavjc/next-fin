@@ -27,7 +27,7 @@ const createHandler = async (req, res) => {
       attachments
     });
     await form.save();
-    await res.status(201).json({ message: "all ok" });
+    res.send(form);
   }
 };
 

@@ -92,7 +92,7 @@ export default function AllItems({
     } else {
       setEntries(forms);
     }
-  }, [search, forms, owner.option]);
+  }, [search]);
 
   const openFormHandler = () => {
     if (owner.create) {
@@ -134,7 +134,7 @@ export default function AllItems({
         }
         axios
           .post('/api/crud/create', values)
-          .then(router.push('/all-items'))
+          .then((entry) => setEntries([...entries, entry.data]))
           .then(
             setMessage('Dodan unos!'),
             setOpen(true),

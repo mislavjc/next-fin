@@ -4,6 +4,7 @@ const MODEL_NAME = "Option";
 
 const schema = new Schema({
   owner: Schema.Types.Mixed,
+  titles: Array,
   subscription: {
     type: String,
     default: "Bez pretplate",

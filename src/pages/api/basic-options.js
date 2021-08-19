@@ -20,6 +20,7 @@ const basicOptionsHandler = async (req, res) => {
     };
     const option = new Option({
       owner: acc,
+      titles: [title]
     });
     await option.save();
     user.create = true;

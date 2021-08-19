@@ -1,16 +1,16 @@
-import Input from "@/models/input";
-import Form from "@/models/form";
+import Input from '@/models/input';
+import Form from '@/models/form';
 
-import { dbConnect } from "@/middleware/db";
+import { dbConnect } from '@/middleware/db';
 
 const editHandler = async (req, res) => {
   dbConnect();
-  if (req.method === "PUT") {
-    const { dataObj, form: _id } = req.body;
+  if (req.method === 'PUT') {
+    const { dataObj, form: _id, owner } = req.body;
     const form = await Form.findOne({ _id }).populate({
-      path: "inputs",
+      path: 'inputs',
       populate: {
-        path: "type",
+        path: 'type',
       },
     });
     for (let i = 0; i < form.inputs.length; i++) {
@@ -21,7 +21,16 @@ const editHandler = async (req, res) => {
       await input.save();
     }
     await form.save();
-    await res.status(201).json({ message: "all ok" });
+    const forms = await Form.find({
+      option: owner.option,
+      archived: false,
+    }).populate({
+      path: 'inputs',
+      populate: {
+        path: 'type',
+      },
+    });
+    res.send(forms);
   }
 };
 

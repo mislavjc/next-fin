@@ -123,6 +123,7 @@ export default function Setup({ session }) {
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState({});
   const [showExample, setShowExample] = useState(false);
+  const [title, setTitle] = useState('');
 
   const removeHandler = (index) => {
     delete nameObj[index];
@@ -160,6 +161,7 @@ export default function Setup({ session }) {
       additional: additionalArr,
       required: requiredObj,
       currency: currencyObj,
+      title,
     };
     axios.post('/api/basic-options', values).then(router.push('/all-items'));
   };
@@ -208,6 +210,19 @@ export default function Setup({ session }) {
                 >
                   Iskorišteno {count + 1} / 20
                 </Typography>
+                <Typography variant="h6" gutterBottom>
+                  Naziv kategorija
+                </Typography>
+                <TextField
+                  fullWidth
+                  variant="filled"
+                  type="text"
+                  id="categoryTitle"
+                  name="categoryTitles"
+                  label="Naziv kategorija"
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
                 {arr.map((category, index) => (
                   <motion.div
                     variants={inputVariants}

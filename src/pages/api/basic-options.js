@@ -1,22 +1,22 @@
-import User from "@/models/user";
-import Type from "@/models/type";
-import Option from "@/models/option";
-import { dbConnect } from "@/middleware/db";
+import User from '@/models/user';
+import Type from '@/models/type';
+import Option from '@/models/option';
+import { dbConnect } from '@/middleware/db';
 
 const basicOptionsHandler = async (req, res) => {
   dbConnect();
-  if (req.method === "POST") {
-    const { currentUser, names, types, additional, required, currency } =
+  if (req.method === 'POST') {
+    const { currentUser, names, types, additional, required, currency, title } =
       req.body;
     const user = await User.findOne({ email: currentUser.email });
-    const username = user.email.split("@")[0];
+    const username = user.email.split('@')[0];
     const acc = {};
     acc[username] = {
       email: user.email,
       create: true,
       delete: true,
-      role: "admin",
-      color: "#BDBDBD",
+      role: 'admin',
+      color: '#BDBDBD',
     };
     const option = new Option({
       owner: acc,
@@ -24,8 +24,8 @@ const basicOptionsHandler = async (req, res) => {
     await option.save();
     user.create = true;
     user.delete = true;
-    user.role = "admin";
-    user.color = "#607d8b";
+    user.role = 'admin';
+    user.color = '#607d8b';
     user.option = option;
     user.admin = true;
     await user.save();
@@ -35,6 +35,7 @@ const basicOptionsHandler = async (req, res) => {
         type: types[i.toString()],
         required: required[i.toString()] || false,
         option: option,
+        title: title,
       };
       if (additional[i.toString()]) {
         field.additional = additional[i.toString()];
@@ -45,7 +46,7 @@ const basicOptionsHandler = async (req, res) => {
       const type = new Type(field);
       await type.save();
     }
-    res.status(201).json({ message: "all ok" });
+    res.status(201).json({ message: 'all ok' });
   }
 };
 

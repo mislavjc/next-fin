@@ -15,7 +15,7 @@ export const Field = ({ category, setNameObj, nameObj }) => {
       variant="filled"
       type="text"
       id={`id${category}`}
-      name="categoryNames"
+      name={`name${category}`}
       label="Naziv kategorije"
       value={name}
       onChange={(e) => setName(e.target.value)}

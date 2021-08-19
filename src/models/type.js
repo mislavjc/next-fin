@@ -7,6 +7,7 @@ const schema = new Schema({
   name: String,
   type: String,
   color: String,
+  title: String,
   required: {
     type: Boolean,
     default: false,

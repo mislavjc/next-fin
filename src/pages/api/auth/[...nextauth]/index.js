@@ -8,5 +8,8 @@ export default NextAuth({
       from: process.env.EMAIL_FROM,
     }),
   ],
+  pages: {
+    signIn: '/auth/signin',
+  },
   database: process.env.DB_CONN_STR,
 });

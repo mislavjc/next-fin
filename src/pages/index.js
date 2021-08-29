@@ -34,7 +34,6 @@ export default function Home({ owner }) {
             variant="h2"
             component="h1"
             align="center"
-            fontWeight={600}
           >
             Landing page je u izradi
           </Typography>

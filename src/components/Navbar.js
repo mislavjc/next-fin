@@ -155,9 +155,20 @@ export const Navbar = () => {
               </Menu>
             </div>
           ) : (
-            <Button variant="outlined" className="btn" onClick={signIn}>
-              Prijavite se
-            </Button>
+            <div>
+              {darkMode === 'true' ? (
+                <IconButton onClick={lightModeHandler}>
+                  <BrightnessHighIcon />
+                </IconButton>
+              ) : (
+                <IconButton onClick={darkModeHandler}>
+                  <Brightness4Icon />
+                </IconButton>
+              )}
+              <Button variant="outlined" className="btn" onClick={signIn}>
+                Prijavite se
+              </Button>
+            </div>
           )}
         </div>
       </div>

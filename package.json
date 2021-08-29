@@ -18,14 +18,15 @@
     "axios": "^0.21.1",
     "dayjs": "^1.10.6",
     "framer-motion": "^4.1.17",
-    "mongoose": "^5.13.7",
+    "mongodb": "^3.6.11",
+    "mongoose": "^6.0.2",
     "next": "^11.1.0",
-    "next-auth": "^3.28.0",
+    "next-auth": "^3.29.0",
     "react": "17.0.2",
     "react-csv-downloader": "^2.7.0",
     "react-csv-reader": "^3.3.1",
     "react-dom": "17.0.2",
-    "sass": "^1.38.0",
+    "sass": "^1.38.2",
     "styled-jsx": "^4.0.0"
   },
   "devDependencies": {

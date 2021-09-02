@@ -7,6 +7,7 @@ const MODEL_NAME = "Form";
 const schema = new Schema({
   option: { type: Schema.Types.ObjectId, ref: "Option" },
   inputs: [{ type: Schema.Types.ObjectId, ref: "Input" }],
+  title: String,
   attachments: [
     {
       url: String,

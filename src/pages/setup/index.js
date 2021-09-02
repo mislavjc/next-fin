@@ -1,3 +1,4 @@
+import User from '@/models/user';
 import Grid from '@material-ui/core/Grid';
 import { getSession } from 'next-auth/client';
 import { useEffect, useState } from 'react';
@@ -106,13 +107,17 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const { user } = session;
+  const owner = await User.findOne({ email: user.email });
+
   return {
     props: {
       session,
+      owner: JSON.parse(JSON.stringify(owner)),
     },
   };
 }
-export default function Setup({ session }) {
+export default function Setup({ session, owner }) {
   const [count, setCount] = useState(0);
   const router = useRouter();
   const [nameObj, setNameObj] = useState({});
@@ -141,7 +146,6 @@ export default function Setup({ session }) {
     } else {
       additionalArr[index].push(additionalObj[index]);
       setAdditionalArr(additionalArr);
-      console.log(additionalArr);
     }
     setAdditionalObj({ ...additionalObj, [index]: '' });
   };
@@ -163,7 +167,11 @@ export default function Setup({ session }) {
       currency: currencyObj,
       title,
     };
-    axios.post('/api/basic-options', values).then(router.push('/all-items'));
+    if (owner.option) {
+      axios.post('/api/new-form', values).then(router.push('/all-items'));
+    } else {
+      axios.post('/api/basic-options', values).then(router.push('/all-items'));
+    }
   };
   const categoryArr = [-1];
   useEffect(() => {

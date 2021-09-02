@@ -1,12 +1,16 @@
 import { getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
 import { dbConnect } from '@/middleware/db';
 import Form from '@/models/form';
 import User from '@/models/user';
 import Type from '@/models/type';
+import Option from '@/models/option';
 import Container from '@material-ui/core/Container';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
 import { CardItem } from '@/components/CardItem';
 import { Input } from '@/components/fields/Input';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
@@ -43,6 +47,7 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
+  const option = await Option.findById(owner.option);
   const forms = await Form.find({
     option: owner.option,
     archived: false,
@@ -57,6 +62,7 @@ export async function getServerSideProps(context) {
       owner: JSON.parse(JSON.stringify(owner)),
       types: JSON.parse(JSON.stringify(types)),
       forms: JSON.parse(JSON.stringify(forms)),
+      option: JSON.parse(JSON.stringify(option)),
       cloudinaryUrl,
       cloudinaryPreset,
     },
@@ -67,10 +73,10 @@ export default function AllItems({
   owner,
   types,
   forms,
+  option,
   cloudinaryUrl,
   cloudinaryPreset,
 }) {
-  const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [dataObj, setDataObj] = useState({});
   const [open, setOpen] = useState(false);
@@ -83,6 +89,17 @@ export default function AllItems({
   const [initialValue, setInitialValue] = useState({});
   const attachments = [];
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState(option.titles[0] || '');
+
+  useEffect(() => {
+    axios
+      .post('/api/crud/read', {
+        title: selectedTitle,
+        owner,
+      })
+      .then((res) => setEntries(res.data))
+      .then(() => setDataObj({}));
+  }, [selectedTitle]);
 
   useEffect(() => {
     if (search !== '') {
@@ -117,7 +134,11 @@ export default function AllItems({
     setIsSubmitted(true);
     let isSubmittable = true;
     for (let i = 0; i < types.length; i++) {
-      if (!dataObj[types[i]._id] && types[i].required) {
+      if (
+        !dataObj[types[i]._id] &&
+        types[i].required &&
+        types[i].title === selectedTitle
+      ) {
         isSubmittable = false;
       }
     }
@@ -128,6 +149,7 @@ export default function AllItems({
         const values = {
           currentUser,
           dataObj,
+          title: selectedTitle,
         };
         if (attachments.length > 0) {
           values.attachments = attachments;
@@ -164,6 +186,7 @@ export default function AllItems({
           dataObj,
           form: initialValue._id,
           owner,
+          title: selectedTitle
         };
         axios
           .put('/api/crud/edit', values)
@@ -206,6 +229,25 @@ export default function AllItems({
             </Typography>
           </div>
         )}
+        <FormControl
+          variant="filled"
+          fullWidth
+          style={{ marginBottom: '2rem' }}
+        >
+          <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
+          <Select
+            value={selectedTitle}
+            onChange={(e) => setSelectedTitle(e.target.value)}
+            labelId={'selectedTitleSelect'}
+            id={'selectedTitleSelectID'}
+          >
+            {option.titles.map((title) => (
+              <MenuItem value={title} key={title}>
+                {title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>
@@ -302,21 +344,25 @@ export default function AllItems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => (
-                <div style={{ marginBottom: '1rem' }} key={type._id}>
-                  <Input
-                    name={type.name}
-                    type={type.type}
-                    required={type.required}
-                    currency={type.currency}
-                    id={type._id}
-                    dataObj={dataObj}
-                    setDataObj={setDataObj}
-                    additional={type.additional || null}
-                    isSubmitted={isSubmitted}
-                  />
-                </div>
-              ))}
+              {types.map((type) => {
+                if (type.title === selectedTitle) {
+                  return (
+                    <div style={{ marginBottom: '1rem' }} key={type._id}>
+                      <Input
+                        name={type.name}
+                        type={type.type}
+                        required={type.required}
+                        currency={type.currency}
+                        id={type._id}
+                        dataObj={dataObj}
+                        setDataObj={setDataObj}
+                        additional={type.additional || null}
+                        isSubmitted={isSubmitted}
+                      />
+                    </div>
+                  );
+                }
+              })}
               <div style={{ marginBottom: '1rem' }}>
                 <input
                   style={{ display: 'none' }}
@@ -374,22 +420,26 @@ export default function AllItems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => (
-                <div style={{ marginBottom: '1rem' }} key={type._id}>
-                  <Input
-                    name={type.name}
-                    type={type.type}
-                    required={type.required}
-                    currency={type.currency}
-                    id={type._id}
-                    dataObj={dataObj}
-                    setDataObj={setDataObj}
-                    initialValue={initialValue}
-                    additional={type.additional || null}
-                    isSubmitted={isSubmitted}
-                  />
-                </div>
-              ))}
+              {types.map((type) => {
+                if (type.title === selectedTitle) {
+                  return (
+                    <div style={{ marginBottom: '1rem' }} key={type._id}>
+                      <Input
+                        name={type.name}
+                        type={type.type}
+                        required={type.required}
+                        currency={type.currency}
+                        id={type._id}
+                        dataObj={dataObj}
+                        setDataObj={setDataObj}
+                        initialValue={initialValue}
+                        additional={type.additional || null}
+                        isSubmitted={isSubmitted}
+                      />
+                    </div>
+                  );
+                }
+              })}
               <Button
                 onClick={editHandler}
                 variant="contained"

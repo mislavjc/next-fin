@@ -183,7 +183,6 @@ export default function Import({ session }) {
     } else {
       additionalArr[index].push(additionalObj[index]);
       setAdditionalArr(additionalArr);
-      console.log(additionalArr);
     }
     setAdditionalObj({ ...additionalObj, [index]: '' });
   };
@@ -206,7 +205,6 @@ export default function Import({ session }) {
       importedValues,
     };
     axios.post('/api/import', values).then(router.push('/all-items'));
-    console.log(values);
   };
 
   const handleClose = (reason) => {

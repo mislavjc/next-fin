@@ -51,7 +51,6 @@ export const EditTypes = ({
     } else {
       additionalArr[index].push(additionalObj[index]);
       setAdditionalArr(additionalArr);
-      console.log(additionalArr);
     }
     setAdditionalObj({ ...additionalObj, [index]: '' });
   };

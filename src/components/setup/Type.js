@@ -8,17 +8,18 @@ export const Type = ({ category, value, onChange }) => {
     <FormControl variant="filled" className="type">
       <InputLabel id={`labelid${category}`}>Tip</InputLabel>
       <Select
-        value={value ? value : ""}
+        value={value ? value : ''}
         onChange={(e) => onChange(e.target.value)}
         labelId={`labelid${category}`}
         id={`id${category}`}
       >
-        <MenuItem value={"text"}>Tekst</MenuItem>
-        <MenuItem value={"date"}>Datum</MenuItem>
-        <MenuItem value={"number"}>Broj</MenuItem>
-        <MenuItem value={"dropdown"}>Izbornik</MenuItem>
-        <MenuItem value={"currency"}>Iznos</MenuItem>
-        <MenuItem value={"textarea"}>Blok teksta</MenuItem>
+        <MenuItem value={'text'}>Tekst</MenuItem>
+        <MenuItem value={'date'}>Datum</MenuItem>
+        <MenuItem value={'number'}>Broj</MenuItem>
+        <MenuItem value={'dropdown'}>Izbornik</MenuItem>
+        <MenuItem value={'currency'}>Iznos</MenuItem>
+        <MenuItem value={'textarea'}>Blok teksta</MenuItem>
+        <MenuItem value={'uuid'}>Jedinstveni identifikator</MenuItem>
       </Select>
     </FormControl>
   );

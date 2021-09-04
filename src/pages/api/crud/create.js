@@ -1,13 +1,13 @@
-import Type from "@/models/type";
-import Option from "@/models/option";
-import Input from "@/models/input";
-import Form from "@/models/form";
+import Type from '@/models/type';
+import Option from '@/models/option';
+import Input from '@/models/input';
+import Form from '@/models/form';
 
-import { dbConnect } from "@/middleware/db";
+import { dbConnect } from '@/middleware/db';
 
 const createHandler = async (req, res) => {
   dbConnect();
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const { currentUser, dataObj, attachments, title } = req.body;
     const option = await Option.findOne({ id: currentUser.option });
     const formArr = [];
@@ -25,7 +25,7 @@ const createHandler = async (req, res) => {
       inputs: formArr,
       option,
       title,
-      attachments
+      attachments,
     });
     await form.save();
     res.send(form);

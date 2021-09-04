@@ -190,7 +190,7 @@ export default function Setup({ session, owner }) {
       animate="visible"
       exit="exit"
     >
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <Grid item xs={12}>
           <form>
             <AnimateSharedLayout>

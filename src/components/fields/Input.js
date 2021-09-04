@@ -5,6 +5,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { useState, useEffect } from 'react';
 import InputAdornment from '@material-ui/core/InputAdornment';
+import { nanoid } from 'nanoid';
 
 import DayJsUtils from '@date-io/dayjs';
 import {
@@ -55,7 +56,11 @@ export const Input = ({
     } else {
       setError(false);
     }
-    dataObj[valueId] = value;
+    if (type === 'uuid') {
+      dataObj[valueId] = nanoid();
+    } else {
+      dataObj[valueId] = value;
+    }
     setDataObj(dataObj);
   }, [value, isSubmitted]);
   if (type === 'dropdown') {
@@ -140,6 +145,21 @@ export const Input = ({
                 ),
               }
         }
+      />
+    );
+  }
+  if (type === 'uuid') {
+    return (
+      <TextField
+        disabled
+        value={value ? value : nanoid()}
+        onChange={(e) => setValue(e.target.value)}
+        fullWidth
+        variant="filled"
+        id={name}
+        type={type}
+        name={name}
+        label={name}
       />
     );
   }

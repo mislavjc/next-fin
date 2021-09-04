@@ -186,7 +186,7 @@ export default function AllItems({
           dataObj,
           form: initialValue._id,
           owner,
-          title: selectedTitle
+          title: selectedTitle,
         };
         axios
           .put('/api/crud/edit', values)

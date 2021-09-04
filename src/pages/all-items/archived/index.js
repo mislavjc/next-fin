@@ -1,35 +1,39 @@
-import { getSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import { dbConnect } from "@/middleware/db";
-import Form from "@/models/form";
-import User from "@/models/user";
-import Type from "@/models/type";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
-import { CardItem } from "@/components/CardItem";
-import { Input } from "@/components/fields/Input";
-import { motion, AnimatePresence, AnimateSharedLayout } from "framer-motion";
-import Fab from "@material-ui/core/Fab";
-import IconButton from "@material-ui/core/IconButton";
-import AddIcon from "@material-ui/icons/Add";
-import { useState, useEffect, useRef } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CloseIcon from "@material-ui/icons/Close";
-import Tooltip from "@material-ui/core/Tooltip";
-import Snackbar from "@material-ui/core/Snackbar";
-import Backdrop from "@material-ui/core/Backdrop";
-import Button from "@material-ui/core/Button";
-import { Toolbar } from "@/components/Toolbar";
-import { uploadFile } from "@/middleware/uploadFile";
+import { getSession } from 'next-auth/client';
+import { dbConnect } from '@/middleware/db';
+import Form from '@/models/form';
+import User from '@/models/user';
+import Type from '@/models/type';
+import Option from '@/models/option';
+import Container from '@material-ui/core/Container';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import MenuItem from '@material-ui/core/MenuItem';
+import { CardItem } from '@/components/CardItem';
+import { Input } from '@/components/fields/Input';
+import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
+import Fab from '@material-ui/core/Fab';
+import IconButton from '@material-ui/core/IconButton';
+import AddIcon from '@material-ui/icons/Add';
+import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
+import Paper from '@material-ui/core/Paper';
+import CloseIcon from '@material-ui/icons/Close';
+import Tooltip from '@material-ui/core/Tooltip';
+import Snackbar from '@material-ui/core/Snackbar';
+import Backdrop from '@material-ui/core/Backdrop';
+import Button from '@material-ui/core/Button';
+import { Toolbar } from '@/components/Toolbar';
+import { uploadFile } from '@/middleware/uploadFile';
 import { formVariants, cardVariants } from '@/lib/framer';
 
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -43,13 +47,14 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
+  const option = await Option.findById(owner.option);
   const forms = await Form.find({
     option: owner.option,
     archived: true,
   }).populate({
-    path: "inputs",
+    path: 'inputs',
     populate: {
-      path: "type",
+      path: 'type',
     },
   });
   return {
@@ -57,48 +62,60 @@ export async function getServerSideProps(context) {
       owner: JSON.parse(JSON.stringify(owner)),
       types: JSON.parse(JSON.stringify(types)),
       forms: JSON.parse(JSON.stringify(forms)),
+      option: JSON.parse(JSON.stringify(option)),
       cloudinaryUrl,
       cloudinaryPreset,
     },
   };
 }
 
-export default function Archivedtems({
+export default function AllItems({
   owner,
   types,
   forms,
+  option,
   cloudinaryUrl,
   cloudinaryPreset,
 }) {
-  const router = useRouter();
   const [showForm, setShowForm] = useState(false);
   const [dataObj, setDataObj] = useState({});
   const [open, setOpen] = useState(false);
   const [showMore, setShowMore] = useState({});
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [entries, setEntries] = useState(forms);
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState('');
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showEditForm, setShowEditForm] = useState(false);
   const [initialValue, setInitialValue] = useState({});
   const attachments = [];
   const [isUploading, setIsUploading] = useState(false);
+  const [selectedTitle, setSelectedTitle] = useState(option.titles[0] || '');
 
   useEffect(() => {
-    if (search !== "") {
+    axios
+      .post('/api/crud/read', {
+        title: selectedTitle,
+        owner,
+      })
+      .then((res) => setEntries(res.data))
+      .then(() => setDataObj({}));
+  }, [selectedTitle]);
+
+  useEffect(() => {
+    if (search !== '') {
       axios
         .get(`/api/${search}/${owner.option}`)
         .then((res) => setEntries(res.data));
     } else {
       setEntries(forms);
     }
-  }, [search, forms, owner.option]);
+  }, [search]);
 
   const openFormHandler = () => {
     if (owner.create) {
       setShowForm(true);
     } else {
-      setMessage("Nemate prava za dodavanje unosa!");
+      setMessage('Nemate prava za dodavanje unosa!');
       setOpen(true);
     }
   };
@@ -117,7 +134,11 @@ export default function Archivedtems({
     setIsSubmitted(true);
     let isSubmittable = true;
     for (let i = 0; i < types.length; i++) {
-      if (!dataObj[types[i]._id] && types[i].required) {
+      if (
+        !dataObj[types[i]._id] &&
+        types[i].required &&
+        types[i].title === selectedTitle
+      ) {
         isSubmittable = false;
       }
     }
@@ -128,20 +149,21 @@ export default function Archivedtems({
         const values = {
           currentUser,
           dataObj,
+          title: selectedTitle,
         };
         if (attachments.length > 0) {
           values.attachments = attachments;
         }
         axios
-          .post("/api/crud/create", values)
-          .then(router.push("/all-items"))
+          .post('/api/crud/create', values)
+          .then((entry) => setEntries([...entries, entry.data]))
           .then(
-            setMessage("Dodan unos!"),
+            setMessage('Dodan unos!'),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage("Nemate prava za dodavanje unosa!");
+        setMessage('Nemate prava za dodavanje unosa!');
         setOpen(true);
       }
     }
@@ -151,7 +173,7 @@ export default function Archivedtems({
     setIsSubmitted(true);
     let isSubmittable = true;
     for (let i = 0; i < types.length; i++) {
-      if (dataObj[types[i]._id] === "" && types[i].required) {
+      if (dataObj[types[i]._id] === '' && types[i].required) {
         isSubmittable = false;
       }
     }
@@ -163,24 +185,26 @@ export default function Archivedtems({
           currentUser,
           dataObj,
           form: initialValue._id,
+          owner,
+          title: selectedTitle,
         };
         axios
-          .put("/api/crud/edit", values)
-          .then(router.push("/all-items"))
+          .put('/api/crud/edit', values)
+          .then((entry) => setEntries([...entry.data]))
           .then(
-            setMessage("Uspješno promjenjen unos!"),
+            setMessage('Uspješno promjenjen unos!'),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage("Nemate prava za promjenu unosa!");
+        setMessage('Nemate prava za promjenu unosa!');
         setOpen(true);
       }
     }
   };
 
   const handleClose = (reason) => {
-    if (reason === "clickaway") {
+    if (reason === 'clickaway') {
       return;
     }
 
@@ -188,16 +212,16 @@ export default function Archivedtems({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div style={{ position: 'relative' }}>
       <Container maxWidth="lg">
         <Toolbar search={search} setSearch={setSearch} owner={owner} />
         {!forms.length && !showForm && (
           <div
             style={{
-              height: "80vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
+              height: '80vh',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
             <Typography variant="h2" color="textPrimary">
@@ -205,6 +229,25 @@ export default function Archivedtems({
             </Typography>
           </div>
         )}
+        <FormControl
+          variant="filled"
+          fullWidth
+          style={{ marginBottom: '2rem' }}
+        >
+          <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
+          <Select
+            value={selectedTitle}
+            onChange={(e) => setSelectedTitle(e.target.value)}
+            labelId={'selectedTitleSelect'}
+            id={'selectedTitleSelectID'}
+          >
+            {option.titles.map((title) => (
+              <MenuItem value={title} key={title}>
+                {title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>
@@ -222,7 +265,6 @@ export default function Archivedtems({
                     >
                       <CardItem
                         form={form}
-                        types={types}
                         owner={owner}
                         setShowEditForm={setShowEditForm}
                         setInitialValue={setInitialValue}
@@ -255,7 +297,7 @@ export default function Archivedtems({
                     </motion.div>
                   )}
                   <Backdrop
-                    style={{ color: "#fff", zIndex: 8 }}
+                    style={{ color: '#fff', zIndex: 8 }}
                     open={showMore[form._id] === true}
                   />
                 </Grid>
@@ -282,17 +324,17 @@ export default function Archivedtems({
             initial="hidden"
             animate="visible"
             exit="exit"
-            layoutId={"form-fab"}
+            layoutId={'form-fab'}
           >
-            <Paper style={{ padding: "1rem" }}>
-              <div style={{ display: "flex" }}>
+            <Paper style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex' }}>
                 <Typography variant="h5">Novi unos</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
-                      position: "relative",
-                      top: "-8px",
-                      marginLeft: "auto",
+                      position: 'relative',
+                      top: '-8px',
+                      marginLeft: 'auto',
                     }}
                     onClick={() => {
                       setShowForm(false), setIsSubmitted(false);
@@ -302,24 +344,28 @@ export default function Archivedtems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => (
-                <div style={{ marginBottom: "1rem" }} key={type._id}>
-                  <Input
-                    name={type.name}
-                    type={type.type}
-                    required={type.required}
-                    currency={type.currency}
-                    id={type._id}
-                    dataObj={dataObj}
-                    setDataObj={setDataObj}
-                    additional={type.additional || null}
-                    isSubmitted={isSubmitted}
-                  />
-                </div>
-              ))}
-              <div style={{ marginBottom: "1rem" }}>
+              {types.map((type) => {
+                if (type.title === selectedTitle) {
+                  return (
+                    <div style={{ marginBottom: '1rem' }} key={type._id}>
+                      <Input
+                        name={type.name}
+                        type={type.type}
+                        required={type.required}
+                        currency={type.currency}
+                        id={type._id}
+                        dataObj={dataObj}
+                        setDataObj={setDataObj}
+                        additional={type.additional || null}
+                        isSubmitted={isSubmitted}
+                      />
+                    </div>
+                  );
+                }
+              })}
+              <div style={{ marginBottom: '1rem' }}>
                 <input
-                  style={{ display: "none" }}
+                  style={{ display: 'none' }}
                   accept="image/*, .pdf"
                   onChange={(e) => handleFiles(e.target.files)}
                   id="contained-button-file"
@@ -354,17 +400,17 @@ export default function Archivedtems({
             initial="hidden"
             animate="visible"
             exit="exit"
-            layoutId={"form-fab"}
+            layoutId={'form-fab'}
           >
-            <Paper style={{ padding: "1rem" }}>
-              <div style={{ display: "flex" }}>
+            <Paper style={{ padding: '1rem' }}>
+              <div style={{ display: 'flex' }}>
                 <Typography variant="h5">Promjeni unos</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
-                      position: "relative",
-                      top: "-8px",
-                      marginLeft: "auto",
+                      position: 'relative',
+                      top: '-8px',
+                      marginLeft: 'auto',
                     }}
                     onClick={() => {
                       setShowForm(false), setShowEditForm(false);
@@ -374,22 +420,26 @@ export default function Archivedtems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => (
-                <div style={{ marginBottom: "1rem" }} key={type._id}>
-                  <Input
-                    name={type.name}
-                    type={type.type}
-                    required={type.required}
-                    currency={type.currency}
-                    id={type._id}
-                    dataObj={dataObj}
-                    setDataObj={setDataObj}
-                    initialValue={initialValue}
-                    additional={type.additional || null}
-                    isSubmitted={isSubmitted}
-                  />
-                </div>
-              ))}
+              {types.map((type) => {
+                if (type.title === selectedTitle) {
+                  return (
+                    <div style={{ marginBottom: '1rem' }} key={type._id}>
+                      <Input
+                        name={type.name}
+                        type={type.type}
+                        required={type.required}
+                        currency={type.currency}
+                        id={type._id}
+                        dataObj={dataObj}
+                        setDataObj={setDataObj}
+                        initialValue={initialValue}
+                        additional={type.additional || null}
+                        isSubmitted={isSubmitted}
+                      />
+                    </div>
+                  );
+                }
+              })}
               <Button
                 onClick={editHandler}
                 variant="contained"
@@ -403,13 +453,13 @@ export default function Archivedtems({
         )}
       </AnimatePresence>
       <Backdrop
-        style={{ color: "#fff", zIndex: 9 }}
+        style={{ color: '#fff', zIndex: 9 }}
         open={showForm || showEditForm}
       />
       <Snackbar
         anchorOrigin={{
-          vertical: "bottom",
-          horizontal: "left",
+          vertical: 'bottom',
+          horizontal: 'left',
         }}
         open={open}
         autoHideDuration={6000}

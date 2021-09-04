@@ -34,6 +34,7 @@ export const EditTypes = ({
   typeAdditional,
   typeIdArr,
   setMessage,
+  selectedTitle,
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
@@ -69,6 +70,7 @@ export const EditTypes = ({
       currency: currencyObj,
       additional: additionalArr,
       typeIdArr,
+      title: selectedTitle,
       count,
     };
     axios

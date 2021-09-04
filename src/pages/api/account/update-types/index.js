@@ -1,11 +1,11 @@
-import User from "@/models/user";
-import Type from "@/models/type";
-import Option from "@/models/option";
-import { dbConnect } from "@/middleware/db";
+import User from '@/models/user';
+import Type from '@/models/type';
+import Option from '@/models/option';
+import { dbConnect } from '@/middleware/db';
 
 const updateTypes = async (req, res) => {
   dbConnect();
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const {
       owner,
       names,
@@ -15,6 +15,7 @@ const updateTypes = async (req, res) => {
       count,
       required,
       currency,
+      title,
     } = req.body;
     const user = await User.findOne({ email: owner.email });
     const option = await Option.findById(user.option);
@@ -26,7 +27,7 @@ const updateTypes = async (req, res) => {
       if (currency[i.toString()]) {
         type.currency = currency[i.toString()];
       }
-      if (type.currency && type.type !== "currency") {
+      if (type.currency && type.type !== 'currency') {
         type.currency = undefined;
       }
       if (additional[i.toString()]) {
@@ -41,6 +42,7 @@ const updateTypes = async (req, res) => {
           type: types[i.toString()],
           required: required[i.toString()] || false,
           option: option,
+          title,
         };
         if (additional[i.toString()]) {
           field.additional = additional;
@@ -53,7 +55,7 @@ const updateTypes = async (req, res) => {
       }
     }
 
-    res.status(201).json({ message: "all ok" });
+    res.status(201).json({ message: 'all ok' });
   }
 };
 

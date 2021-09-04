@@ -5,6 +5,7 @@ import { dbConnect } from '@/middleware/db';
 import Form from '@/models/form';
 import User from '@/models/user';
 import Type from '@/models/type';
+import Option from '@/models/option';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
@@ -53,6 +54,7 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
+  const option = await Option.findById(owner.option);
   const typeCount = await Type.countDocuments({ option: owner.option });
   const types = await Type.find({ option: owner.option });
   const forms = await Form.countDocuments({
@@ -87,19 +89,30 @@ export async function getServerSideProps(context) {
   const typeRequired = {};
   const typeCurrency = {};
   const typeAdditional = {};
-  const typeIdArr = [];
+  const typeIdArr = {};
 
-  for (let i = 0; i < types.length; i++) {
-    typeNames[i] = types[i].name;
-    typeTypes[i] = types[i].type;
-    typeRequired[i] = types[i].required;
-    if (types[i].additional) {
-      typeAdditional[i] = types[i].additional;
+  for (const type of types) {
+    let count = 0;
+    if (typeNames.hasOwnProperty(type.title)) {
+      count = Object.keys(typeNames[type.title]).length;
+    } else {
+      typeNames[type.title] = {};
+      typeTypes[type.title] = {};
+      typeRequired[type.title] = {};
+      typeAdditional[type.title] = {};
+      typeCurrency[type.title] = {};
+      typeIdArr[type.title] = [];
     }
-    if (types[i].currency) {
-      typeCurrency[i] = types[i].currency;
+    typeNames[type.title][count] = type.name;
+    typeTypes[type.title][count] = type.type;
+    typeRequired[type.title][count] = type.required;
+    typeIdArr[type.title].push(type._id);
+    if (type.additional) {
+      typeAdditional[type.title][count] = type.additional;
     }
-    typeIdArr.push(types[i]._id);
+    if (type.currency) {
+      typeCurrency[type.title][count] = type.currency;
+    }
   }
 
   for (let acc of accounts) {
@@ -114,6 +127,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
+      option: JSON.parse(JSON.stringify(option)),
       accounts: JSON.parse(JSON.stringify(accounts)),
       types: JSON.parse(JSON.stringify(types)),
       typeIdArr: JSON.parse(JSON.stringify(typeIdArr)),
@@ -133,6 +147,7 @@ export async function getServerSideProps(context) {
 
 export default function Account({
   owner,
+  option,
   datas,
   typeCount,
   typeNames,
@@ -155,6 +170,12 @@ export default function Account({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [user, setUser] = useState({});
+  const [selectedTitle, setSelectedTitle] = useState(option.titles[0] || '');
+
+  const editTypesHandler = (title) => {
+    setSelectedTitle(title);
+    setShowEditCategories(true);
+  };
 
   const editAccountHandler = (key, value) => {
     if (owner.admin) {
@@ -392,12 +413,38 @@ export default function Account({
               <Divider />
               <List>
                 <ListItem
-                  disabled={!typeCount}
-                  onClick={() => setShowEditCategories(true)}
+                  disabled={!typeCount || !owner.create}
+                  onClick={() => router.push('/setup')}
                   button
                 >
-                  <ListItemText primary="Promjenite kategorije" />
+                  <ListItemText primary="Dodajte forme" />
                 </ListItem>
+              </List>
+            </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Paper>
+              <List>
+                <ListItem button>
+                  <ListItemText
+                    primary={<Typography variant="h5">Dodane forme</Typography>}
+                    secondary="Popis kreiranih formi"
+                  />
+                </ListItem>
+                <Grid container spacing={4} className="members">
+                  {option.titles.map((title) => (
+                    <Grid item xs={4} md={3} lg={2} key={title}>
+                      <Avatar
+                        className="avatar"
+                        style={{ background: '#BDBDBD' }}
+                        onClick={() => editTypesHandler(title)}
+                      >
+                        {title[0]}
+                      </Avatar>
+                      <Typography variant="body1">{title}</Typography>
+                    </Grid>
+                  ))}
+                </Grid>
               </List>
             </Paper>
           </Grid>
@@ -543,14 +590,15 @@ export default function Account({
                 setOpen={setOpen}
                 owner={owner}
                 user={user}
-                typeNames={typeNames}
-                typeTypes={typeTypes}
-                typeRequired={typeRequired}
-                typeCurrency={typeCurrency}
-                typeAdditional={typeAdditional}
-                typeCount={typeCount}
-                typeIdArr={typeIdArr}
+                typeNames={typeNames[selectedTitle]}
+                typeTypes={typeTypes[selectedTitle]}
+                typeRequired={typeRequired[selectedTitle]}
+                typeCurrency={typeCurrency[selectedTitle]}
+                typeAdditional={typeAdditional[selectedTitle]}
+                typeCount={typeIdArr[selectedTitle].length}
+                typeIdArr={typeIdArr[selectedTitle]}
                 setMessage={setMessage}
+                selectedTitle={selectedTitle}
               />
             </motion.div>
           )}

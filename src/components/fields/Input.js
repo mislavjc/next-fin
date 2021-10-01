@@ -1,11 +1,8 @@
 import TextField from '@mui/material/TextField';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
 import { useState, useEffect } from 'react';
 import InputAdornment from '@mui/material/InputAdornment';
 import { nanoid } from 'nanoid';
+import Autocomplete from '@mui/material/Autocomplete';
 
 import DateAdapter from '@mui/lab/AdapterDayjs';
 
@@ -40,6 +37,7 @@ export const Input = ({
     return '';
   };
   const [value, setValue] = useState(inputValue());
+  const [autocompleteValue, setAutocompleteValue] = useState('');
   const [error, setError] = useState(false);
   const errorMessage = 'Polje ne smije biti prazno.';
   const [selectedDate, handleDateChange] = useState(value || new Date());
@@ -64,21 +62,30 @@ export const Input = ({
   }, [value, isSubmitted]);
   if (type === 'dropdown') {
     return (
-      <FormControl variant="filled" fullWidth error={error}>
-        <InputLabel id={`labelid${id}`}>{name}</InputLabel>
-        <Select
-          value={value ? value : ''}
-          onChange={(e) => setValue(e.target.value)}
-          labelId={`labelid${id}`}
-          id={`id${id}`}
-        >
-          {additional.map((additional) => (
-            <MenuItem value={additional} key={additional}>
-              {additional}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
+      <Autocomplete
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        inputValue={autocompleteValue}
+        onInputChange={(event, newAutocompleteValue) => {
+          setAutocompleteValue(newAutocompleteValue);
+        }}
+        options={additional}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            error={error}
+            helperText={error ? errorMessage : null}
+            fullWidth
+            variant="filled"
+            id={name}
+            type={type}
+            name={name}
+            label={name}
+          />
+        )}
+      />
     );
   }
   if (type === 'date') {

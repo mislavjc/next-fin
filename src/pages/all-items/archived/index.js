@@ -98,8 +98,15 @@ export default function AllItems({
         owner,
       })
       .then((res) => setEntries(res.data))
-      .then(() => setDataObj({}));
+      .then(() => setDataObj({}))
+      .then(() => localStorage.setItem('selectedTitle', selectedTitle));
   }, [selectedTitle]);
+
+  useEffect(() => {
+    if (localStorage.getItem('selectedTitle')) {
+      setSelectedTitle(localStorage.getItem('selectedTitle'));
+    }
+  }, []);
 
   useEffect(() => {
     if (search !== '') {

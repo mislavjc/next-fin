@@ -28,17 +28,21 @@ export const CardItem = ({
   const id = form._id;
   const archiveHandler = () => {
     if (owner.delete) {
-      axios.get(`/api/archive/${id}`).then(router.push('/all-items'));
+      axios
+        .get(`/api/archive/${id}`)
+        .then(router.reload(window.location.pathname));
     }
   };
   const unArchiveHandler = () => {
     if (owner.delete) {
-      axios.post(`/api/archive/${id}`).then(router.push('/all-items/archived'));
+      axios
+        .post(`/api/archive/${id}`)
+        .then(router.reload(window.location.pathname));
     }
   };
   const deleteHandler = () => {
     if (owner.delete) {
-      axios.delete(`/api/crud/${id}`).then(router.push('/all-items'));
+      axios.delete(`/api/crud/${id}`).then(router.reload(window.location.pathname));
     }
   };
 

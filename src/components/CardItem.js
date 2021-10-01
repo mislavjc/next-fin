@@ -1,18 +1,18 @@
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
-import IconButton from '@material-ui/core/IconButton';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import UnarchiveIcon from '@material-ui/icons/Unarchive';
-import Tooltip from '@material-ui/core/Tooltip';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import Divider from '@material-ui/core/Divider';
-import Paper from '@material-ui/core/Paper';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import UnarchiveIcon from '@mui/icons-material/Unarchive';
+import Tooltip from '@mui/material/Tooltip';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import Paper from '@mui/material/Paper';
 import dayjs from 'dayjs';
 
 export const CardItem = ({
@@ -42,7 +42,9 @@ export const CardItem = ({
   };
   const deleteHandler = () => {
     if (owner.delete) {
-      axios.delete(`/api/crud/${id}`).then(router.reload(window.location.pathname));
+      axios
+        .delete(`/api/crud/${id}`)
+        .then(router.reload(window.location.pathname));
     }
   };
 

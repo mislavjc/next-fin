@@ -1,10 +1,10 @@
-import { useState } from "react";
-import BottomNavigation from "@material-ui/core/BottomNavigation";
-import BottomNavigationAction from "@material-ui/core/BottomNavigationAction";
-import TocIcon from "@material-ui/icons/Toc";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import { useRouter } from "next/router";
+import { useState } from 'react';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import TocIcon from '@mui/icons-material/Toc';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import { useRouter } from 'next/router';
 
 export const BottomNav = () => {
   const router = useRouter();

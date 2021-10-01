@@ -4,27 +4,27 @@ import Form from '@/models/form';
 import User from '@/models/user';
 import Type from '@/models/type';
 import Option from '@/models/option';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
 import { CardItem } from '@/components/CardItem';
 import { Input } from '@/components/fields/Input';
 import { motion, AnimatePresence, AnimateSharedLayout } from 'framer-motion';
-import Fab from '@material-ui/core/Fab';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+import Fab from '@mui/material/Fab';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 import { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
-import Paper from '@material-ui/core/Paper';
-import CloseIcon from '@material-ui/icons/Close';
-import Tooltip from '@material-ui/core/Tooltip';
-import Snackbar from '@material-ui/core/Snackbar';
-import Backdrop from '@material-ui/core/Backdrop';
-import Button from '@material-ui/core/Button';
+import Paper from '@mui/material/Paper';
+import CloseIcon from '@mui/icons-material/Close';
+import Tooltip from '@mui/material/Tooltip';
+import Snackbar from '@mui/material/Snackbar';
+import Backdrop from '@mui/material/Backdrop';
+import Button from '@mui/material/Button';
 import { Toolbar } from '@/components/Toolbar';
 import { uploadFile } from '@/middleware/uploadFile';
 import { formVariants, cardVariants } from '@/lib/framer';
@@ -104,7 +104,7 @@ export default function AllItems({
 
   useEffect(() => {
     if (localStorage.getItem('selectedTitle')) {
-      setSelectedTitle(localStorage.getItem('selectedTitle'))
+      setSelectedTitle(localStorage.getItem('selectedTitle'));
     }
   }, []);
 

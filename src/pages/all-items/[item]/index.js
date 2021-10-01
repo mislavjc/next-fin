@@ -1,21 +1,21 @@
-import { getSession } from "next-auth/client";
-import { dbConnect } from "@/middleware/db";
-import Form from "@/models/form";
-import User from "@/models/user";
-import Type from "@/models/type";
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
-import { useRouter } from "next/router";
-import { CardItem } from "@/components/CardItem";
-import { useState } from "react";
-import { Button } from "@material-ui/core";
+import { getSession } from 'next-auth/client';
+import { dbConnect } from '@/middleware/db';
+import Form from '@/models/form';
+import User from '@/models/user';
+import Type from '@/models/type';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import { useRouter } from 'next/router';
+import { CardItem } from '@/components/CardItem';
+import { useState } from 'react';
+import { Button } from '@mui/material';
 
 export async function getServerSideProps(context) {
   dbConnect();
   const { item: id } = context.query;
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -28,13 +28,13 @@ export async function getServerSideProps(context) {
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
   const form = await Form.findById(id).populate({
-    path: "inputs",
+    path: 'inputs',
     populate: {
-      path: "type",
+      path: 'type',
     },
   });
   if (JSON.stringify(form.option) !== JSON.stringify(owner.option)) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -74,7 +74,7 @@ export default function Item({ form, types, owner }) {
           <Button
             variant="outlined"
             color="primary"
-            style={{ marginTop: "1rem" }}
+            style={{ marginTop: '1rem' }}
             onClick={() => router.back()}
           >
             Nazad

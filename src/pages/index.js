@@ -1,9 +1,9 @@
-import Typography from "@material-ui/core/Typography";
-import Link from "next/link";
-import { dbConnect } from "@/middleware/db";
-import { getSession } from "next-auth/client";
-import User from "@/models/user";
-import { Button } from "@material-ui/core";
+import Typography from '@mui/material/Typography';
+import Link from 'next/link';
+import { dbConnect } from '@/middleware/db';
+import { getSession } from 'next-auth/client';
+import User from '@/models/user';
+import { Button } from '@mui/material';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
 export default function Home({ owner }) {
   return (
     <>
-      <div style={{ padding: "2rem 0" }}>
+      <div style={{ padding: '2rem 0' }}>
         <div className="landing-text">
           <Typography
             color="primary"
@@ -50,7 +50,7 @@ export default function Home({ owner }) {
             <Button variant="outlined" color="primary" size="large">
               <Link
                 href={
-                  owner ? (owner.option ? "/all-items" : "/setup") : "/setup"
+                  owner ? (owner.option ? '/all-items' : '/setup') : '/setup'
                 }
               >
                 Započnite korištenje

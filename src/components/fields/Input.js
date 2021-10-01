@@ -1,17 +1,16 @@
-import TextField from '@material-ui/core/TextField';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
+import TextField from '@mui/material/TextField';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import { useState, useEffect } from 'react';
-import InputAdornment from '@material-ui/core/InputAdornment';
+import InputAdornment from '@mui/material/InputAdornment';
 import { nanoid } from 'nanoid';
 
-import DayJsUtils from '@date-io/dayjs';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import DateAdapter from '@mui/lab/AdapterDayjs';
+
+import MobileDatePicker from '@mui/lab/MobileDatePicker';
+import LocalizationProvider from '@mui/lab/LocalizationProvider';
 
 export const Input = ({
   name,
@@ -84,21 +83,17 @@ export const Input = ({
   }
   if (type === 'date') {
     return (
-      <MuiPickersUtilsProvider utils={DayJsUtils}>
-        <KeyboardDatePicker
-          disableToolbar
-          inputVariant="filled"
-          format="DD.MM.YYYY"
-          fullWidth
-          id={name}
+      <LocalizationProvider dateAdapter={DateAdapter}>
+        <MobileDatePicker
           label={name}
+          inputFormat="DD.MM.YYYY"
           value={selectedDate}
           onChange={handleDateChange}
-          KeyboardButtonProps={{
-            'aria-label': 'change date',
-          }}
+          renderInput={(params) => (
+            <TextField {...params} fullWidth variant="filled" />
+          )}
         />
-      </MuiPickersUtilsProvider>
+      </LocalizationProvider>
     );
   }
   if (type === 'textarea') {

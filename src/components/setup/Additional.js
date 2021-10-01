@@ -1,4 +1,4 @@
-import TextField from "@material-ui/core/TextField";
+import TextField from '@mui/material/TextField';
 
 export const Additional = ({ category, value, onChange }) => {
   return (
@@ -9,7 +9,7 @@ export const Additional = ({ category, value, onChange }) => {
       id={`id${category}dropdown`}
       name="categoryNames"
       label="Kategorija za izbornik"
-      value={value ? value : ""}
+      value={value ? value : ''}
       onChange={(e) => onChange(e.target.value)}
     />
   );

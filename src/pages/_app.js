@@ -3,8 +3,8 @@ import { Provider } from 'next-auth/client';
 import '@/styles/global.scss';
 import { Navbar } from '@/components/Navbar';
 import { BottomNav } from '@/components/BottomNav';
-import { createTheme, ThemeProvider } from '@material-ui/core';
-import { deepPurple } from '@material-ui/core/colors';
+import { createTheme, ThemeProvider } from '@mui/material';
+import { deepPurple } from '@mui/material/colors';
 import { useState, useEffect } from 'react';
 
 const theme = createTheme({
@@ -21,14 +21,14 @@ const theme = createTheme({
 const lightTheme = createTheme({
   ...theme,
   palette: {
-    type: 'light',
+    mode: 'light',
   },
 });
 
 const darkTheme = createTheme({
   ...theme,
   palette: {
-    type: 'dark',
+    mode: 'dark',
     primary: {
       main: deepPurple[100],
     },

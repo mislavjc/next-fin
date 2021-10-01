@@ -1,13 +1,13 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import SearchIcon from "@material-ui/icons/Search";
-import InputBase from "@material-ui/core/InputBase";
-import Chip from "@material-ui/core/Chip";
-import TocIcon from "@material-ui/icons/Toc";
-import DashboardIcon from "@material-ui/icons/Dashboard";
-import ArchiveIcon from "@material-ui/icons/Archive";
-import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
+import Chip from '@mui/material/Chip';
+import TocIcon from '@mui/icons-material/Toc';
+import DashboardIcon from '@mui/icons-material/Dashboard';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
 
 export const Toolbar = ({ search, setSearch, owner }) => {
   const router = useRouter();
@@ -19,7 +19,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
           <Chip
             icon={<DashboardIcon />}
             label="Kartični pregled"
-            variant={router.asPath === "/all-items" ? "default" : "outlined"}
+            variant={router.asPath === '/all-items' ? 'default' : 'outlined'}
             color="primary"
           />
         </Link>
@@ -29,7 +29,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
           <Chip
             icon={<TocIcon />}
             label="Tablični pregled"
-            variant={router.asPath === "/table" ? "default" : "outlined"}
+            variant={router.asPath === '/table' ? 'default' : 'outlined'}
             color="primary"
           />
         </Link>
@@ -40,7 +40,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
             icon={<ArchiveIcon />}
             label="Arhivirani unosi"
             variant={
-              router.asPath === "/all-items/archived" ? "default" : "outlined"
+              router.asPath === '/all-items/archived' ? 'default' : 'outlined'
             }
             color="primary"
           />
@@ -54,7 +54,7 @@ export const Toolbar = ({ search, setSearch, owner }) => {
           disabled={!owner.option}
           className="search"
           placeholder="Pretražite unose"
-          inputProps={{ "aria-label": "pretražite unose" }}
+          inputProps={{ 'aria-label': 'pretražite unose' }}
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />

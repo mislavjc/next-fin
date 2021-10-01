@@ -1,27 +1,27 @@
-import { useState } from "react";
-import { dbConnect } from "@/middleware/db";
-import { getSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import User from "@/models/user";
-import Form from "@/models/form";
-import Type from "@/models/type";
-import Paper from "@material-ui/core/Paper";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TablePagination from "@material-ui/core/TablePagination";
-import TableRow from "@material-ui/core/TableRow";
-import Container from "@material-ui/core/Container";
-import { Toolbar } from "@/components/Toolbar";
-import dayjs from "dayjs";
+import { useState } from 'react';
+import { dbConnect } from '@/middleware/db';
+import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+import User from '@/models/user';
+import Form from '@/models/form';
+import Type from '@/models/type';
+import Paper from '@mui/material/Paper';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableContainer from '@mui/material/TableContainer';
+import TableHead from '@mui/material/TableHead';
+import TablePagination from '@mui/material/TablePagination';
+import TableRow from '@mui/material/TableRow';
+import Container from '@mui/material/Container';
+import { Toolbar } from '@/components/Toolbar';
+import dayjs from 'dayjs';
 
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -32,9 +32,9 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
   const forms = await Form.find({ option: owner.option }).populate({
-    path: "inputs",
+    path: 'inputs',
     populate: {
-      path: "type",
+      path: 'type',
     },
   });
   const types = await Type.find({ option: owner.option });
@@ -80,7 +80,7 @@ export default function StickyHeadTable({ forms, types, owner }) {
     setPage(0);
   };
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
 
   return (
     <Container maxWidth="lg">
@@ -116,10 +116,10 @@ export default function StickyHeadTable({ forms, types, owner }) {
                         const value = row.value[index];
                         return (
                           <TableCell key={index}>
-                            {column.format && typeof value === "number"
+                            {column.format && typeof value === 'number'
                               ? column.format(value)
-                              : column.type === "date"
-                              ? dayjs(value).format("DD.MM.YYYY")
+                              : column.type === 'date'
+                              ? dayjs(value).format('DD.MM.YYYY')
                               : value}
                           </TableCell>
                         );

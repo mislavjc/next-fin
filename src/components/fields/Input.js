@@ -20,6 +20,8 @@ export const Input = ({
   currency,
   required,
   isSubmitted,
+  inputs,
+  relation,
 }) => {
   let valueId = id;
   const inputValue = () => {
@@ -60,6 +62,7 @@ export const Input = ({
     }
     setDataObj(dataObj);
   }, [value, isSubmitted]);
+
   if (type === 'dropdown') {
     return (
       <Autocomplete
@@ -72,6 +75,36 @@ export const Input = ({
           setAutocompleteValue(newAutocompleteValue);
         }}
         options={additional}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            error={error}
+            helperText={error ? errorMessage : null}
+            fullWidth
+            variant="filled"
+            id={name}
+            type={type}
+            name={name}
+            label={name}
+          />
+        )}
+      />
+    );
+  }
+  if (type === 'relation') {
+    return (
+      <Autocomplete
+        options={inputs
+          .filter((input) => input.type === relation)
+          .map((input) => input.value)}
+        value={value}
+        onChange={(event, newValue) => {
+          setValue(newValue);
+        }}
+        inputValue={autocompleteValue}
+        onInputChange={(event, newAutocompleteValue) => {
+          setAutocompleteValue(newAutocompleteValue);
+        }}
         renderInput={(params) => (
           <TextField
             {...params}

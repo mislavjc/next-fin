@@ -6,8 +6,16 @@ import { dbConnect } from '@/middleware/db';
 const newFromHandler = async (req, res) => {
   dbConnect();
   if (req.method === 'POST') {
-    const { currentUser, names, types, additional, required, currency, title } =
-      req.body;
+    const {
+      currentUser,
+      names,
+      types,
+      additional,
+      required,
+      currency,
+      title,
+      relationCategoryObj,
+    } = req.body;
     const user = await User.findOne({ email: currentUser.email });
     const option = await Option.findById(user.option);
     option.titles.push(title);
@@ -25,6 +33,13 @@ const newFromHandler = async (req, res) => {
       }
       if (currency[i.toString()] && types[i.toString()] === 'currency') {
         field.currency = currency[i.toString()];
+      }
+      if (relationCategoryObj[i.toString()]) {
+        const relation = await Type.findOne({
+          name: relationCategoryObj[i.toString()],
+          option,
+        });
+        field._relation = relation._id;
       }
       const type = new Type(field);
       await type.save();

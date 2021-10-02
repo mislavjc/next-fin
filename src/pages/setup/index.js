@@ -1,3 +1,5 @@
+import Option from '@/models/option';
+import { default as Types } from '@/models/type';
 import User from '@/models/user';
 import Grid from '@mui/material/Grid';
 import { getSession } from 'next-auth/client';
@@ -7,6 +9,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
+import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
 import { Additional } from '@/components/setup/Additional';
 import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
@@ -109,15 +112,30 @@ export async function getServerSideProps(context) {
 
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
+  const hasMoreForms = owner.option ? true : false;
+  if (owner.option) {
+    const option = await Option.findById(owner.option);
+    const types = await Types.find({ option: owner.option });
+    return {
+      props: {
+        session,
+        owner: JSON.parse(JSON.stringify(owner)),
+        option: JSON.parse(JSON.stringify(option)),
+        types: JSON.parse(JSON.stringify(types)),
+        hasMoreForms,
+      },
+    };
+  }
 
   return {
     props: {
       session,
       owner: JSON.parse(JSON.stringify(owner)),
+      hasMoreForms,
     },
   };
 }
-export default function Setup({ session, owner }) {
+export default function Setup({ session, owner, option, types, hasMoreForms }) {
   const [count, setCount] = useState(0);
   const router = useRouter();
   const [nameObj, setNameObj] = useState({});
@@ -125,6 +143,8 @@ export default function Setup({ session, owner }) {
   const [requiredObj, setRequiredObj] = useState({});
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState({});
+  const [relationTitleObj, setRelationTitleObj] = useState({});
+  const [relationCategoryObj, setRelationCategoryObj] = useState({});
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState({});
   const [showExample, setShowExample] = useState(false);
@@ -136,6 +156,8 @@ export default function Setup({ session, owner }) {
     delete additionalObj[index];
     delete additionalArr[index];
     delete requiredObj[index];
+    delete relationTitleObj[index];
+    delete relationCategoryObj[index];
     setCount(count - 1);
   };
 
@@ -166,6 +188,8 @@ export default function Setup({ session, owner }) {
       required: requiredObj,
       currency: currencyObj,
       title,
+      relationTitleObj,
+      relationCategoryObj,
     };
     if (owner.option) {
       axios.post('/api/new-form', values).then(router.push('/all-items'));
@@ -253,6 +277,7 @@ export default function Setup({ session, owner }) {
                             [index]: val,
                           });
                         }}
+                        hasMoreForms={hasMoreForms}
                       />
                       {typeObj[index] === 'currency' && (
                         <motion.div variants={inputVariants}>
@@ -283,6 +308,43 @@ export default function Setup({ session, owner }) {
                         labelPlacement="top"
                       />
                     </div>
+                    {hasMoreForms && typeObj[index] === 'relation' && (
+                      <div className="relation-container">
+                        <motion.div
+                          style={{ marginTop: '1rem', marginLeft: '0' }}
+                          variants={inputVariants}
+                        >
+                          <RelationTitle
+                            value={relationTitleObj[index]}
+                            onChange={(val) => {
+                              setRelationTitleObj({
+                                ...relationTitleObj,
+                                [index]: val,
+                              });
+                            }}
+                            option={option}
+                          />
+                        </motion.div>
+                        {relationTitleObj[index] && (
+                          <motion.div
+                            style={{ marginTop: '1rem', marginLeft: '0' }}
+                            variants={inputVariants}
+                          >
+                            <RelationCategory
+                              value={relationCategoryObj[index]}
+                              onChange={(val) => {
+                                setRelationCategoryObj({
+                                  ...relationCategoryObj,
+                                  [index]: val,
+                                });
+                              }}
+                              selectedTitle={relationTitleObj[index]}
+                              types={types}
+                            />
+                          </motion.div>
+                        )}
+                      </div>
+                    )}
                     {typeObj[index] == 'dropdown' && (
                       <motion.div
                         style={{ marginTop: '1rem', marginLeft: '0' }}

@@ -3,7 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export const Type = ({ category, value, onChange }) => {
+export const Type = ({ category, value, onChange, hasMoreForms }) => {
   return (
     <FormControl variant="filled" className="type">
       <InputLabel id={`labelid${category}`}>Tip</InputLabel>
@@ -20,6 +20,7 @@ export const Type = ({ category, value, onChange }) => {
         <MenuItem value={'currency'}>Iznos</MenuItem>
         <MenuItem value={'textarea'}>Blok teksta</MenuItem>
         <MenuItem value={'uuid'}>Jedinstveni identifikator</MenuItem>
+        {hasMoreForms && <MenuItem value={'relation'}>Poveznica</MenuItem>}
       </Select>
     </FormControl>
   );

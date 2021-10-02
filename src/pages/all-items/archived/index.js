@@ -96,6 +96,7 @@ export default function AllItems({
       .post('/api/crud/read', {
         title: selectedTitle,
         owner,
+        archived: true,
       })
       .then((res) => setEntries(res.data))
       .then(() => setDataObj({}))
@@ -222,20 +223,6 @@ export default function AllItems({
     <div style={{ position: 'relative' }}>
       <Container maxWidth="lg">
         <Toolbar search={search} setSearch={setSearch} owner={owner} />
-        {!forms.length && !showForm && (
-          <div
-            style={{
-              height: '80vh',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Typography variant="h2" color="textPrimary">
-              Dodajte unos pritiskom na plus
-            </Typography>
-          </div>
-        )}
         <FormControl
           variant="filled"
           fullWidth

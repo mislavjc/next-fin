@@ -5,11 +5,11 @@ import { dbConnect } from '@/middleware/db';
 const editHandler = async (req, res) => {
   dbConnect();
   if (req.method === 'POST') {
-    const { owner, title } = req.body;
+    const { owner, title, archived } = req.body;
     const forms = await Form.find({
       option: owner.option,
       title,
-      archived: false,
+      archived,
     }).populate({
       path: 'inputs',
       populate: {

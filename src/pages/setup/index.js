@@ -188,7 +188,6 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
       required: requiredObj,
       currency: currencyObj,
       title,
-      relationTitleObj,
       relationCategoryObj,
     };
     if (owner.option) {

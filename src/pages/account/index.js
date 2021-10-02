@@ -141,6 +141,7 @@ export async function getServerSideProps(context) {
       typeAdditional,
       forms,
       archived,
+      hasMoreForms: option.titles.length > 1 ? true : false,
     },
   };
 }
@@ -159,6 +160,7 @@ export default function Account({
   forms,
   archived,
   options,
+  hasMoreForms,
 }) {
   const router = useRouter();
   const [accountPreferences, setAccountPrefrences] = useState(false);
@@ -599,6 +601,8 @@ export default function Account({
                 typeIdArr={typeIdArr[selectedTitle]}
                 setMessage={setMessage}
                 selectedTitle={selectedTitle}
+                option={option}
+                hasMoreForms={hasMoreForms}
               />
             </motion.div>
           )}

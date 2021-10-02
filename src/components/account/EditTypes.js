@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import axios from 'axios';
 import { motion, AnimateSharedLayout } from 'framer-motion';
+import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
 import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
 import ButtonGroup from '@mui/material/ButtonGroup';
@@ -35,12 +36,16 @@ export const EditTypes = ({
   typeIdArr,
   setMessage,
   selectedTitle,
+  option,
+  hasMoreForms,
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
   const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState(typeCurrency);
+  const [relationTitleObj, setRelationTitleObj] = useState({});
+  const [relationCategoryObj, setRelationCategoryObj] = useState({});
   const [count, setCount] = useState(typeCount);
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState(typeAdditional || {});
@@ -72,6 +77,7 @@ export const EditTypes = ({
       typeIdArr,
       title: selectedTitle,
       count,
+      relationCategoryObj,
     };
     axios
       .post('/api/account/update-types', values)
@@ -141,6 +147,7 @@ export const EditTypes = ({
                         [index]: val,
                       });
                     }}
+                    hasMoreForms={hasMoreForms}
                   />
                   {typeObj[index] === 'currency' && (
                     <motion.div variants={inputVariants}>
@@ -171,6 +178,43 @@ export const EditTypes = ({
                     labelPlacement="top"
                   />
                 </div>
+                {typeObj[index] === 'relation' && (
+                  <div className="relation-container">
+                    <motion.div
+                      style={{ marginTop: '1rem', marginLeft: '0' }}
+                      variants={inputVariants}
+                    >
+                      <RelationTitle
+                        value={relationTitleObj[index]}
+                        onChange={(val) => {
+                          setRelationTitleObj({
+                            ...relationTitleObj,
+                            [index]: val,
+                          });
+                        }}
+                        option={option}
+                      />
+                    </motion.div>
+                    {relationTitleObj[index] && (
+                      <motion.div
+                        style={{ marginTop: '1rem', marginLeft: '0' }}
+                        variants={inputVariants}
+                      >
+                        <RelationCategory
+                          value={relationCategoryObj[index]}
+                          onChange={(val) => {
+                            setRelationCategoryObj({
+                              ...relationCategoryObj,
+                              [index]: val,
+                            });
+                          }}
+                          selectedTitle={relationTitleObj[index]}
+                          types={types}
+                        />
+                      </motion.div>
+                    )}
+                  </div>
+                )}
                 {typeObj[index] == 'dropdown' && (
                   <motion.div
                     style={{ marginTop: '1rem', marginLeft: '0' }}

@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
@@ -10,7 +11,6 @@ import User from '@/models/user';
 import Option from '@/models/option';
 
 import { dbConnect } from '@/middleware/db';
-import axios from 'axios';
 
 export async function getServerSideProps(context) {
   dbConnect();

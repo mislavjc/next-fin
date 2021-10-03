@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+
 import Option from "./option";
 
 const MODEL_NAME = "User";

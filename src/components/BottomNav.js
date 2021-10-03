@@ -1,10 +1,11 @@
 import { useState } from 'react';
+import { useRouter } from 'next/router';
+
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import TocIcon from '@mui/icons-material/Toc';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import { useRouter } from 'next/router';
 
 export const BottomNav = () => {
   const router = useRouter();

@@ -1,17 +1,14 @@
-import Grid from '@mui/material/Grid';
-import { dbConnect } from '@/middleware/db';
+import axios from 'axios';
+import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
+import CSVReader from 'react-csv-reader';
 import { getSession } from 'next-auth/client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
+
+import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import { Field } from '@/components/setup/Field';
-import { Type } from '@/components/setup/Type';
-import { Additional } from '@/components/setup/Additional';
-import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
-import axios from 'axios';
 import Container from '@mui/material/Container';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
@@ -31,8 +28,11 @@ import CloseIcon from '@mui/icons-material/Close';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import { Currency } from '@/components/setup/Currency';
-import CSVReader from 'react-csv-reader';
 import Snackbar from '@mui/material/Snackbar';
+
+import { Field } from '@/components/setup/Field';
+import { Type } from '@/components/setup/Type';
+import { Additional } from '@/components/setup/Additional';
 
 const form = [
   {
@@ -51,23 +51,6 @@ const form = [
     type: 'text',
   },
 ];
-
-const containerVariants = {
-  hidden: {
-    y: 50,
-  },
-  visible: {
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      delayChildren: 0.5,
-    },
-  },
-  exit: {
-    y: 50,
-  },
-};
 
 const formVariants = {
   hidden: {

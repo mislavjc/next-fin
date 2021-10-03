@@ -1,9 +1,12 @@
-import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-import { dbConnect } from '@/middleware/db';
 import { getSession } from 'next-auth/client';
+
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
 import User from '@/models/user';
-import { Button } from '@mui/material';
+
+import { dbConnect } from '@/middleware/db';
 
 export async function getServerSideProps(context) {
   dbConnect();

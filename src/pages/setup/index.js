@@ -1,18 +1,12 @@
-import Option from '@/models/option';
-import { default as Types } from '@/models/type';
-import User from '@/models/user';
-import Grid from '@mui/material/Grid';
-import { getSession } from 'next-auth/client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
-import { Field } from '@/components/setup/Field';
-import { Type } from '@/components/setup/Type';
-import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
-import { Additional } from '@/components/setup/Additional';
+import { getSession } from 'next-auth/client';
 import { motion, AnimateSharedLayout, AnimatePresence } from 'framer-motion';
 import axios from 'axios';
+
+import Grid from '@mui/material/Grid';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Chip from '@mui/material/Chip';
@@ -33,7 +27,16 @@ import TextField from '@mui/material/TextField';
 import CloseIcon from '@mui/icons-material/Close';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+
+import { Field } from '@/components/setup/Field';
+import { Type } from '@/components/setup/Type';
+import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
+import { Additional } from '@/components/setup/Additional';
 import { Currency } from '@/components/setup/Currency';
+
+import Option from '@/models/option';
+import { default as Types } from '@/models/type';
+import User from '@/models/user';
 
 const form = [
   {

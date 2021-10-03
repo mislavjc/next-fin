@@ -1,11 +1,14 @@
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import { Provider } from 'next-auth/client';
-import '@/styles/global.scss';
-import { Navbar } from '@/components/Navbar';
-import { BottomNav } from '@/components/BottomNav';
+
 import { createTheme, ThemeProvider } from '@mui/material';
 import { deepPurple } from '@mui/material/colors';
-import { useState, useEffect } from 'react';
+
+import { Navbar } from '@/components/Navbar';
+import { BottomNav } from '@/components/BottomNav';
+
+import '@/styles/global.scss';
 
 const theme = createTheme({
   palette: {

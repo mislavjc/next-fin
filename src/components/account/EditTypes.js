@@ -1,4 +1,7 @@
+import axios from 'axios';
 import { useState, useEffect } from 'react';
+import { motion, AnimateSharedLayout } from 'framer-motion';
+
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
 import List from '@mui/material/List';
@@ -8,19 +11,18 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from 'axios';
-import { motion, AnimateSharedLayout } from 'framer-motion';
-import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
-import { Field } from '@/components/setup/Field';
-import { Type } from '@/components/setup/Type';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import { Additional } from '@/components/setup/Additional';
 import Chip from '@mui/material/Chip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
-import { Currency } from '@/components/setup/Currency';
 import { inputVariants } from '@/lib/framer';
+
+import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
+import { Field } from '@/components/setup/Field';
+import { Type } from '@/components/setup/Type';
+import { Currency } from '@/components/setup/Currency';
 
 export const EditTypes = ({
   setShowEditCategories,

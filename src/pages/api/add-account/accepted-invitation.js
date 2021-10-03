@@ -1,4 +1,5 @@
 import User from '@/models/user';
+
 import { dbConnect } from '@/middleware/db';
 
 const addAccountHandler = async (req, res) => {

@@ -1,5 +1,7 @@
+import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
+
 import Paper from '@mui/material/Paper';
 import WorkIcon from '@mui/icons-material/Work';
 import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
@@ -17,7 +19,6 @@ import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
-import axios from 'axios';
 
 export const Options = ({
   setShowOptions,

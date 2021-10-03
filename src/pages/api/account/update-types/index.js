@@ -1,6 +1,7 @@
 import User from '@/models/user';
 import Type from '@/models/type';
 import Option from '@/models/option';
+
 import { dbConnect } from '@/middleware/db';
 
 const updateTypes = async (req, res) => {

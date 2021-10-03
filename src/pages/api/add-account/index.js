@@ -1,7 +1,9 @@
+const mail = require("@sendgrid/mail");
+
 import User from "@/models/user";
 import Option from "@/models/option";
+
 import { dbConnect } from "@/middleware/db";
-const mail = require("@sendgrid/mail");
 
 mail.setApiKey(process.env.SENDGRID_API_KEY);
 

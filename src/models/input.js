@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";
+
 import Type from "./type";
 import Option from "./option";
 

@@ -1,9 +1,10 @@
 import User from "@/models/user";
 import Type from "@/models/type";
 import Option from "@/models/option";
-import { dbConnect } from "@/middleware/db";
 import Input from "@/models/input";
 import Form from "@/models/form";
+
+import { dbConnect } from "@/middleware/db";
 
 const importHandler = async (req, res) => {
   dbConnect();

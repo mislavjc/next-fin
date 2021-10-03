@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/client';
+import Image from 'next/image';
 
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -62,15 +63,16 @@ export const Navbar = () => {
 
   return (
     <nav>
-      <img
-        className="logo"
-        src="/icons/logo.svg"
-        alt="logo"
-        width="40px"
-        height="40px"
-      />
+      <span className="logo">
+        <Image
+          src="/icons/logo.svg"
+          alt="logo"
+          width="40px"
+          height="40px"
+        />
+      </span>
       <div>
-        <img src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
+        <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
         <div className="account">
           {session && !loading ? (
             <div>

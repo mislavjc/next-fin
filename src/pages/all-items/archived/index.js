@@ -3,6 +3,7 @@ import { dbConnect } from '@/middleware/db';
 import Form from '@/models/form';
 import User from '@/models/user';
 import Type from '@/models/type';
+import { default as Inputs } from '@/models/input';
 import Option from '@/models/option';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
@@ -48,9 +49,10 @@ export async function getServerSideProps(context) {
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
   const option = await Option.findById(owner.option);
+  const inputs = await Inputs.find({ option: owner.option });
   const forms = await Form.find({
     option: owner.option,
-    archived: true,
+    archived: false,
   }).populate({
     path: 'inputs',
     populate: {
@@ -63,6 +65,7 @@ export async function getServerSideProps(context) {
       types: JSON.parse(JSON.stringify(types)),
       forms: JSON.parse(JSON.stringify(forms)),
       option: JSON.parse(JSON.stringify(option)),
+      inputs: JSON.parse(JSON.stringify(inputs)),
       cloudinaryUrl,
       cloudinaryPreset,
     },
@@ -74,6 +77,7 @@ export default function AllItems({
   types,
   forms,
   option,
+  inputs,
   cloudinaryUrl,
   cloudinaryPreset,
 }) {
@@ -96,7 +100,7 @@ export default function AllItems({
       .post('/api/crud/read', {
         title: selectedTitle,
         owner,
-        archived: true,
+        archived: false,
       })
       .then((res) => setEntries(res.data))
       .then(() => setDataObj({}))
@@ -352,6 +356,8 @@ export default function AllItems({
                         setDataObj={setDataObj}
                         additional={type.additional || null}
                         isSubmitted={isSubmitted}
+                        inputs={inputs}
+                        relation={type._relation}
                       />
                     </div>
                   );
@@ -429,6 +435,8 @@ export default function AllItems({
                         initialValue={initialValue}
                         additional={type.additional || null}
                         isSubmitted={isSubmitted}
+                        inputs={inputs}
+                        relation={type._relation}
                       />
                     </div>
                   );

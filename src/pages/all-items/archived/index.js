@@ -109,7 +109,7 @@ export default function AllItems({
         owner,
         archived: false,
       })
-      .then((res) => setEntries(res.data))
+      .then((res) => setEntries(res.data.forms))
       .then(() => setDataObj({}))
       .then(() => localStorage.setItem('selectedTitle', selectedTitle));
   }, [selectedTitle]);

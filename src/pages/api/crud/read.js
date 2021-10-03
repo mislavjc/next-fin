@@ -1,4 +1,5 @@
 import Form from '@/models/form';
+import Type from '@/models/type';
 
 import { dbConnect } from '@/middleware/db';
 
@@ -16,7 +17,8 @@ const editHandler = async (req, res) => {
         path: 'type',
       },
     });
-    res.send(forms);
+    const types = await Type.find({ option: owner.option, title });
+    res.send({ forms, types });
   }
 };
 

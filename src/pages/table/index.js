@@ -1,10 +1,9 @@
-import { useState } from 'react';
-import { dbConnect } from '@/middleware/db';
+import dayjs from 'dayjs';
+import axios from 'axios';
+import { useState, useEffect } from 'react';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
-import User from '@/models/user';
-import Form from '@/models/form';
-import Type from '@/models/type';
+
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -14,8 +13,19 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
+import FormControl from '@mui/material/FormControl';
+import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import Select from '@mui/material/Select';
+
 import { Toolbar } from '@/components/Toolbar';
-import dayjs from 'dayjs';
+
+import User from '@/models/user';
+import Form from '@/models/form';
+import Type from '@/models/type';
+import Option from '@/models/option';
+
+import { dbConnect } from '@/middleware/db';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -31,6 +41,7 @@ export async function getServerSideProps(context) {
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
+  const option = await Option.findById(owner.option);
   const forms = await Form.find({ option: owner.option }).populate({
     path: 'inputs',
     populate: {
@@ -43,20 +54,52 @@ export async function getServerSideProps(context) {
       forms: JSON.parse(JSON.stringify(forms)),
       types: JSON.parse(JSON.stringify(types)),
       owner: JSON.parse(JSON.stringify(owner)),
+      option: JSON.parse(JSON.stringify(option)),
     },
   };
 }
 
-export default function StickyHeadTable({ forms, types, owner }) {
+export default function TablePage({ forms, owner, option, types }) {
   const router = useRouter();
+
+  const [dataObj, setDataObj] = useState({});
+  const [entries, setEntries] = useState(forms);
+  const [columnTypes, setColumnTypes] = useState(types);
+
+  const [selectedTitle, setSelectedTitle] = useState(
+    option ? option.titles[0] : ''
+  );
+
+  useEffect(() => {
+    axios
+      .post('/api/crud/read', {
+        title: selectedTitle,
+        owner,
+        archived: false,
+      })
+      .then((res) => {
+        setEntries(res.data.forms);
+        setColumnTypes(res.data.types);
+      })
+      .then(() => setDataObj({}))
+      .then(() => localStorage.setItem('selectedTitle', selectedTitle));
+  }, [selectedTitle]);
+
+  useEffect(() => {
+    if (localStorage.getItem('selectedTitle')) {
+      setSelectedTitle(localStorage.getItem('selectedTitle'));
+    }
+  }, []);
+
   const columns = [];
-  for (let i = 0; i < types.length; i++) {
-    columns.push(types[i]);
+
+  for (const type of columnTypes) {
+    columns.push(type);
   }
 
   const rows = [];
 
-  for (let form of forms) {
+  for (let form of entries) {
     const data = [];
     for (let i = 0; i < form.inputs.length; i++) {
       data.push(form.inputs[i].value);
@@ -85,6 +128,27 @@ export default function StickyHeadTable({ forms, types, owner }) {
   return (
     <Container maxWidth="lg">
       <Toolbar search={search} setSearch={setSearch} owner={owner} />
+      {option && (
+        <FormControl
+          variant="filled"
+          fullWidth
+          style={{ marginBottom: '2rem' }}
+        >
+          <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
+          <Select
+            value={selectedTitle}
+            onChange={(e) => setSelectedTitle(e.target.value)}
+            labelId={'selectedTitleSelect'}
+            id={'selectedTitleSelectID'}
+          >
+            {option.titles.map((title) => (
+              <MenuItem value={title} key={title}>
+                {title}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      )}
       <Paper>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">

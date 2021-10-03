@@ -141,7 +141,7 @@ export async function getServerSideProps(context) {
       typeAdditional,
       forms,
       archived,
-      hasMoreForms: option.titles.length > 1 ? true : false,
+      hasMoreForms: option ? (option.titles.length > 1 ? true : false) : false,
     },
   };
 }
@@ -172,7 +172,9 @@ export default function Account({
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState('');
   const [user, setUser] = useState({});
-  const [selectedTitle, setSelectedTitle] = useState(option.titles[0] || '');
+  const [selectedTitle, setSelectedTitle] = useState(
+    option ? option.titles[0] : ''
+  );
 
   const editTypesHandler = (title) => {
     setSelectedTitle(title);
@@ -424,32 +426,36 @@ export default function Account({
               </List>
             </Paper>
           </Grid>
-          <Grid item xs={12}>
-            <Paper>
-              <List>
-                <ListItem button>
-                  <ListItemText
-                    primary={<Typography variant="h5">Dodane forme</Typography>}
-                    secondary="Popis kreiranih formi"
-                  />
-                </ListItem>
-                <Grid container spacing={4} className="members">
-                  {option.titles.map((title) => (
-                    <Grid item xs={4} md={3} lg={2} key={title}>
-                      <Avatar
-                        className="avatar"
-                        style={{ background: '#BDBDBD' }}
-                        onClick={() => editTypesHandler(title)}
-                      >
-                        {title[0]}
-                      </Avatar>
-                      <Typography variant="body1">{title}</Typography>
-                    </Grid>
-                  ))}
-                </Grid>
-              </List>
-            </Paper>
-          </Grid>
+          {option && (
+            <Grid item xs={12}>
+              <Paper>
+                <List>
+                  <ListItem button>
+                    <ListItemText
+                      primary={
+                        <Typography variant="h5">Dodane forme</Typography>
+                      }
+                      secondary="Popis kreiranih formi"
+                    />
+                  </ListItem>
+                  <Grid container spacing={4} className="members">
+                    {option.titles.map((title) => (
+                      <Grid item xs={4} md={3} lg={2} key={title}>
+                        <Avatar
+                          className="avatar"
+                          style={{ background: '#BDBDBD' }}
+                          onClick={() => editTypesHandler(title)}
+                        >
+                          {title[0]}
+                        </Avatar>
+                        <Typography variant="body1">{title}</Typography>
+                      </Grid>
+                    ))}
+                  </Grid>
+                </List>
+              </Paper>
+            </Grid>
+          )}
           <Grid item xs={12}>
             <Paper>
               <List>

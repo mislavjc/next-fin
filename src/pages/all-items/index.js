@@ -93,7 +93,7 @@ export default function AllItems({
   const [initialValue, setInitialValue] = useState({});
   const attachments = [];
   const [isUploading, setIsUploading] = useState(false);
-  const [selectedTitle, setSelectedTitle] = useState(option.titles[0] || '');
+  const [selectedTitle, setSelectedTitle] = useState(option ? option.titles[0] : '');
 
   useEffect(() => {
     axios
@@ -227,25 +227,27 @@ export default function AllItems({
     <div style={{ position: 'relative' }}>
       <Container maxWidth="lg">
         <Toolbar search={search} setSearch={setSearch} owner={owner} />
-        <FormControl
-          variant="filled"
-          fullWidth
-          style={{ marginBottom: '2rem' }}
-        >
-          <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
-          <Select
-            value={selectedTitle}
-            onChange={(e) => setSelectedTitle(e.target.value)}
-            labelId={'selectedTitleSelect'}
-            id={'selectedTitleSelectID'}
+        {option && (
+          <FormControl
+            variant="filled"
+            fullWidth
+            style={{ marginBottom: '2rem' }}
           >
-            {option.titles.map((title) => (
-              <MenuItem value={title} key={title}>
-                {title}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+            <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
+            <Select
+              value={selectedTitle}
+              onChange={(e) => setSelectedTitle(e.target.value)}
+              labelId={'selectedTitleSelect'}
+              id={'selectedTitleSelectID'}
+            >
+              {option.titles.map((title) => (
+                <MenuItem value={title} key={title}>
+                  {title}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        )}
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>

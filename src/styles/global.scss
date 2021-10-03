@@ -320,7 +320,7 @@ h1 {
     width: 100%;
     z-index: 7;
   }
-  .toolbar div:not(.search) {
+  .toolbar >:not(.search) {
     display: none;
   }
   .fab {

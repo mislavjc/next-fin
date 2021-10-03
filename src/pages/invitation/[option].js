@@ -1,15 +1,23 @@
-import { getSession } from "next-auth/client";
-import { useRouter } from "next/router";
-import { dbConnect } from "@/middleware/db";
-import User from "@/models/user";
-import Option from "@/models/option";
+import { getSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
+
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+
+import User from '@/models/user';
+import Option from '@/models/option';
+
+import { dbConnect } from '@/middleware/db';
+import axios from 'axios';
 
 export async function getServerSideProps(context) {
   dbConnect();
   const { option: id } = context.query;
   const session = await getSession(context);
   if (!session) {
-    context.res.writeHead(302, { Location: "/api/auth/signin" });
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
     context.res.end();
     return {
       props: {
@@ -21,30 +29,67 @@ export async function getServerSideProps(context) {
   const { user } = session;
   const option = await Option.findById(id);
   const owner = await User.findOne({ email: user.email });
-  const username = user.email.split("@")[0].replace(".", "");
-  if (username in option.owner) {
-    owner.option = option;
-    owner.create = option.owner[username].create;
-    owner.delete = option.owner[username].delete;
-    owner.role = option.owner[username].role;
-    owner.color = option.owner[username].color;
-    await owner.save();
-  } else {
+  const username = user.email.split('@')[0].replace('.', '');
+  if (!(username in option.owner)) {
     return {
       props: {
         owner: false,
+        option: false,
       },
     };
   }
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
+      option: JSON.parse(JSON.stringify(option)),
+      username,
     },
   };
 }
 
-export default function Invitation({ owner }) {
+export default function Invitation({ owner, option, username }) {
   const router = useRouter();
-  router.push("/all-items");
-  return <h1>{JSON.stringify(owner)}</h1>;
+  const acceptInvitationHandler = () => {
+    axios
+      .post('/api/add-account/accepted-invitation', {
+        id: owner._id,
+        option,
+        username,
+      })
+      .then(() => router.push('/all-items'));
+  };
+
+  return (
+    <div>
+      <Container
+        maxWidth="sm"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '90vh',
+        }}
+      >
+        <Paper variant="outlined" style={{ padding: '1rem' }}>
+          <Typography variant="h5" gutterBottom>
+            Pozivnica za pridruživanje poslovanju
+          </Typography>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            style={{ marginBottom: '1rem' }}
+          >
+            Ukoliko želite se pridružiti poslovanju, pritisnite gumb ispod.
+          </Typography>
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={acceptInvitationHandler}
+          >
+            Prihvati pozivnicu
+          </Button>
+        </Paper>
+      </Container>
+    </div>
+  );
 }

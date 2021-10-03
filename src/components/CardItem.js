@@ -74,7 +74,7 @@ export const CardItem = ({
                     }}
                   >
                     <Typography variant="overline">
-                      {columnTypes[index].name}
+                      {columnTypes[index] && columnTypes[index].name}
                     </Typography>
                   </span>
                   <Divider orientation="vertical" flexItem />
@@ -86,13 +86,13 @@ export const CardItem = ({
                       paddingLeft: '0.5rem',
                     }}
                   >
-                    {columnTypes[index].currency === '£'
+                    {columnTypes[index] && columnTypes[index].currency === '£'
                       ? columnTypes[index].currency
                       : null}{' '}
-                    {columnTypes[index].type === 'date'
+                    {columnTypes[index] && columnTypes[index].type === 'date'
                       ? dayjs(input.value).format('DD.MM.YYYY')
                       : input.value}{' '}
-                    {columnTypes[index].currency !== '£'
+                    {columnTypes[index] && columnTypes[index].currency !== '£'
                       ? columnTypes[index].currency
                       : null}
                   </Typography>

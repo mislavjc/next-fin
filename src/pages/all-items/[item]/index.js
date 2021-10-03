@@ -61,6 +61,7 @@ export default function Item({ form, types, owner }) {
   const [showMore, setShowMore] = useState({});
   const [showEditForm, setShowEditForm] = useState(false);
   const [initialValue, setInitialValue] = useState({});
+  const [columnTypes, setColumnTypes] = useState(types);
 
   return (
     <Container maxWidth="lg">
@@ -74,6 +75,7 @@ export default function Item({ form, types, owner }) {
             setShowEditForm={setShowEditForm}
             setInitialValue={setInitialValue}
             onOpen={() => setShowMore({ ...showMore, [form._id]: true })}
+            columnTypes={columnTypes}
           />
           <Button
             variant="outlined"

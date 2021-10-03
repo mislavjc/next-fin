@@ -34,6 +34,7 @@ import { Toolbar } from '@/components/Toolbar';
 import { dbConnect } from '@/middleware/db';
 import { uploadFile } from '@/middleware/uploadFile';
 import { formVariants, cardVariants } from '@/lib/framer';
+import { mapAndReduce } from '@/lib/filter';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -121,9 +122,9 @@ export default function AllItems({
   }, []);
 
   useEffect(() => {
-    if (search !== '') {
+    if (search.length > 0) {
       axios
-        .get(`/api/${search}/${owner.option}`)
+        .post('/api/search', { search, option: owner.option })
         .then((res) => setEntries(res.data));
     } else {
       setEntries(forms);
@@ -233,7 +234,12 @@ export default function AllItems({
   return (
     <div style={{ position: 'relative' }}>
       <Container maxWidth="lg">
-        <Toolbar search={search} setSearch={setSearch} owner={owner} />
+        <Toolbar
+          search={search}
+          setSearch={setSearch}
+          owner={owner}
+          inputs={mapAndReduce(entries)}
+        />
         {option && (
           <FormControl
             variant="filled"

@@ -26,6 +26,7 @@ import Type from '@/models/type';
 import Option from '@/models/option';
 
 import { dbConnect } from '@/middleware/db';
+import { mapAndReduce } from '@/lib/filter';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -125,9 +126,24 @@ export default function TablePage({ forms, owner, option, types }) {
 
   const [search, setSearch] = useState('');
 
+  useEffect(() => {
+    if (search.length > 0) {
+      axios
+        .post('/api/search', { search, option: owner.option })
+        .then((res) => setEntries(res.data));
+    } else {
+      setEntries(forms);
+    }
+  }, [search]);
+
   return (
     <Container maxWidth="lg">
-      <Toolbar search={search} setSearch={setSearch} owner={owner} />
+      <Toolbar
+        search={search}
+        setSearch={setSearch}
+        owner={owner}
+        inputs={mapAndReduce(entries)}
+      />
       {option && (
         <FormControl
           variant="filled"

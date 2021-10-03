@@ -1,17 +1,18 @@
 import Link from 'next/link';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 
-import SearchIcon from '@mui/icons-material/Search';
-import InputBase from '@mui/material/InputBase';
 import Chip from '@mui/material/Chip';
 import TocIcon from '@mui/icons-material/Toc';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ArchiveIcon from '@mui/icons-material/Archive';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
-export const Toolbar = ({ search, setSearch, owner }) => {
+export const Toolbar = ({ setSearch, owner, inputs }) => {
   const router = useRouter();
+
+  const [autocompleteValue, setAutocompleteValue] = useState('')
 
   return (
     <div className="toolbar">
@@ -47,19 +48,27 @@ export const Toolbar = ({ search, setSearch, owner }) => {
           />
         </Link>
       </div>
-      <Paper className="search">
-        <IconButton aria-label="search">
-          <SearchIcon />
-        </IconButton>
-        <InputBase
-          disabled={!owner.option}
-          className="search"
-          placeholder="Pretražite unose"
-          inputProps={{ 'aria-label': 'pretražite unose' }}
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-      </Paper>
+      <Autocomplete
+        className="search"
+        disabled={!owner.option}
+        multiple
+        id="search"
+        options={inputs}
+        onChange={(event, newValue) => {
+          setSearch(newValue);
+        }}
+        inputValue={autocompleteValue}
+        onInputChange={(event, newAutocompleteValue) => {
+          setAutocompleteValue(newAutocompleteValue);
+        }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            variant="outlined"
+            label="Pretražite unose"
+          />
+        )}
+      />
     </div>
   );
 };

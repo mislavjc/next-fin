@@ -35,19 +35,22 @@ export const EditTypes = ({
   typeRequired,
   typeCurrency,
   typeAdditional,
+  typeRelationTitle,
+  typeRelationCategory,
   typeIdArr,
   setMessage,
   selectedTitle,
   option,
   hasMoreForms,
+  types,
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
   const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState(typeCurrency);
-  const [relationTitleObj, setRelationTitleObj] = useState({});
-  const [relationCategoryObj, setRelationCategoryObj] = useState({});
+  const [relationTitleObj, setRelationTitleObj] = useState(typeRelationTitle);
+  const [relationCategoryObj, setRelationCategoryObj] = useState(typeRelationCategory);
   const [count, setCount] = useState(typeCount);
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState(typeAdditional || {});

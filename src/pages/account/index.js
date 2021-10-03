@@ -43,7 +43,6 @@ import Option from '@/models/option';
 import { dbConnect } from '@/middleware/db';
 import { formVariants, containerVariants } from '@/lib/framer';
 
-
 export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
@@ -95,6 +94,8 @@ export async function getServerSideProps(context) {
   const typeCurrency = {};
   const typeAdditional = {};
   const typeIdArr = {};
+  const typeRelationTitle = {};
+  const typeRelationCategory = {};
 
   for (const type of types) {
     let count = 0;
@@ -107,6 +108,8 @@ export async function getServerSideProps(context) {
       typeAdditional[type.title] = {};
       typeCurrency[type.title] = {};
       typeIdArr[type.title] = [];
+      typeRelationTitle[type.title] = {};
+      typeRelationCategory[type.title] = {};
     }
     typeNames[type.title][count] = type.name;
     typeTypes[type.title][count] = type.type;
@@ -117,6 +120,11 @@ export async function getServerSideProps(context) {
     }
     if (type.currency) {
       typeCurrency[type.title][count] = type.currency;
+    }
+    if (type._relation) {
+      const relatedType = await Type.findById(type._relation);
+      typeRelationTitle[type.title][count] = relatedType.title;
+      typeRelationCategory[type.title][count] = relatedType.name;
     }
   }
 
@@ -144,6 +152,8 @@ export async function getServerSideProps(context) {
       typeRequired,
       typeCurrency,
       typeAdditional,
+      typeRelationTitle,
+      typeRelationCategory,
       forms,
       archived,
       hasMoreForms: option ? (option.titles.length > 1 ? true : false) : false,
@@ -155,6 +165,7 @@ export default function Account({
   owner,
   option,
   datas,
+  types,
   typeCount,
   typeNames,
   typeTypes,
@@ -162,6 +173,8 @@ export default function Account({
   typeCurrency,
   typeAdditional,
   typeIdArr,
+  typeRelationTitle,
+  typeRelationCategory,
   forms,
   archived,
   options,
@@ -610,10 +623,13 @@ export default function Account({
                 typeAdditional={typeAdditional[selectedTitle]}
                 typeCount={typeIdArr[selectedTitle].length}
                 typeIdArr={typeIdArr[selectedTitle]}
+                typeRelationTitle={typeRelationTitle[selectedTitle]}
+                typeRelationCategory={typeRelationCategory[selectedTitle]}
                 setMessage={setMessage}
                 selectedTitle={selectedTitle}
                 option={option}
                 hasMoreForms={hasMoreForms}
+                types={types}
               />
             </motion.div>
           )}

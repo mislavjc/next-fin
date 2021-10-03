@@ -27,7 +27,11 @@ export const Input = ({
   const inputValue = () => {
     if (initialValue) {
       for (let value of initialValue.inputs) {
-        if (value.type._id === id) {
+        if (
+          typeof value.type === 'string'
+            ? value.type === id
+            : value.type._id === id
+        ) {
           valueId = value._id;
           return value.value;
         }

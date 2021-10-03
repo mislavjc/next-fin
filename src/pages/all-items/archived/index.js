@@ -102,6 +102,7 @@ export default function AllItems({
   const [selectedTitle, setSelectedTitle] = useState(
     option ? option.titles[0] : ''
   );
+  const [columnTypes, setColumnTypes] = useState(types);
 
   useEffect(() => {
     axios
@@ -110,7 +111,10 @@ export default function AllItems({
         owner,
         archived: false,
       })
-      .then((res) => setEntries(res.data.forms))
+      .then((res) => {
+        setEntries(res.data.forms);
+        setColumnTypes(res.data.types);
+      })
       .then(() => setDataObj({}))
       .then(() => localStorage.setItem('selectedTitle', selectedTitle));
   }, [selectedTitle]);
@@ -285,6 +289,7 @@ export default function AllItems({
                           setShowMore({ ...showMore, [form._id]: false });
                         }}
                         showBack={showMore[form._id]}
+                        columnTypes={columnTypes}
                       />
                     </motion.div>
                   ) : (
@@ -299,13 +304,13 @@ export default function AllItems({
                     >
                       <CardItem
                         form={form}
-                        types={types}
                         owner={owner}
                         setShowEditForm={setShowEditForm}
                         setInitialValue={setInitialValue}
                         onOpen={() =>
                           setShowMore({ ...showMore, [form._id]: true })
                         }
+                        columnTypes={columnTypes}
                       />
                     </motion.div>
                   )}

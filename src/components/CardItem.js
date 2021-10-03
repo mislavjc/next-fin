@@ -24,6 +24,7 @@ export const CardItem = ({
   owner,
   setShowEditForm,
   setInitialValue,
+  columnTypes,
 }) => {
   const router = useRouter();
   const id = form._id;
@@ -57,7 +58,7 @@ export const CardItem = ({
   return (
     <Paper className="overscroll-card">
       <List>
-        {form.inputs.map((input) => {
+        {form.inputs.map((input, index) => {
           if (input.type) {
             return (
               <span key={input._id}>
@@ -73,7 +74,7 @@ export const CardItem = ({
                     }}
                   >
                     <Typography variant="overline">
-                      {input.type.name}
+                      {columnTypes[index].name}
                     </Typography>
                   </span>
                   <Divider orientation="vertical" flexItem />
@@ -85,11 +86,15 @@ export const CardItem = ({
                       paddingLeft: '0.5rem',
                     }}
                   >
-                    {input.type.currency === '£' ? input.type.currency : null}{' '}
-                    {input.type.type === 'date'
+                    {columnTypes[index].currency === '£'
+                      ? columnTypes[index].currency
+                      : null}{' '}
+                    {columnTypes[index].type === 'date'
                       ? dayjs(input.value).format('DD.MM.YYYY')
                       : input.value}{' '}
-                    {input.type.currency !== '£' ? input.type.currency : null}
+                    {columnTypes[index].currency !== '£'
+                      ? columnTypes[index].currency
+                      : null}
                   </Typography>
                 </ListItem>
                 <Divider />

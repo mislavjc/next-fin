@@ -35,6 +35,9 @@ import { dbConnect } from '@/middleware/db';
 import { uploadFile } from '@/middleware/uploadFile';
 import { formVariants, cardVariants } from '@/lib/framer';
 import { mapAndReduce } from '@/lib/filter';
+import { useStrings } from '@/lib/use-strings';
+
+import Strings from '@/translation/all-items/Strings';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -103,6 +106,8 @@ export default function AllItems({
     option ? option.titles[0] : ''
   );
   const [columnTypes, setColumnTypes] = useState(types);
+
+  const { button } = useStrings(Strings);
 
   useEffect(() => {
     axios

@@ -29,6 +29,7 @@
     "react-csv-downloader": "^2.7.0",
     "react-csv-reader": "^3.3.1",
     "react-dom": "17.0.2",
+    "react-localization": "^1.0.17",
     "sass": "^1.42.1",
     "styled-jsx": "^4.0.1"
   },

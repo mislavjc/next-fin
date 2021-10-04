@@ -38,6 +38,10 @@ import Option from '@/models/option';
 import { default as Types } from '@/models/type';
 import User from '@/models/user';
 
+import { useStrings } from '@/lib/use-strings';
+
+import Strings from '@/translation/setup/String'
+
 const form = [
   {
     name: 'Datum',
@@ -153,6 +157,8 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
   const [showExample, setShowExample] = useState(false);
   const [title, setTitle] = useState('');
 
+  const { header, formSection } = useStrings(Strings);
+
   const removeHandler = (index) => {
     delete nameObj[index];
     delete typeObj[index];
@@ -221,10 +227,9 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
           <form>
             <AnimateSharedLayout>
               <Paper variant="outlined" style={{ padding: '1rem' }}>
-                <Typography variant="h5">Odabir polja za unos</Typography>
+                <Typography variant="h5">{header.title}</Typography>
                 <Typography variant="body2" color="textSecondary" gutterBottom>
-                  Prema odabranim kategorijama napraviti će se ekranski pregled
-                  polja za unos (kategorija).
+                  {header.subtitle}
                 </Typography>
                 <Typography
                   className="card"
@@ -233,7 +238,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                   onClick={() => setShowExample(true)}
                   gutterBottom
                 >
-                  Primjer
+                  {header.example.text}
                   <HelpOutlineIcon fontSize="inherit" />
                 </Typography>
                 <Typography
@@ -242,10 +247,10 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                   display="block"
                   gutterBottom
                 >
-                  Iskorišteno {count + 1} / 20
+                  {header.example.usage} {count + 1} / 20
                 </Typography>
                 <Typography variant="h6" gutterBottom>
-                  Naziv kategorija
+                  {formSection.title}
                 </Typography>
                 <TextField
                   fullWidth
@@ -306,7 +311,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                             }
                           />
                         }
-                        label="Obavezno"
+                        label={formSection.required}
                         labelPlacement="top"
                       />
                     </div>
@@ -370,7 +375,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                             style={{ marginLeft: '1rem' }}
                             onClick={() => additionalHandler(index)}
                           >
-                            Dodaj
+                            {formSection.add}
                           </Button>
                         </div>
                         {additionalArr[index] &&
@@ -419,7 +424,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                     onClick={clickHandler}
                     disableElevation
                   >
-                    Spremi
+                    {formSection.save}
                   </Button>
                 </motion.div>
               </Paper>

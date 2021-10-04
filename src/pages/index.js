@@ -7,6 +7,9 @@ import Button from '@mui/material/Button';
 import User from '@/models/user';
 
 import { dbConnect } from '@/middleware/db';
+import { useStrings } from '@/lib/use-strings';
+
+import Strings from '@/translation/index/Strings';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -28,6 +31,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Home({ owner }) {
+  const { hero } = useStrings(Strings);
+
   return (
     <>
       <div style={{ padding: '2rem 0' }}>
@@ -38,7 +43,7 @@ export default function Home({ owner }) {
             component="h1"
             align="center"
           >
-            Landing page je u izradi
+            {hero.title}
           </Typography>
           <Typography
             variant="h4"
@@ -46,8 +51,7 @@ export default function Home({ owner }) {
             align="center"
             color="textPrimary"
           >
-            FIN je platforma koja olakšava evidenciju poslovnih procesa,
-            jednostavna je za korištenje te je dostupna bilo kada i bilo gdje.
+            {hero.subtitle}
           </Typography>
           <Typography variant="h4" align="center">
             <Button variant="outlined" color="primary" size="large">
@@ -56,7 +60,7 @@ export default function Home({ owner }) {
                   owner ? (owner.option ? '/all-items' : '/setup') : '/setup'
                 }
               >
-                Započnite korištenje
+                {hero.button}
               </Link>
             </Button>
           </Typography>

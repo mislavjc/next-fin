@@ -120,6 +120,7 @@ export default function Import({ session }) {
   const [message, setMessage] = useState('');
   const [open, setOpen] = useState(false);
   const [showExample, setShowExample] = useState(false);
+  const [title, setTitle] = useState('');
 
   useEffect(() => {
     if (imported.length > 0) {
@@ -157,7 +158,7 @@ export default function Import({ session }) {
         setOpen(true);
       }
     }
-  }, [imported, error, headers, importedValues, nameObj, typeObj]);
+  }, [imported]);
 
   const additionalHandler = (index) => {
     if (!additionalArr[index]) {
@@ -186,6 +187,7 @@ export default function Import({ session }) {
       required: requiredObj,
       currency: currencyObj,
       importedValues,
+      title,
     };
     axios.post('/api/import', values).then(router.push('/all-items'));
   };
@@ -260,6 +262,19 @@ export default function Import({ session }) {
                     Primjer
                     <HelpOutlineIcon fontSize="inherit" />
                   </Typography>
+                  <Typography variant="h6" gutterBottom>
+                    Naziv kategorija
+                  </Typography>
+                  <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    id="categoryTitle"
+                    name="categoryTitles"
+                    label="Naziv kategorija"
+                    value={title}
+                    onChange={(e) => setTitle(e.target.value)}
+                  />
                   <motion.div
                     variants={inputVariants}
                     initial="hidden"

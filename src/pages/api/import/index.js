@@ -1,14 +1,14 @@
-import User from "@/models/user";
-import Type from "@/models/type";
-import Option from "@/models/option";
-import Input from "@/models/input";
-import Form from "@/models/form";
+import User from '@/models/user';
+import Type from '@/models/type';
+import Option from '@/models/option';
+import Input from '@/models/input';
+import Form from '@/models/form';
 
-import { dbConnect } from "@/middleware/db";
+import { dbConnect } from '@/middleware/db';
 
 const importHandler = async (req, res) => {
   dbConnect();
-  if (req.method === "POST") {
+  if (req.method === 'POST') {
     const {
       currentUser,
       names,
@@ -17,25 +17,27 @@ const importHandler = async (req, res) => {
       required,
       currency,
       importedValues,
+      title,
     } = req.body;
     const user = await User.findOne({ email: currentUser.email });
-    const username = user.email.split("@")[0];
+    const username = user.email.split('@')[0];
     const acc = {};
     acc[username] = {
       email: user.email,
       create: true,
       delete: true,
-      role: "admin",
-      color: "#BDBDBD",
+      role: 'admin',
+      color: '#BDBDBD',
     };
     const option = new Option({
       owner: acc,
+      titles: [title]
     });
     await option.save();
     user.create = true;
     user.delete = true;
-    user.role = "admin";
-    user.color = "#607d8b";
+    user.role = 'admin';
+    user.color = '#607d8b';
     user.option = option;
     user.admin = true;
     await user.save();
@@ -45,12 +47,13 @@ const importHandler = async (req, res) => {
         name: names[i.toString()],
         type: types[i.toString()],
         required: required[i.toString()] || false,
-        option: option,
+        option,
+        title,
       };
       if (additional[i.toString()]) {
         field.additional = additional[i.toString()];
       }
-      if (currency[i.toString()] && types[i.toString()] === "currency") {
+      if (currency[i.toString()] && types[i.toString()] === 'currency') {
         field.currency = currency[i.toString()];
       }
       const type = new Type(field);
@@ -66,16 +69,17 @@ const importHandler = async (req, res) => {
           option,
           type: typeArr[j],
         });
-        await input.save()
+        await input.save();
         formArr.push(input);
       }
       const form = new Form({
         inputs: formArr,
         option,
+        title,
       });
       await form.save();
     }
-    res.status(201).json({ message: "all ok" });
+    res.status(201).json({ message: 'all ok' });
   }
 };
 

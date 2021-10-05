@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 
@@ -7,9 +8,13 @@ import TocIcon from '@mui/icons-material/Toc';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import ArchiveIcon from '@mui/icons-material/Archive';
 
+import { useStrings } from '@/lib/use-strings';
+
 export const BottomNav = () => {
   const router = useRouter();
   const [value, setValue] = useState(router.pathname);
+
+  const { bottomNav } = useStrings(Strings);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -23,20 +28,37 @@ export const BottomNav = () => {
       className="bottom-nav"
     >
       <BottomNavigationAction
-        label="Kartice"
+        label={bottomNav.cardView}
         value="/all-items"
         icon={<DashboardIcon />}
       />
       <BottomNavigationAction
-        label="Tablica"
+        label={bottomNav.tableView}
         value="/table"
         icon={<TocIcon />}
       />
       <BottomNavigationAction
-        label="Arhivi"
+        label={bottomNav.archive}
         value="/all-items/archived"
         icon={<ArchiveIcon />}
       />
     </BottomNavigation>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    bottomNav: {
+      cardView: 'Cards',
+      tableView: 'Table',
+      archive: 'Archived',
+    },
+  },
+  hr: {
+    bottomNav: {
+      cardView: 'Kartice',
+      tableView: 'Tablica',
+      archive: 'Arhivi',
+    },
+  },
+});

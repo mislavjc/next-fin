@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -19,6 +20,9 @@ import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import GetAppIcon from '@mui/icons-material/GetApp';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
+import TranslateIcon from '@mui/icons-material/Translate';
+
+import { useStrings } from '@/lib/use-strings';
 
 export const Navbar = () => {
   const router = useRouter();
@@ -27,6 +31,8 @@ export const Navbar = () => {
   const [name, setName] = useState(null);
   const [darkMode, setDarkMode] = useState('false');
   const [color, setColor] = useState(null);
+
+  const { navbar } = useStrings(Strings);
 
   const lightModeHandler = () => {
     setDarkMode(false);
@@ -64,12 +70,7 @@ export const Navbar = () => {
   return (
     <nav>
       <span className="logo">
-        <Image
-          src="/icons/logo.svg"
-          alt="logo"
-          width="40px"
-          height="40px"
-        />
+        <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
       </span>
       <div>
         <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
@@ -114,7 +115,7 @@ export const Navbar = () => {
                           <AccountCircleIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary="Račun" />
+                      <ListItemText primary={navbar.account} />
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
@@ -126,8 +127,8 @@ export const Navbar = () => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Više računa"
-                        secondary="Dodajte račune"
+                        primary={navbar.moreAccounts.title}
+                        secondary={navbar.moreAccounts.subtitle}
                       />
                     </ListItem>
                   </Link>
@@ -140,19 +141,37 @@ export const Navbar = () => {
                         </Avatar>
                       </ListItemAvatar>
                       <ListItemText
-                        primary="Eksport podataka"
-                        secondary="Skinite sve unose"
+                        primary={navbar.export.title}
+                        secondary={navbar.export.subtitle}
                       />
                     </ListItem>
                   </Link>
                   <Divider variant="inset" component="li" />
+                  <Link
+                    href="#"
+                    locale={router.locale === 'hr' ? 'en' : 'hr'}
+                    passHref
+                  >
+                    <ListItem onClick={handleClose}>
+                      <ListItemAvatar>
+                        <Avatar>
+                          <TranslateIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={
+                          router.locale === 'hr' ? 'English' : 'Hrvatski'
+                        }
+                      />
+                    </ListItem>
+                  </Link>
                   <ListItem onClick={signOut}>
                     <ListItemAvatar>
                       <Avatar>
                         <MeetingRoomIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText primary="Odjava" />
+                    <ListItemText primary={navbar.logout} />
                   </ListItem>
                 </List>
               </Menu>
@@ -169,7 +188,7 @@ export const Navbar = () => {
                 </IconButton>
               )}
               <Button variant="outlined" className="btn" onClick={signIn}>
-                Prijavite se
+                {navbar.login}
               </Button>
             </div>
           )}
@@ -178,3 +197,34 @@ export const Navbar = () => {
     </nav>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    navbar: {
+      account: 'Account',
+      moreAccounts: {
+        title: 'Multiple accounts',
+        subtitle: 'Add multiple accounts',
+      },
+      export: {
+        title: 'Excel export',
+        subtitle: 'Download all your entries',
+      },
+      logout: 'Log out',
+      login: 'Log in',
+    },
+  },
+  hr: {
+    account: 'Račun',
+    moreAccounts: {
+      title: 'Više računa',
+      subtitle: 'Dodajte više računa',
+    },
+    export: {
+      title: 'Eksport podataka',
+      subtitle: 'Skinite sve unose',
+    },
+    logout: 'Odjava',
+    login: 'Prijavite se',
+  },
+});

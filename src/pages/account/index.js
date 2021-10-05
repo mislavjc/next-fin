@@ -42,6 +42,9 @@ import Option from '@/models/option';
 
 import { dbConnect } from '@/middleware/db';
 import { formVariants, containerVariants } from '@/lib/framer';
+import { useStrings } from '@/lib/use-strings';
+
+import Strings from '@/translation/account/Strings';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -194,6 +197,8 @@ export default function Account({
     option ? option.titles[0] : ''
   );
 
+  const { accountStrings } = useStrings(Strings);
+
   const editTypesHandler = (title) => {
     setSelectedTitle(title);
     setShowEditCategories(true);
@@ -240,10 +245,10 @@ export default function Account({
         <div className="account-header">
           <Avatar>{owner.email[0]}</Avatar>
           <Typography variant="h5" align="center" color="textPrimary">
-            Dobrodošao, {owner.email}
+            {accountStrings.welcome}, {owner.email}
           </Typography>
           <Typography variant="body1" align="center" color="textSecondary">
-            Promjenite postavke računa
+            {accountStrings.title}
           </Typography>
         </div>
         <Grid container spacing={3}>
@@ -313,7 +318,7 @@ export default function Account({
                           <AccountCircleIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary="Korisničko ime"
+                          primary={accountStrings.user.username}
                           secondary={owner.email.split('@')[0]}
                         />
                       </ListItem>
@@ -322,8 +327,8 @@ export default function Account({
                           <ColorLensIcon />
                         </ListItemIcon>
                         <ListItemText
-                          primary="Tema"
-                          secondary="Promjenite temu računa"
+                          primary={accountStrings.user.theme.title}
+                          secondary={accountStrings.user.theme.subtitle}
                         />
                       </ListItem>
                     </List>
@@ -333,7 +338,9 @@ export default function Account({
                         button
                         onClick={() => setAccountPrefrences(true)}
                       >
-                        <ListItemText primary="Promjenite temu računa" />
+                        <ListItemText
+                          primary={accountStrings.user.theme.subtitle}
+                        />
                       </ListItem>
                     </List>
                   </Paper>
@@ -349,8 +356,8 @@ export default function Account({
                     <DataUsageIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Podatci"
-                    secondary="Iskorišteno 14/15 GB"
+                    primary={accountStrings.data.title}
+                    secondary={accountStrings.data.subtitle}
                   />
                 </ListItem>
                 <ListItem button>
@@ -364,8 +371,8 @@ export default function Account({
                     datas={datas}
                   >
                     <ListItemText
-                      primary="Eksport podataka"
-                      secondary="Preuzmite sve svoje podatke u CSV formatu"
+                      primary={accountStrings.export.title}
+                      secondary={accountStrings.export.subtitle}
                     />
                   </CsvDownloader>
                 </ListItem>
@@ -373,7 +380,7 @@ export default function Account({
               <Divider />
               <List>
                 <ListItem disabled button>
-                  <ListItemText primary="Promjenite plan pretplate" />
+                  <ListItemText primary={accountStrings.data.button} />
                 </ListItem>
               </List>
             </Paper>
@@ -386,8 +393,13 @@ export default function Account({
                     <StorageIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Unosi"
-                    secondary={<>Ukupno dodano {forms} unosa</>}
+                    primary={accountStrings.unarchived.title}
+                    secondary={
+                      <>
+                        {accountStrings.unarchived.subtitle[0]} {forms}{' '}
+                        {accountStrings.unarchived.subtitle[1]}
+                      </>
+                    }
                   />
                 </ListItem>
                 <ListItem button>
@@ -395,8 +407,13 @@ export default function Account({
                     <ArchiveIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Arhivi"
-                    secondary={<>Arhivirano ukupno {archived} unosa</>}
+                    primary={accountStrings.archived.title}
+                    secondary={
+                      <>
+                        {accountStrings.archived.subtitle[0]} {archived}{' '}
+                        {accountStrings.archived.subtitle[1]}
+                      </>
+                    }
                   />
                 </ListItem>
               </List>
@@ -404,7 +421,7 @@ export default function Account({
               <List>
                 <Link href="/all-items" passHref>
                   <ListItem button>
-                    <ListItemText primary="Pregled svih unosa" />
+                    <ListItemText primary={accountStrings.entriesButton} />
                   </ListItem>
                 </Link>
               </List>
@@ -418,8 +435,13 @@ export default function Account({
                     <CategoryIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Polja za unos podataka"
-                    secondary={<>Odabrano {typeCount} polja za unos podataka</>}
+                    primary={accountStrings.types.title}
+                    secondary={
+                      <>
+                        {accountStrings.types.subtitle[0]} {typeCount}{' '}
+                        {accountStrings.types.subtitle[1]}
+                      </>
+                    }
                   />
                 </ListItem>
                 <ListItem disabled button>
@@ -427,8 +449,8 @@ export default function Account({
                     <FormatLineSpacingIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Raspored polja za unos"
-                    secondary="Promjenite raspored polja za unos"
+                    primary={accountStrings.order.title}
+                    secondary={accountStrings.order.subtitle}
                   />
                 </ListItem>
               </List>
@@ -439,7 +461,7 @@ export default function Account({
                   onClick={() => router.push('/setup')}
                   button
                 >
-                  <ListItemText primary="Dodajte forme" />
+                  <ListItemText primary={accountStrings.typeButton} />
                 </ListItem>
               </List>
             </Paper>
@@ -451,9 +473,11 @@ export default function Account({
                   <ListItem button>
                     <ListItemText
                       primary={
-                        <Typography variant="h5">Dodane forme</Typography>
+                        <Typography variant="h5">
+                          {accountStrings.collections.title}
+                        </Typography>
                       }
-                      secondary="Popis kreiranih formi"
+                      secondary={accountStrings.collections.subtitle}
                     />
                   </ListItem>
                   <Grid container spacing={4} className="members">
@@ -480,9 +504,11 @@ export default function Account({
                 <ListItem button>
                   <ListItemText
                     primary={
-                      <Typography variant="h5">Dodani korisnici</Typography>
+                      <Typography variant="h5">
+                        {accountStrings.users.title}
+                      </Typography>
                     }
-                    secondary="Popis korisnika u vašem poduzeću"
+                    secondary={accountStrings.users.subtitle}
                   />
                 </ListItem>
                 <Grid container spacing={4} className="members">
@@ -519,7 +545,9 @@ export default function Account({
                       >
                         +
                       </Avatar>
-                      <Typography variant="body1">Dodajte račun</Typography>
+                      <Typography variant="body1">
+                        {accountStrings.users.button}
+                      </Typography>
                     </Grid>
                   )}
                 </Grid>
@@ -534,8 +562,8 @@ export default function Account({
                     <HelpOutlineIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Podrška"
-                    secondary="Kontaktirajte nas za pomoć pri korištenju aplikacije"
+                    primary={accountStrings.support.title}
+                    secondary={accountStrings.support.subtitle}
                   />
                 </ListItem>
                 <Divider variant="middle" />
@@ -544,8 +572,8 @@ export default function Account({
                     <SearchIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Dokumentacija"
-                    secondary="Pretražite dokumentaciju korištenja aplikacije"
+                    primary={accountStrings.documentation.title}
+                    secondary={accountStrings.documentation.subtitle}
                   />
                 </ListItem>
                 <Divider variant="middle" />
@@ -554,8 +582,8 @@ export default function Account({
                     <FeedbackIcon />
                   </ListItemIcon>
                   <ListItemText
-                    primary="Povratna informacija"
-                    secondary="Pošaljite nam povratnu informaciju"
+                    primary={accountStrings.feedback.title}
+                    secondary={accountStrings.feedback.subtitle}
                   />
                 </ListItem>
               </List>

@@ -38,71 +38,46 @@ import Option from '@/models/option';
 import { default as Types } from '@/models/type';
 import User from '@/models/user';
 
+import { formVariants, inputVariants, containerVariants } from '@/lib/framer';
 import { useStrings } from '@/lib/use-strings';
 
-import Strings from '@/translation/setup/String'
+import Strings from '@/translation/setup/String';
 
-const form = [
-  {
-    name: 'Datum',
-    value: '5/6/2021',
-    type: 'number',
-  },
-  {
-    name: 'Špediter',
-    value: 'DPD',
-    type: 'text',
-  },
-  {
-    name: 'Cijena',
-    value: '100kn',
-    type: 'text',
-  },
-];
-
-const containerVariants = {
-  hidden: {
-    y: 50,
-  },
-  visible: {
-    y: 0,
-    transition: {
-      type: 'spring',
-      stiffness: 100,
-      delayChildren: 0.5,
+const example = {
+  en: [
+    {
+      name: 'Date',
+      value: '5/6/2021',
+      type: 'number',
     },
-  },
-  exit: {
-    y: 50,
-  },
-};
-
-const formVariants = {
-  hidden: {
-    y: -1000,
-  },
-  visible: {
-    y: 0,
-  },
-  exit: {
-    y: -1000,
-    opacity: 0,
-  },
-};
-
-const inputVariants = {
-  hidden: {
-    y: 50,
-    opacity: 0,
-  },
-  visible: {
-    y: 0,
-    opacity: 1,
-    transition: {
-      type: 'tween',
-      stiffness: 100,
+    {
+      name: 'Delivery service',
+      value: 'DPD',
+      type: 'text',
     },
-  },
+    {
+      name: 'Price',
+      value: '$100',
+      type: 'text',
+    },
+  ],
+  hr: [
+    {
+      name: 'Datum',
+      value: '5/6/2021',
+      type: 'number',
+    },
+    {
+      name: 'Špediter',
+      value: 'DPD',
+      type: 'text',
+    },
+    {
+      name: 'Cijena',
+      value: '100kn',
+      type: 'text',
+    },
+  ],
 };
 
 export async function getServerSideProps(context) {
@@ -144,7 +119,6 @@ export async function getServerSideProps(context) {
 }
 export default function Setup({ session, owner, option, types, hasMoreForms }) {
   const [count, setCount] = useState(0);
-  const router = useRouter();
   const [nameObj, setNameObj] = useState({});
   const [typeObj, setTypeObj] = useState({});
   const [requiredObj, setRequiredObj] = useState({});
@@ -157,6 +131,9 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
   const [showExample, setShowExample] = useState(false);
   const [title, setTitle] = useState('');
 
+  const router = useRouter();
+
+  const form = example[router.locale];
   const { header, formSection } = useStrings(Strings);
 
   const removeHandler = (index) => {
@@ -258,7 +235,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                   type="text"
                   id="categoryTitle"
                   name="categoryTitles"
-                  label="Naziv kategorija"
+                  label={formSection.titleField}
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
@@ -442,7 +419,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
             >
               <Paper style={{ padding: '1rem' }} className="overscroll">
                 <div style={{ display: 'flex' }}>
-                  <Typography variant="h5">Primjer polja</Typography>
+                  <Typography variant="h5">{header.example.title1}</Typography>
                   <Tooltip title="Zatvori">
                     <IconButton
                       style={{
@@ -469,7 +446,7 @@ export default function Setup({ session, owner, option, types, hasMoreForms }) {
                 ))}
                 <Divider variant="middle" style={{ margin: '1rem 0' }} />
                 <Typography variant="h5" gutterBottom>
-                  Primjer kreiranog unosa iz polja
+                  {header.example.title2}
                 </Typography>
                 <Paper>
                   <List>

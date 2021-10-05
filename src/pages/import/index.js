@@ -34,55 +34,46 @@ import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
 import { Additional } from '@/components/setup/Additional';
 
-const form = [
-  {
-    name: 'Datum',
-    value: '5/6/2021',
-    type: 'number',
-  },
-  {
-    name: 'Špediter',
-    value: 'DPD',
-    type: 'text',
-  },
-  {
-    name: 'Cijena',
-    value: '100kn',
-    type: 'text',
-  },
-];
+import { formVariants, inputVariants } from '@/lib/framer';
+import { useStrings } from '@/lib/use-strings';
 
-const formVariants = {
-  hidden: {
-    y: -1000,
-  },
-  visible: {
-    y: 0,
-  },
-  exit: {
-    y: -1000,
-    opacity: 0,
-  },
-};
+import Strings from '@/translation/import/Strings';
 
-const inputVariants = {
-  hidden: {
-    y: 50,
-    opacity: 0,
-  },
-  visible: (index) => ({
-    opacity: 1,
-    y: 0,
-    transition: {
-      delay: index * 0.01,
+const example = {
+  en: [
+    {
+      name: 'Date',
+      value: '5/6/2021',
+      type: 'number',
     },
-  }),
-  exit: {
-    opacity: 0,
-    transition: {
-      duration: 0.1,
+    {
+      name: 'Delivery service',
+      value: 'DPD',
+      type: 'text',
     },
-  },
+    {
+      name: 'Price',
+      value: '$100',
+      type: 'text',
+    },
+  ],
+  hr: [
+    {
+      name: 'Datum',
+      value: '5/6/2021',
+      type: 'number',
+    },
+    {
+      name: 'Špediter',
+      value: 'DPD',
+      type: 'text',
+    },
+    {
+      name: 'Cijena',
+      value: '100kn',
+      type: 'text',
+    },
+  ],
 };
 
 export async function getServerSideProps(context) {
@@ -105,7 +96,6 @@ export async function getServerSideProps(context) {
 }
 
 export default function Import({ session }) {
-  const router = useRouter();
   const [imported, setImported] = useState([]);
   const [importedValues, setImportedValues] = useState({});
   const [headers, setHeaders] = useState([]);
@@ -121,6 +111,11 @@ export default function Import({ session }) {
   const [open, setOpen] = useState(false);
   const [showExample, setShowExample] = useState(false);
   const [title, setTitle] = useState('');
+
+  const router = useRouter();
+
+  const form = example[router.locale];
+  const { hero, header, formSection } = useStrings(Strings);
 
   useEffect(() => {
     if (imported.length > 0) {
@@ -210,7 +205,7 @@ export default function Import({ session }) {
           align="center"
           fontWeight={600}
         >
-          Prenesite svoje Excel tablice
+          {hero.title}
         </Typography>
         <Typography
           variant="h4"
@@ -218,8 +213,7 @@ export default function Import({ session }) {
           align="center"
           color="textPrimary"
         >
-          Imate unose već spremljene u Excel tablici? Jednostavno je priložite
-          ispod!
+          {hero.subtitle}
         </Typography>
       </div>
       <div className="wrapper">
@@ -229,7 +223,7 @@ export default function Import({ session }) {
           htmlFor="react-csv-reader-input"
         >
           <span style={{ position: 'absolute' }}>
-            Priložite <br /> Excel datoteke
+            {hero.button[0]} <br /> {hero.button[1]}
           </span>
           <CSVReader
             cssClass="react-csv-input"
@@ -243,14 +237,13 @@ export default function Import({ session }) {
             <form>
               <AnimateSharedLayout>
                 <Paper variant="outlined" style={{ padding: '1rem' }}>
-                  <Typography variant="h5">Odabir polja za unos</Typography>
+                  <Typography variant="h5">{header.title}</Typography>
                   <Typography
                     variant="body2"
                     color="textSecondary"
                     gutterBottom
                   >
-                    Prema odabranim kategorijama napraviti će se ekranski
-                    pregled polja za unos (kategorija).
+                    {header.subtitle}
                   </Typography>
                   <Typography
                     className="card"
@@ -259,11 +252,11 @@ export default function Import({ session }) {
                     onClick={() => setShowExample(true)}
                     gutterBottom
                   >
-                    Primjer
+                    {header.example.text}
                     <HelpOutlineIcon fontSize="inherit" />
                   </Typography>
                   <Typography variant="h6" gutterBottom>
-                    Naziv kategorija
+                    {formSection.title}
                   </Typography>
                   <TextField
                     fullWidth
@@ -271,7 +264,7 @@ export default function Import({ session }) {
                     type="text"
                     id="categoryTitle"
                     name="categoryTitles"
-                    label="Naziv kategorija"
+                    label={formSection.titleField}
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
                   />
@@ -333,7 +326,7 @@ export default function Import({ session }) {
                                 }
                               />
                             }
-                            label="Obavezno"
+                            label={formSection.required}
                             labelPlacement="top"
                           />
                         </div>
@@ -362,7 +355,7 @@ export default function Import({ session }) {
                                 style={{ marginLeft: '1rem' }}
                                 onClick={() => additionalHandler(index)}
                               >
-                                Dodaj
+                                {formSection.add}
                               </Button>
                             </div>
                             {additionalArr[index] &&
@@ -395,7 +388,7 @@ export default function Import({ session }) {
                         onClick={clickHandler}
                         disableElevation
                       >
-                        Spremi
+                        {formSection.save}
                       </Button>
                     </motion.div>
                   </motion.div>
@@ -415,7 +408,7 @@ export default function Import({ session }) {
             >
               <Paper style={{ padding: '1rem' }} className="overscroll">
                 <div style={{ display: 'flex' }}>
-                  <Typography variant="h5">Primjer polja</Typography>
+                  <Typography variant="h5">{header.example.title1}</Typography>
                   <Tooltip title="Zatvori">
                     <IconButton
                       style={{
@@ -442,7 +435,7 @@ export default function Import({ session }) {
                 ))}
                 <Divider variant="middle" style={{ margin: '1rem 0' }} />
                 <Typography variant="h5" gutterBottom>
-                  Primjer kreiranog unosa iz polja
+                  {header.example.title2}
                 </Typography>
                 <Paper>
                   <List>

@@ -177,7 +177,7 @@ export const Navbar = () => {
                 ) : (
                   <>
                     <Link
-                      href="#"
+                      href={router.pathname}
                       locale={router.locale === 'hr' ? 'en' : 'hr'}
                       passHref
                     >

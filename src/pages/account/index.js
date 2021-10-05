@@ -643,7 +643,6 @@ export default function Account({
                 setShowEditCategories={setShowEditCategories}
                 setOpen={setOpen}
                 owner={owner}
-                user={user}
                 typeNames={typeNames[selectedTitle]}
                 typeTypes={typeTypes[selectedTitle]}
                 typeRequired={typeRequired[selectedTitle]}

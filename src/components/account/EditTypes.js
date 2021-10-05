@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
@@ -24,10 +25,11 @@ import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
 import { Currency } from '@/components/setup/Currency';
 
+import { useStrings } from '@/lib/use-strings';
+
 export const EditTypes = ({
   setShowEditCategories,
   setOpen,
-  user,
   owner,
   typeCount,
   typeNames,
@@ -50,10 +52,13 @@ export const EditTypes = ({
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState(typeCurrency);
   const [relationTitleObj, setRelationTitleObj] = useState(typeRelationTitle);
-  const [relationCategoryObj, setRelationCategoryObj] = useState(typeRelationCategory);
+  const [relationCategoryObj, setRelationCategoryObj] =
+    useState(typeRelationCategory);
   const [count, setCount] = useState(typeCount);
   const [arr, setArr] = useState([]);
   const [additionalArr, setAdditionalArr] = useState(typeAdditional || {});
+
+  const { modal } = useStrings(Strings);
 
   const additionalHandler = (index) => {
     if (!additionalArr[index]) {
@@ -107,9 +112,7 @@ export const EditTypes = ({
     <Paper>
       <List>
         <div style={{ display: 'flex', padding: '1rem 1rem 0 1rem' }}>
-          <Typography variant="h5">
-            {user ? 'Promjena postavki' : 'Unos novog računa'}
-          </Typography>
+          <Typography variant="h5">{modal.title}</Typography>
           <Tooltip title="Zatvori">
             <IconButton
               style={{
@@ -130,7 +133,7 @@ export const EditTypes = ({
           gutterBottom
           style={{ paddingLeft: '1rem' }}
         >
-          Iskorišteno {count} / 20
+          {modal.usage} {count} / 20
         </Typography>
         <Divider variant="middle" />
         <div className="overscroll">
@@ -179,7 +182,7 @@ export const EditTypes = ({
                         }
                       />
                     }
-                    label="Obavezno"
+                    label={modal.required}
                     labelPlacement="top"
                   />
                 </div>
@@ -243,7 +246,7 @@ export const EditTypes = ({
                         style={{ marginLeft: '1rem' }}
                         onClick={() => additionalHandler(index)}
                       >
-                        Dodaj
+                        {modal.add}
                       </Button>
                     </div>
                     {additionalArr[index] &&
@@ -279,9 +282,28 @@ export const EditTypes = ({
       <Divider />
       <List>
         <ListItem onClick={submitHandler} button>
-          <ListItemText primary="Spremite promjene" />
+          <ListItemText primary={modal.save} />
         </ListItem>
       </List>
     </Paper>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    modal: {
+      title: 'Change collection',
+      usage: 'Used',
+      required: 'Required',
+      add: 'Add',
+      save: 'Save changes'
+    },
+  },
+  hr: {
+    title: 'Promjena forme',
+    usage: 'Iskorišteno',
+    required: 'Obavezno',
+    add: 'Dodaj',
+    save: 'Spremite promjene'
+  },
+});

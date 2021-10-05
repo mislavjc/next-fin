@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import axios from 'axios';
 import dayjs from 'dayjs';
 import Image from 'next/image';
@@ -16,6 +17,8 @@ import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import Paper from '@mui/material/Paper';
 
+import { useStrings } from '@/lib/use-strings';
+
 export const CardItem = ({
   form,
   onOpen,
@@ -28,6 +31,9 @@ export const CardItem = ({
 }) => {
   const router = useRouter();
   const id = form._id;
+
+  const { card } = useStrings(Strings);
+
   const archiveHandler = () => {
     if (owner.delete) {
       axios
@@ -124,7 +130,7 @@ export const CardItem = ({
           ))}
         <ListItem>
           {showBack && (
-            <Tooltip title="Nazad">
+            <Tooltip title={card.back}>
               <IconButton onClick={onClose}>
                 <KeyboardBackspaceIcon />
               </IconButton>
@@ -132,7 +138,7 @@ export const CardItem = ({
           )}
           <span style={{ marginLeft: 'auto' }}>
             {owner.create && (
-              <Tooltip title="Promjeni">
+              <Tooltip title={card.edit}>
                 <IconButton onClick={editHandler} className="edit">
                   <EditIcon className="edit" />
                 </IconButton>
@@ -141,19 +147,19 @@ export const CardItem = ({
             {showBack && owner.delete && (
               <>
                 {form.archived ? (
-                  <Tooltip title="Vrati iz arhiva">
+                  <Tooltip title={card.unarchive}>
                     <IconButton onClick={unArchiveHandler}>
                       <UnarchiveIcon />
                     </IconButton>
                   </Tooltip>
                 ) : (
-                  <Tooltip title="Arhiviraj">
+                  <Tooltip title={card.archive}>
                     <IconButton onClick={archiveHandler}>
                       <ArchiveIcon />
                     </IconButton>
                   </Tooltip>
                 )}
-                <Tooltip title="Obriši">
+                <Tooltip title={card.delete}>
                   <IconButton onClick={deleteHandler}>
                     <DeleteIcon />
                   </IconButton>
@@ -166,3 +172,24 @@ export const CardItem = ({
     </Paper>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    card: {
+      back: 'Go back',
+      unarchive: 'Unarchive',
+      archive: 'Archive',
+      delete: 'Delete',
+      edit: 'Edit',
+    },
+  },
+  hr: {
+    card: {
+      back: 'Nazad',
+      unarchive: 'Vrati iz arhiva',
+      archive: 'Arhiviraj',
+      delete: 'Obriši',
+      edit: 'Promjeni',
+    },
+  },
+});

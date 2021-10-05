@@ -64,7 +64,7 @@ const Strings = new LocalizedStrings({
   },
   hr: {
     accountStrings: {
-      weclome: 'Dobrodošao',
+      welcome: 'Dobrodošao',
       title: 'Promjenite postavke računa',
       user: {
         username: 'Korisničko ime',
@@ -100,27 +100,27 @@ const Strings = new LocalizedStrings({
         subtitle: 'Promjenite raspored polja za unos',
       },
       typeButton: 'Dodajte forme',
-    },
-    collections: {
-      title: 'Dodane forme',
-      subtitle: 'Popis kreiranih formi',
-    },
-    users: {
-      title: 'Dodani korisnici',
-      subtitle: 'Popis korisnika u vašem poduzeću',
-      button: 'Dodajte korisnika',
-    },
-    support: {
-      title: 'Podrška',
-      subtitle: 'Kontaktirajte nas za pomoć pri korištenju aplikacije',
-    },
-    documentation: {
-      title: 'Dokumentacija',
-      subtitle: 'Pretražite dokumentaciju korištenja aplikacije',
-    },
-    feedback: {
-      title: 'Povratna informacija',
-      subtitle: 'Pošaljite nam povratnu informaciju',
+      collections: {
+        title: 'Dodane forme',
+        subtitle: 'Popis kreiranih formi',
+      },
+      users: {
+        title: 'Dodani korisnici',
+        subtitle: 'Popis korisnika u vašem poduzeću',
+        button: 'Dodajte korisnika',
+      },
+      support: {
+        title: 'Podrška',
+        subtitle: 'Kontaktirajte nas za pomoć pri korištenju aplikacije',
+      },
+      documentation: {
+        title: 'Dokumentacija',
+        subtitle: 'Pretražite dokumentaciju korištenja aplikacije',
+      },
+      feedback: {
+        title: 'Povratna informacija',
+        subtitle: 'Pošaljite nam povratnu informaciju',
+      },
     },
   },
 });

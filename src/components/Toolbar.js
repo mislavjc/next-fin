@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -9,10 +10,14 @@ import ArchiveIcon from '@mui/icons-material/Archive';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 
+import { useStrings } from '@/lib/use-strings';
+
 export const Toolbar = ({ setSearch, owner, inputs }) => {
   const router = useRouter();
 
-  const [autocompleteValue, setAutocompleteValue] = useState('')
+  const { toolbar } = useStrings(Strings);
+
+  const [autocompleteValue, setAutocompleteValue] = useState('');
 
   return (
     <div className="toolbar">
@@ -20,7 +25,7 @@ export const Toolbar = ({ setSearch, owner, inputs }) => {
         <Link href="/all-items" passHref>
           <Chip
             icon={<DashboardIcon />}
-            label="Kartični pregled"
+            label={toolbar.cardView}
             variant={router.asPath === '/all-items' ? 'default' : 'outlined'}
             color="primary"
           />
@@ -30,7 +35,7 @@ export const Toolbar = ({ setSearch, owner, inputs }) => {
         <Link href="/table" passHref>
           <Chip
             icon={<TocIcon />}
-            label="Tablični pregled"
+            label={toolbar.tableView}
             variant={router.asPath === '/table' ? 'default' : 'outlined'}
             color="primary"
           />
@@ -40,7 +45,7 @@ export const Toolbar = ({ setSearch, owner, inputs }) => {
         <Link href="/all-items/archived" passHref>
           <Chip
             icon={<ArchiveIcon />}
-            label="Arhivirani unosi"
+            label={toolbar.archived}
             variant={
               router.asPath === '/all-items/archived' ? 'default' : 'outlined'
             }
@@ -62,13 +67,28 @@ export const Toolbar = ({ setSearch, owner, inputs }) => {
           setAutocompleteValue(newAutocompleteValue);
         }}
         renderInput={(params) => (
-          <TextField
-            {...params}
-            variant="outlined"
-            label="Pretražite unose"
-          />
+          <TextField {...params} variant="outlined" label={toolbar.search} />
         )}
       />
     </div>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    toolbar: {
+      cardView: 'Card view',
+      tableView: 'Table view',
+      archived: 'Archived entries',
+      search: 'Search entries',
+    },
+  },
+  hr: {
+    toolbar: {
+      cardView: 'Kartični pregled',
+      tableView: 'Tablični pregled',
+      archived: 'Arhivirani unosi',
+      search: 'Pretražite unose',
+    },
+  },
+});

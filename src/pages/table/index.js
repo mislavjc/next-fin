@@ -13,12 +13,9 @@ import TableHead from '@mui/material/TableHead';
 import TablePagination from '@mui/material/TablePagination';
 import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import InputLabel from '@mui/material/InputLabel';
-import Select from '@mui/material/Select';
 
 import { Toolbar } from '@/components/Toolbar';
+import { CollectionSelect } from '@/components/CollectionSelect';
 
 import User from '@/models/user';
 import Form from '@/models/form';
@@ -145,25 +142,11 @@ export default function TablePage({ forms, owner, option, types }) {
         inputs={mapAndReduce(entries)}
       />
       {option && (
-        <FormControl
-          variant="filled"
-          fullWidth
-          style={{ marginBottom: '2rem' }}
-        >
-          <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
-          <Select
-            value={selectedTitle}
-            onChange={(e) => setSelectedTitle(e.target.value)}
-            labelId={'selectedTitleSelect'}
-            id={'selectedTitleSelectID'}
-          >
-            {option.titles.map((title) => (
-              <MenuItem value={title} key={title}>
-                {title}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <CollectionSelect
+          option={option}
+          value={selectedTitle}
+          onChange={setSelectedTitle}
+        />
       )}
       <Paper>
         <TableContainer>

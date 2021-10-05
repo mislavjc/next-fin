@@ -6,10 +6,6 @@ import { getSession } from 'next-auth/client';
 import Container from '@mui/material/Container';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
 import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
@@ -22,6 +18,7 @@ import Button from '@mui/material/Button';
 
 import { CardItem } from '@/components/CardItem';
 import { Input } from '@/components/fields/Input';
+import { CollectionSelect } from '@/components/CollectionSelect';
 
 import Form from '@/models/form';
 import User from '@/models/user';
@@ -107,7 +104,7 @@ export default function AllItems({
   );
   const [columnTypes, setColumnTypes] = useState(types);
 
-  const { button } = useStrings(Strings);
+  const { formStrings } = useStrings(Strings);
 
   useEffect(() => {
     axios
@@ -250,25 +247,11 @@ export default function AllItems({
           inputs={mapAndReduce(entries)}
         />
         {option && (
-          <FormControl
-            variant="filled"
-            fullWidth
-            style={{ marginBottom: '2rem' }}
-          >
-            <InputLabel id={'selectedTitle'}>Pregled polja</InputLabel>
-            <Select
-              value={selectedTitle}
-              onChange={(e) => setSelectedTitle(e.target.value)}
-              labelId={'selectedTitleSelect'}
-              id={'selectedTitleSelectID'}
-            >
-              {option.titles.map((title) => (
-                <MenuItem value={title} key={title}>
-                  {title}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+          <CollectionSelect
+            option={option}
+            value={selectedTitle}
+            onChange={setSelectedTitle}
+          />
         )}
         <Grid container spacing={4}>
           <AnimateSharedLayout>
@@ -351,7 +334,7 @@ export default function AllItems({
           >
             <Paper style={{ padding: '1rem' }}>
               <div style={{ display: 'flex' }}>
-                <Typography variant="h5">Novi unos</Typography>
+                <Typography variant="h5">{formStrings.new}</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
@@ -400,7 +383,7 @@ export default function AllItems({
                 />
                 <label htmlFor="contained-button-file">
                   <Button variant="outlined" color="primary" component="span">
-                    Dodaj datoteku
+                    {formStrings.attachment}
                   </Button>
                 </label>
               </div>
@@ -411,7 +394,7 @@ export default function AllItems({
                 color="primary"
                 disabled={isUploading ? true : false}
               >
-                Spremi
+                {formStrings.button}
               </Button>
             </Paper>
           </motion.div>
@@ -429,7 +412,7 @@ export default function AllItems({
           >
             <Paper style={{ padding: '1rem' }}>
               <div style={{ display: 'flex' }}>
-                <Typography variant="h5">Promjeni unos</Typography>
+                <Typography variant="h5">{formStrings.edit}</Typography>
                 <Tooltip title="Zatvori">
                   <IconButton
                     style={{
@@ -473,7 +456,7 @@ export default function AllItems({
                 size="large"
                 color="primary"
               >
-                Spremi
+                {formStrings.button}
               </Button>
             </Paper>
           </motion.div>

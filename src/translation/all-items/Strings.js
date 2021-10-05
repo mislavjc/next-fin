@@ -2,10 +2,20 @@ import LocalizedStrings from 'react-localization';
 
 const Strings = new LocalizedStrings({
   en: {
-    button: 'Save'
+    formStrings: {
+      new: 'New entry',
+      edit: 'Edit entry',
+      button: 'Save',
+      attachment: 'Add a file',
+    },
   },
   hr: {
-    button: 'Spremi'
+    formStrings: {
+      new: 'Novi unos',
+      edit: 'Promjeni unos',
+      button: 'Spremi',
+      attachment: 'Dodaj datoteku',
+    },
   },
 });
 

@@ -1,3 +1,4 @@
+import LocalizedStrings from 'react-localization';
 import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
@@ -20,6 +21,8 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 
+import { useStrings } from '@/lib/use-strings';
+
 export const Options = ({
   setShowOptions,
   setOpen,
@@ -32,6 +35,8 @@ export const Options = ({
   const [email, setEmail] = useState(user?.email || '');
   const [add, setAdd] = useState(user?.create || false);
   const [del, setDel] = useState(user?.delete || false);
+
+  const { options } = useStrings(Strings);
 
   const clickHandler = () => {
     axios
@@ -57,7 +62,7 @@ export const Options = ({
       <List>
         <div style={{ display: 'flex', padding: '1rem' }}>
           <Typography variant="h5">
-            {user ? 'Promjena postavki' : 'Unos novog računa'}
+            {user ? options.title[0] : options.title[1]}
           </Typography>
           <Tooltip title="Zatvori">
             <IconButton
@@ -80,7 +85,7 @@ export const Options = ({
           <TextField
             id="email"
             type="email"
-            label="Email adresa"
+            label={options.email}
             variant="filled"
             value={email}
             disabled={user && true}
@@ -95,7 +100,7 @@ export const Options = ({
           <TextField
             id="role"
             type="text"
-            label="Naziv pozicije"
+            label={options.position}
             variant="filled"
             value={role}
             onChange={(e) => setRole(e.target.value)}
@@ -108,8 +113,8 @@ export const Options = ({
             <PlaylistAddIcon />
           </ListItemIcon>
           <ListItemText
-            primary="Unos podataka"
-            secondary="Dopuštenje za unos podataka"
+            primary={options.addEntry.title}
+            secondary={options.addEntry.subtitle}
           />
           <ListItemSecondaryAction>
             <Switch
@@ -125,8 +130,8 @@ export const Options = ({
             <DeleteSweepIcon />
           </ListItemIcon>
           <ListItemText
-            primary="Brisanje podataka"
-            secondary="Dopuštenje za brisanje podataka"
+            primary={options.deleteEntry.title}
+            secondary={options.deleteEntry.subtitle}
           />
           <ListItemSecondaryAction>
             <Switch
@@ -142,10 +147,45 @@ export const Options = ({
       <List>
         <ListItem button onClick={clickHandler}>
           <ListItemText
-            primary={user ? 'Spremite promjene' : 'Pošaljite pozivnicu'}
+            primary={user ? options.button[0] : options.button[1]}
           />
         </ListItem>
       </List>
     </Paper>
   );
 };
+
+const Strings = new LocalizedStrings({
+  en: {
+    options: {
+      title: ['Change settings', 'New account invite'],
+      email: 'E-mail address',
+      position: 'Employee title',
+      addEntry: {
+        title: 'Add data',
+        subtitle: 'Permission for adding data',
+      },
+      deleteEntry: {
+        title: 'Delete data',
+        subtitle: 'Permission for deleting data',
+      },
+      button: ['Save changes', 'Send invitation'],
+    },
+  },
+  hr: {
+    options: {
+      title: ['Promjena postavki', 'Unos novog računa'],
+      email: 'E-mail addresa',
+      position: 'Naziv pozicije',
+      addEntry: {
+        title: 'Unos podataka',
+        subtitle: 'Dopuštenje za unos podataka',
+      },
+      deleteEntry: {
+        title: 'Brisanje podataka',
+        subtitle: 'Dopuštenje za brisanje podataka',
+      },
+      button: ['Spremite promjene', 'Pošaljite pozivnicu'],
+    },
+  },
+});

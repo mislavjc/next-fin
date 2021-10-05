@@ -65,6 +65,7 @@ export async function getServerSideProps(context) {
       path: 'type',
     },
   });
+
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -104,7 +105,7 @@ export default function AllItems({
   );
   const [columnTypes, setColumnTypes] = useState(types);
 
-  const { formStrings } = useStrings(Strings);
+  const { formStrings, snackbar } = useStrings(Strings);
 
   useEffect(() => {
     axios
@@ -141,7 +142,7 @@ export default function AllItems({
     if (owner.create) {
       setShowForm(true);
     } else {
-      setMessage('Nemate prava za dodavanje unosa!');
+      setMessage(snackbar.create);
       setOpen(true);
     }
   };
@@ -184,12 +185,12 @@ export default function AllItems({
           .post('/api/crud/create', values)
           .then((entry) => setEntries([...entries, entry.data]))
           .then(
-            setMessage('Dodan unos!'),
+            setMessage(snackbar.created),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage('Nemate prava za dodavanje unosa!');
+        setMessage(snackbar.create);
         setOpen(true);
       }
     }
@@ -218,12 +219,12 @@ export default function AllItems({
           .put('/api/crud/edit', values)
           .then((entry) => setEntries([...entry.data]))
           .then(
-            setMessage('Uspješno promjenjen unos!'),
+            setMessage(snackbar.edited),
             setOpen(true),
             setIsSubmitted(false)
           );
       } else {
-        setMessage('Nemate prava za promjenu unosa!');
+        setMessage(snackbar.create);
         setOpen(true);
       }
     }

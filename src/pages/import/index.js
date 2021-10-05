@@ -115,7 +115,7 @@ export default function Import({ session }) {
   const router = useRouter();
 
   const form = example[router.locale];
-  const { hero, header, formSection } = useStrings(Strings);
+  const { hero, header, formSection, snackbar } = useStrings(Strings);
 
   useEffect(() => {
     if (imported.length > 0) {
@@ -149,7 +149,7 @@ export default function Import({ session }) {
       } else {
         setImportedValues({});
         setHeaders([]);
-        setMessage('Neispravan format tablice');
+        setMessage(snackbar.invalidFormat);
         setOpen(true);
       }
     }

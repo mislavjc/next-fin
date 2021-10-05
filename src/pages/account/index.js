@@ -223,7 +223,7 @@ export default function Account({
       })
       .then(router.push('/account'));
     setOpen(true);
-    setMessage('Promjene spremljene.');
+    setMessage(accountStrings.snackbar);
     setAccountPrefrences(false);
   };
 

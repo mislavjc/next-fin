@@ -8,6 +8,12 @@ const Strings = new LocalizedStrings({
       button: 'Save',
       attachment: 'Add a file',
     },
+    snackbar: {
+      create: "You don't have permission to create this entry!",
+      created: 'Entry added!',
+      edited: 'Entry changed successfully!'
+
+    },
   },
   hr: {
     formStrings: {
@@ -15,6 +21,11 @@ const Strings = new LocalizedStrings({
       edit: 'Promjeni unos',
       button: 'Spremi',
       attachment: 'Dodaj datoteku',
+    },
+    snackbar: {
+      create: 'Nemate prava za dodavanje unosa!',
+      created: 'Dodan unos!',
+      edited: 'Uspješno promjenjen unos!'
     },
   },
 });

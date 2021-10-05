@@ -94,7 +94,7 @@ export const EditTypes = ({
       .then(
         setShowEditCategories(false),
         setOpen(true),
-        setMessage('Uspješno promjenjene postavke.')
+        setMessage(modal.savedChanges)
       );
   };
 
@@ -296,7 +296,8 @@ const Strings = new LocalizedStrings({
       usage: 'Used',
       required: 'Required',
       add: 'Add',
-      save: 'Save changes'
+      save: 'Save changes',
+      savedChanges: 'Changes saved successfully!'
     },
   },
   hr: {
@@ -305,5 +306,6 @@ const Strings = new LocalizedStrings({
     required: 'Obavezno',
     add: 'Dodaj',
     save: 'Spremite promjene'
+    ,savedChanges: 'Uspješno promjeljene postavke!'
   },
 });

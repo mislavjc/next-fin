@@ -60,6 +60,7 @@ const Strings = new LocalizedStrings({
         title: 'Feedback',
         subtitle: 'Send us feedback',
       },
+      snackbar: 'Changes saved successfully!',
     },
   },
   hr: {
@@ -121,6 +122,7 @@ const Strings = new LocalizedStrings({
         title: 'Povratna informacija',
         subtitle: 'Pošaljite nam povratnu informaciju',
       },
+      snackbar: 'Promjene uspješno spremljene!',
     },
   },
 });

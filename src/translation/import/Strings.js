@@ -27,6 +27,9 @@ const Strings = new LocalizedStrings({
       add: 'Add',
       save: 'Save',
     },
+    snackbar: {
+      invalidFormat: 'Invalid table format!',
+    },
   },
   hr: {
     hero: {
@@ -53,6 +56,9 @@ const Strings = new LocalizedStrings({
       required: 'Obavezno',
       add: 'Dodaj',
       save: 'Spremi',
+    },
+    snackbar: {
+      invalidFormat: 'Neispravan format tablice!',
     },
   },
 });

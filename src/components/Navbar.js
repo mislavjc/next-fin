@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import { signIn, signOut, useSession } from 'next-auth/client';
 import Image from 'next/image';
 
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MeetingRoomIcon from '@mui/icons-material/MeetingRoom';
@@ -75,123 +74,140 @@ export const Navbar = () => {
       <div>
         <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
         <div className="account">
-          {session && !loading ? (
-            <div>
-              {darkMode === 'true' ? (
-                <IconButton onClick={lightModeHandler}>
-                  <BrightnessHighIcon />
-                </IconButton>
-              ) : (
-                <IconButton onClick={darkModeHandler}>
-                  <Brightness4Icon />
-                </IconButton>
-              )}
-              <IconButton
-                aria-label="account of current user"
-                onClick={handleClick}
-              >
-                <Avatar style={{ background: color }}>{name}</Avatar>
+          <div>
+            {darkMode === 'true' ? (
+              <IconButton onClick={lightModeHandler}>
+                <BrightnessHighIcon />
               </IconButton>
-              <Menu
-                id="simple-menu"
-                anchorEl={anchorEl}
-                keepMounted
-                open={Boolean(anchorEl)}
-                onClose={handleClose}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'left',
-                }}
-                transformOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-              >
-                <List style={{ paddingRight: '1rem', cursor: 'pointer' }}>
-                  <Link href="/account" passHref>
-                    <ListItem onClick={handleClose}>
+            ) : (
+              <IconButton onClick={darkModeHandler}>
+                <Brightness4Icon />
+              </IconButton>
+            )}
+            <IconButton
+              aria-label="account of current user"
+              onClick={handleClick}
+            >
+              <Avatar style={{ background: color }}>{name}</Avatar>
+            </IconButton>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+            >
+              <List style={{ paddingRight: '1rem', cursor: 'pointer' }}>
+                {session && !loading ? (
+                  <>
+                    <Link href="/account" passHref>
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <AccountCircleIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText primary={navbar.account} />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <Link href="/account" passHref>
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <SupervisorAccountIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={navbar.moreAccounts.title}
+                          secondary={navbar.moreAccounts.subtitle}
+                        />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <Link href="/account" passHref>
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <GetAppIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={navbar.export.title}
+                          secondary={navbar.export.subtitle}
+                        />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <Link
+                      href="#"
+                      locale={router.locale === 'hr' ? 'en' : 'hr'}
+                      passHref
+                    >
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <TranslateIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            router.locale === 'hr' ? 'English' : 'Hrvatski'
+                          }
+                        />
+                      </ListItem>
+                    </Link>
+                    <ListItem onClick={signOut}>
                       <ListItemAvatar>
                         <Avatar>
-                          <AccountCircleIcon />
+                          <MeetingRoomIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText primary={navbar.account} />
+                      <ListItemText primary={navbar.logout} />
                     </ListItem>
-                  </Link>
-                  <Divider variant="inset" component="li" />
-                  <Link href="/account" passHref>
-                    <ListItem onClick={handleClose}>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="#"
+                      locale={router.locale === 'hr' ? 'en' : 'hr'}
+                      passHref
+                    >
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <TranslateIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={
+                            router.locale === 'hr' ? 'English' : 'Hrvatski'
+                          }
+                        />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <ListItem onClick={signIn}>
                       <ListItemAvatar>
                         <Avatar>
-                          <SupervisorAccountIcon />
+                          <MeetingRoomIcon />
                         </Avatar>
                       </ListItemAvatar>
-                      <ListItemText
-                        primary={navbar.moreAccounts.title}
-                        secondary={navbar.moreAccounts.subtitle}
-                      />
+                      <ListItemText primary={navbar.login} />
                     </ListItem>
-                  </Link>
-                  <Divider variant="inset" component="li" />
-                  <Link href="/account" passHref>
-                    <ListItem onClick={handleClose}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <GetAppIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={navbar.export.title}
-                        secondary={navbar.export.subtitle}
-                      />
-                    </ListItem>
-                  </Link>
-                  <Divider variant="inset" component="li" />
-                  <Link
-                    href="#"
-                    locale={router.locale === 'hr' ? 'en' : 'hr'}
-                    passHref
-                  >
-                    <ListItem onClick={handleClose}>
-                      <ListItemAvatar>
-                        <Avatar>
-                          <TranslateIcon />
-                        </Avatar>
-                      </ListItemAvatar>
-                      <ListItemText
-                        primary={
-                          router.locale === 'hr' ? 'English' : 'Hrvatski'
-                        }
-                      />
-                    </ListItem>
-                  </Link>
-                  <ListItem onClick={signOut}>
-                    <ListItemAvatar>
-                      <Avatar>
-                        <MeetingRoomIcon />
-                      </Avatar>
-                    </ListItemAvatar>
-                    <ListItemText primary={navbar.logout} />
-                  </ListItem>
-                </List>
-              </Menu>
-            </div>
-          ) : (
-            <div>
-              {darkMode === 'true' ? (
-                <IconButton onClick={lightModeHandler}>
-                  <BrightnessHighIcon />
-                </IconButton>
-              ) : (
-                <IconButton onClick={darkModeHandler}>
-                  <Brightness4Icon />
-                </IconButton>
-              )}
-              <Button variant="outlined" className="btn" onClick={signIn}>
-                {navbar.login}
-              </Button>
-            </div>
-          )}
+                  </>
+                )}
+              </List>
+            </Menu>
+          </div>
         </div>
       </div>
     </nav>

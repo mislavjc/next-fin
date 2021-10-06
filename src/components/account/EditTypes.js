@@ -297,15 +297,17 @@ const Strings = new LocalizedStrings({
       required: 'Required',
       add: 'Add',
       save: 'Save changes',
-      savedChanges: 'Changes saved successfully!'
+      savedChanges: 'Changes saved successfully!',
     },
   },
   hr: {
-    title: 'Promjena forme',
-    usage: 'Iskorišteno',
-    required: 'Obavezno',
-    add: 'Dodaj',
-    save: 'Spremite promjene'
-    ,savedChanges: 'Uspješno promjeljene postavke!'
+    modal: {
+      title: 'Promjena forme',
+      usage: 'Iskorišteno',
+      required: 'Obavezno',
+      add: 'Dodaj',
+      save: 'Spremite promjene',
+      savedChanges: 'Uspješno promjeljene postavke!',
+    },
   },
 });

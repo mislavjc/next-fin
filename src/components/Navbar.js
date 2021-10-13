@@ -20,6 +20,7 @@ import GetAppIcon from '@mui/icons-material/GetApp';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import TranslateIcon from '@mui/icons-material/Translate';
+import QueryStatsIcon from '@mui/icons-material/QueryStats';
 
 import { useStrings } from '@/lib/use-strings';
 
@@ -146,6 +147,19 @@ export const Navbar = () => {
                         />
                       </ListItem>
                     </Link>
+                    <Link href="/statistics" passHref>
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <QueryStatsIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={navbar.statistics.title}
+                          secondary={navbar.statistics.subtitle}
+                        />
+                      </ListItem>
+                    </Link>
                     <Divider variant="inset" component="li" />
                     <Link
                       href="#"
@@ -226,6 +240,10 @@ const Strings = new LocalizedStrings({
         title: 'Excel export',
         subtitle: 'Download all your entries',
       },
+      statistics: {
+        title: 'Statistics',
+        subtitle: 'View your statistics',
+      },
       logout: 'Log out',
       login: 'Log in',
     },
@@ -240,6 +258,10 @@ const Strings = new LocalizedStrings({
       export: {
         title: 'Eksport podataka',
         subtitle: 'Skinite sve unose',
+      },
+      statistics: {
+        title: 'Statistke',
+        subtitle: 'Pregledajte svoje statistike',
       },
       logout: 'Odjava',
       login: 'Prijavite se',

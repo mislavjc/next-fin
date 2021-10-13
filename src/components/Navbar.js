@@ -231,16 +231,18 @@ const Strings = new LocalizedStrings({
     },
   },
   hr: {
-    account: 'Račun',
-    moreAccounts: {
-      title: 'Više računa',
-      subtitle: 'Dodajte više računa',
+    navbar: {
+      account: 'Račun',
+      moreAccounts: {
+        title: 'Više računa',
+        subtitle: 'Dodajte više računa',
+      },
+      export: {
+        title: 'Eksport podataka',
+        subtitle: 'Skinite sve unose',
+      },
+      logout: 'Odjava',
+      login: 'Prijavite se',
     },
-    export: {
-      title: 'Eksport podataka',
-      subtitle: 'Skinite sve unose',
-    },
-    logout: 'Odjava',
-    login: 'Prijavite se',
   },
 });

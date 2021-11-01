@@ -6,7 +6,7 @@ import { dbConnect } from '@/middleware/db';
 const editHandler = async (req, res) => {
   dbConnect();
   if (req.method === 'PUT') {
-    const { dataObj, form: _id, owner, title } = req.body;
+    const { dataObj, form: _id, owner, title, page } = req.body;
     const form = await Form.findOne({ _id }).populate({
       path: 'inputs',
       populate: {
@@ -25,12 +25,15 @@ const editHandler = async (req, res) => {
       option: owner.option,
       title,
       archived: false,
-    }).populate({
-      path: 'inputs',
-      populate: {
-        path: 'type',
-      },
-    });
+    })
+      .limit(12)
+      .skip(12 * (page - 1))
+      .populate({
+        path: 'inputs',
+        populate: {
+          path: 'type',
+        },
+      });
     res.send(forms);
   }
 };

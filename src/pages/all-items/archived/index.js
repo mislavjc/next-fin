@@ -236,6 +236,7 @@ export default function AllItems({
           form: initialValue._id,
           owner,
           title: selectedTitle,
+          page,
         };
         axios
           .put('/api/crud/edit', values)
@@ -456,28 +457,30 @@ export default function AllItems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => {
-                if (type.title === selectedTitle) {
-                  return (
-                    <div style={{ marginBottom: '1rem' }} key={type._id}>
-                      <Input
-                        name={type.name}
-                        type={type.type}
-                        required={type.required}
-                        currency={type.currency}
-                        id={type._id}
-                        dataObj={dataObj}
-                        setDataObj={setDataObj}
-                        initialValue={initialValue}
-                        additional={type.additional || null}
-                        isSubmitted={isSubmitted}
-                        inputs={inputs}
-                        relation={type._relation}
-                      />
-                    </div>
-                  );
-                }
-              })}
+              <div className="overscroll">
+                {types.map((type) => {
+                  if (type.title === selectedTitle) {
+                    return (
+                      <div style={{ marginBottom: '1rem' }} key={type._id}>
+                        <Input
+                          name={type.name}
+                          type={type.type}
+                          required={type.required}
+                          currency={type.currency}
+                          id={type._id}
+                          dataObj={dataObj}
+                          setDataObj={setDataObj}
+                          initialValue={initialValue}
+                          additional={type.additional || null}
+                          isSubmitted={isSubmitted}
+                          inputs={inputs}
+                          relation={type._relation}
+                        />
+                      </div>
+                    );
+                  }
+                })}
+              </div>
               <Button
                 onClick={editHandler}
                 variant="contained"

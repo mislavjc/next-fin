@@ -100,12 +100,10 @@ export const EditTypes = ({
 
   const categoryArr = [];
   useEffect(() => {
-    if (count < 19) {
-      for (let i = 0; i < count; i++) {
-        categoryArr.push(i);
-      }
-      setArr(categoryArr);
+    for (let i = 0; i < count; i++) {
+      categoryArr.push(i);
     }
+    setArr(categoryArr);
   }, [count]);
 
   return (

@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 import User from '@/models/user';
 import Type from '@/models/type';
 import Option from '@/models/option';
@@ -31,7 +33,7 @@ const importHandler = async (req, res) => {
     };
     const option = new Option({
       owner: acc,
-      titles: [title]
+      titles: [title],
     });
     await option.save();
     user.create = true;
@@ -64,8 +66,18 @@ const importHandler = async (req, res) => {
     for (let i = 0; i < totalLength; i++) {
       const formArr = [];
       for (let j = 0; j < typeArr.length; j++) {
+        let value;
+        if (typeArr[j].type === 'date') {
+          if (importedValues[names[j]][i] !== '') {
+            value = dayjs(importedValues[names[j]][i], 'YYYY-MM-DD').toDate();
+          } else {
+            value = importedValues[names[j]][i];
+          }
+        } else {
+          value = importedValues[names[j]][i];
+        }
         const input = new Input({
-          value: importedValues[names[j]][i],
+          value,
           option,
           type: typeArr[j],
         });

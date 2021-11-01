@@ -100,7 +100,7 @@ export const CardItem = ({
                       ? columnTypes[index].currency
                       : null}{' '}
                     {columnTypes[index] && columnTypes[index].type === 'date'
-                      ? dayjs(input.value).format('DD.MM.YYYY')
+                      ? input.value && dayjs(input.value).format('DD.MM.YYYY')
                       : input.value}{' '}
                     {columnTypes[index] && columnTypes[index].currency !== '£'
                       ? columnTypes[index].currency

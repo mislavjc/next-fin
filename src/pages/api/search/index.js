@@ -35,7 +35,19 @@ const searchHandler = async (req, res) => {
         .limit(12);
       const result = await Type.populate(forms, { path: 'inputs.type' });
 
-      const searchData = mapAndReduce(result)
+      const formsSearchData = await Form.aggregate([
+        {
+          $lookup: {
+            from: 'inputs',
+            localField: 'inputs',
+            foreignField: '_id',
+            as: 'inputs',
+          },
+        },
+        ...query,
+      ]);
+
+      const searchData = mapAndReduce(formsSearchData);
 
       const formCount = await Form.aggregate([
         {

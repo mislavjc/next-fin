@@ -123,6 +123,7 @@ export default function AllItems({
   const [paginationCount, setPaginationCount] = useState(
     Math.ceil(entries.length / 12)
   );
+  const [formCount, setFormCount] = useState(entries.length);
   const handlePagination = (event, value) => {
     if (search.length > 0) {
       axios
@@ -136,6 +137,7 @@ export default function AllItems({
           console.log(res.data);
           setEntries(res.data.forms);
           setPaginationCount(Math.ceil(res.data.formCount / 12));
+          setFormCount(res.data.formCount);
           setSearchData(res.data.searchData);
         });
       setPage(value);
@@ -155,7 +157,7 @@ export default function AllItems({
     }
   };
 
-  const { formStrings, snackbar } = useStrings(Strings);
+  const { formStrings, snackbar, totalCount } = useStrings(Strings);
 
   useEffect(() => {
     axios
@@ -168,6 +170,7 @@ export default function AllItems({
         setEntries(res.data.forms);
         setColumnTypes(res.data.types);
         setPaginationCount(Math.ceil(res.data.formCount / 12));
+        setFormCount(res.data.formCount);
       })
       .then(() => setDataObj({}))
       .then(() => localStorage.setItem('selectedTitle', selectedTitle));
@@ -191,11 +194,13 @@ export default function AllItems({
         .then((res) => {
           setEntries(res.data.forms);
           setPaginationCount(Math.ceil(res.data.formCount / 12));
+          setFormCount(res.data.formCount);
           setSearchData(res.data.searchData);
         });
     } else {
       setEntries(forms);
       setPaginationCount(Math.ceil(forms.length / 12));
+      setFormCount(forms.length);
     }
   }, [search]);
 
@@ -316,11 +321,18 @@ export default function AllItems({
             onChange={setSelectedTitle}
           />
         )}
-        <Pagination
-          count={paginationCount}
-          page={page}
-          onChange={handlePagination}
-        />
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Pagination
+            count={paginationCount}
+            page={page}
+            variant="outlined"
+            color="primary"
+            siblingCount={1}
+            size="small"
+            onChange={handlePagination}
+          />
+        </div>
+        {totalCount} : {formCount}
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>
@@ -418,27 +430,29 @@ export default function AllItems({
                   </IconButton>
                 </Tooltip>
               </div>
-              {types.map((type) => {
-                if (type.title === selectedTitle) {
-                  return (
-                    <div style={{ marginBottom: '1rem' }} key={type._id}>
-                      <Input
-                        name={type.name}
-                        type={type.type}
-                        required={type.required}
-                        currency={type.currency}
-                        id={type._id}
-                        dataObj={dataObj}
-                        setDataObj={setDataObj}
-                        additional={type.additional || null}
-                        isSubmitted={isSubmitted}
-                        inputs={inputs}
-                        relation={type._relation}
-                      />
-                    </div>
-                  );
-                }
-              })}
+              <div className="overscroll">
+                {types.map((type) => {
+                  if (type.title === selectedTitle) {
+                    return (
+                      <div style={{ marginBottom: '1rem' }} key={type._id}>
+                        <Input
+                          name={type.name}
+                          type={type.type}
+                          required={type.required}
+                          currency={type.currency}
+                          id={type._id}
+                          dataObj={dataObj}
+                          setDataObj={setDataObj}
+                          additional={type.additional || null}
+                          isSubmitted={isSubmitted}
+                          inputs={inputs}
+                          relation={type._relation}
+                        />
+                      </div>
+                    );
+                  }
+                })}
+              </div>
               <div style={{ marginBottom: '1rem' }}>
                 <input
                   style={{ display: 'none' }}

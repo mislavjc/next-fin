@@ -12,8 +12,8 @@ const Strings = new LocalizedStrings({
       create: "You don't have permission to create this entry!",
       created: 'Entry added!',
       edited: 'Entry changed successfully!'
-
     },
+    totalCount: 'Total'
   },
   hr: {
     formStrings: {
@@ -27,6 +27,7 @@ const Strings = new LocalizedStrings({
       created: 'Dodan unos!',
       edited: 'Uspješno promjenjen unos!'
     },
+    totalCount: 'Ukupno'
   },
 });
 

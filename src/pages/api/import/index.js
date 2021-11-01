@@ -1,4 +1,6 @@
 import dayjs from 'dayjs';
+const customParseFormat = require('dayjs/plugin/customParseFormat');
+dayjs.extend(customParseFormat);
 
 import User from '@/models/user';
 import Type from '@/models/type';
@@ -69,7 +71,7 @@ const importHandler = async (req, res) => {
         let value;
         if (typeArr[j].type === 'date') {
           if (importedValues[names[j]][i] !== '') {
-            value = dayjs(importedValues[names[j]][i], 'YYYY-MM-DD').toDate();
+            value = dayjs(importedValues[names[j]][i], 'D.M.YYYY').toDate();
           } else {
             value = importedValues[names[j]][i];
           }

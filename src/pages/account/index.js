@@ -463,7 +463,7 @@ export default function Account({
               <List>
                 <ListItem
                   disabled={!typeCount || !owner.create}
-                  onClick={() => router.push('/setup')}
+                  onClick={() => router.push('/flow')}
                   button
                 >
                   <ListItemText primary={accountStrings.typeButton} />

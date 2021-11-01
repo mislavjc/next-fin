@@ -34,6 +34,10 @@ import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
 import { Additional } from '@/components/setup/Additional';
 
+import User from '@/models/user';
+import Option from '@/models/option';
+import { default as Types } from '@/models/type';
+
 import { formVariants, inputVariants } from '@/lib/framer';
 import { useStrings } from '@/lib/use-strings';
 
@@ -88,14 +92,40 @@ export async function getServerSideProps(context) {
     };
   }
 
+  const { user } = session;
+  const owner = await User.findOne({ email: user.email });
+  const hasMoreForms = owner.option ? true : false;
+
+  if (owner.option) {
+    const option = await Option.findById(owner.option);
+    const types = await Types.find({ option: owner.option });
+    return {
+      props: {
+        session,
+        owner: JSON.parse(JSON.stringify(owner)),
+        option: JSON.parse(JSON.stringify(option)),
+        types: JSON.parse(JSON.stringify(types)),
+        hasMoreForms,
+      },
+    };
+  }
+
   return {
     props: {
       session,
+      owner: JSON.parse(JSON.stringify(owner)),
+      hasMoreForms,
     },
   };
 }
 
-export default function Import({ session }) {
+export default function Import({
+  session,
+  owner,
+  option,
+  types,
+  hasMoreForms,
+}) {
   const [imported, setImported] = useState([]);
   const [importedValues, setImportedValues] = useState({});
   const [headers, setHeaders] = useState([]);
@@ -184,7 +214,11 @@ export default function Import({ session }) {
       importedValues,
       title,
     };
-    axios.post('/api/import', values).then(router.push('/all-items'));
+    if (!hasMoreForms) {
+      axios.post('/api/import', values).then(router.push('/all-items'));
+    } else {
+      axios.post('/api/import/new', values).then(router.push('/all-items'));
+    }
   };
 
   const handleClose = (reason) => {

@@ -1,0 +1,69 @@
+{
+  "name": "FIN",
+  "short_name": "FIN",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/maskable_icon_x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "theme_color": "#FFFFFF",
+  "background_color": "#333333",
+  "start_url": "/",
+  "shortcuts": [
+    {
+      "name": "All items",
+      "short_name": "Cards",
+      "description": "View all items",
+      "url": "/all-items",
+      "icons": [
+        {
+          "src": "/toc.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+    {
+      "name": "Table view",
+      "short_name": "Table",
+      "description": "View table",
+      "url": "/table",
+      "icons": [
+        {
+          "src": "/table.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    },
+      {
+      "name": "Account settings",
+      "short_name": "Account",
+      "description": "View account settings",
+      "url": "/account",
+      "icons": [
+        {
+          "src": "/account.png",
+          "sizes": "192x192",
+          "type": "image/png"
+        }
+      ]
+    }
+  ],
+  "display": "standalone",
+  "orientation": "portrait"
+}

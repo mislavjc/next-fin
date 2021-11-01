@@ -33,6 +33,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { Field } from '@/components/setup/Field';
 import { Type } from '@/components/setup/Type';
 import { Additional } from '@/components/setup/Additional';
+import { RelationTitle, RelationCategory } from '@/components/setup/Relation';
 
 import User from '@/models/user';
 import Option from '@/models/option';
@@ -141,6 +142,8 @@ export default function Import({
   const [open, setOpen] = useState(false);
   const [showExample, setShowExample] = useState(false);
   const [title, setTitle] = useState('');
+  const [relationTitleObj, setRelationTitleObj] = useState({});
+  const [relationCategoryObj, setRelationCategoryObj] = useState({});
 
   const router = useRouter();
 
@@ -213,6 +216,7 @@ export default function Import({
       currency: currencyObj,
       importedValues,
       title,
+      relationCategoryObj,
     };
     if (!hasMoreForms) {
       axios.post('/api/import', values).then(router.push('/all-items'));
@@ -331,6 +335,7 @@ export default function Import({
                                 [index]: val,
                               });
                             }}
+                            hasMoreForms={hasMoreForms}
                           />
                           {typeObj[index] === 'currency' && (
                             <motion.div variants={inputVariants}>
@@ -364,6 +369,43 @@ export default function Import({
                             labelPlacement="top"
                           />
                         </div>
+                        {hasMoreForms && typeObj[index] === 'relation' && (
+                          <div className="relation-container">
+                            <motion.div
+                              style={{ marginTop: '1rem', marginLeft: '0' }}
+                              variants={inputVariants}
+                            >
+                              <RelationTitle
+                                value={relationTitleObj[index]}
+                                onChange={(val) => {
+                                  setRelationTitleObj({
+                                    ...relationTitleObj,
+                                    [index]: val,
+                                  });
+                                }}
+                                option={option}
+                              />
+                            </motion.div>
+                            {relationTitleObj[index] && (
+                              <motion.div
+                                style={{ marginTop: '1rem', marginLeft: '0' }}
+                                variants={inputVariants}
+                              >
+                                <RelationCategory
+                                  value={relationCategoryObj[index]}
+                                  onChange={(val) => {
+                                    setRelationCategoryObj({
+                                      ...relationCategoryObj,
+                                      [index]: val,
+                                    });
+                                  }}
+                                  selectedTitle={relationTitleObj[index]}
+                                  types={types}
+                                />
+                              </motion.div>
+                            )}
+                          </div>
+                        )}
                         {typeObj[index] == 'dropdown' && (
                           <motion.div
                             style={{ marginTop: '1rem', marginLeft: '0' }}

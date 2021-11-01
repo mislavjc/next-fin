@@ -18,6 +18,7 @@ const importHandler = async (req, res) => {
       currency,
       importedValues,
       title,
+      relationCategoryObj,
     } = req.body;
     const user = await User.findOne({ email: currentUser.email });
     const option = await Option.findById(user.option);
@@ -37,6 +38,13 @@ const importHandler = async (req, res) => {
       }
       if (currency[i.toString()] && types[i.toString()] === 'currency') {
         field.currency = currency[i.toString()];
+      }
+      if (relationCategoryObj[i.toString()]) {
+        const relation = await Type.findOne({
+          name: relationCategoryObj[i.toString()],
+          option,
+        });
+        field._relation = relation._id;
       }
       const type = new Type(field);
       await type.save();

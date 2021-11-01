@@ -69,6 +69,15 @@ export async function getServerSideProps(context) {
       },
     });
 
+  const tempForms = await Form.find({
+    option: owner.option,
+    archived: false,
+  }).populate({
+    path: 'inputs',
+  });
+
+  const searchForms = mapAndReduce(tempForms);
+
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -76,6 +85,7 @@ export async function getServerSideProps(context) {
       forms: JSON.parse(JSON.stringify(forms)),
       option: JSON.parse(JSON.stringify(option)),
       inputs: JSON.parse(JSON.stringify(inputs)),
+      searchForms,
       cloudinaryUrl,
       cloudinaryPreset,
     },
@@ -88,6 +98,7 @@ export default function AllItems({
   forms,
   option,
   inputs,
+  searchForms,
   cloudinaryUrl,
   cloudinaryPreset,
 }) {
@@ -108,22 +119,40 @@ export default function AllItems({
   );
   const [columnTypes, setColumnTypes] = useState(types);
   const [page, setPage] = useState(1);
+  const [searchData, setSearchData] = useState(searchForms);
   const [paginationCount, setPaginationCount] = useState(
     Math.ceil(entries.length / 12)
   );
   const handlePagination = (event, value) => {
-    axios
-      .post('/api/pagination', {
-        title: selectedTitle,
-        owner,
-        archived: false,
-        page: value,
-      })
-      .then((res) => {
-        setEntries(res.data.forms);
-        setColumnTypes(res.data.types);
-      });
-    setPage(value);
+    if (search.length > 0) {
+      axios
+        .post('/api/search', {
+          search,
+          option: owner.option,
+          title: selectedTitle,
+          page: value,
+        })
+        .then((res) => {
+          console.log(res.data);
+          setEntries(res.data.forms);
+          setPaginationCount(Math.ceil(res.data.formCount / 12));
+          setSearchData(res.data.searchData);
+        });
+      setPage(value);
+    } else {
+      axios
+        .post('/api/pagination', {
+          title: selectedTitle,
+          owner,
+          archived: false,
+          page: value,
+        })
+        .then((res) => {
+          setEntries(res.data.forms);
+          setColumnTypes(res.data.types);
+        });
+      setPage(value);
+    }
   };
 
   const { formStrings, snackbar } = useStrings(Strings);
@@ -153,10 +182,20 @@ export default function AllItems({
   useEffect(() => {
     if (search.length > 0) {
       axios
-        .post('/api/search', { search, option: owner.option })
-        .then((res) => setEntries(res.data));
+        .post('/api/search', {
+          search,
+          option: owner.option,
+          title: selectedTitle,
+          page,
+        })
+        .then((res) => {
+          setEntries(res.data.forms);
+          setPaginationCount(Math.ceil(res.data.formCount / 12));
+          setSearchData(res.data.searchData);
+        });
     } else {
       setEntries(forms);
+      setPaginationCount(Math.ceil(forms.length / 12));
     }
   }, [search]);
 
@@ -268,7 +307,7 @@ export default function AllItems({
           search={search}
           setSearch={setSearch}
           owner={owner}
-          inputs={mapAndReduce(entries)}
+          inputs={searchData}
         />
         {option && (
           <CollectionSelect

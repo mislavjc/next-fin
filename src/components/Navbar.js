@@ -70,10 +70,22 @@ export const Navbar = () => {
   return (
     <nav>
       <span className="logo">
-        <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
+        <Image
+          src="/icons/logo.svg"
+          alt="logo"
+          width="40px"
+          height="40px"
+          onClick={() => router.push('/all-items')}
+        />
       </span>
       <div>
-        <Image src="/icons/logo.svg" alt="logo" width="40px" height="40px" />
+        <Image
+          src="/icons/logo.svg"
+          alt="logo"
+          width="40px"
+          height="40px"
+          onClick={() => router.push('/all-items')}
+        />
         <div className="account">
           <div>
             {darkMode === 'true' ? (

@@ -57,7 +57,7 @@ export default function Home({ owner }) {
             <Button variant="outlined" color="primary" size="large">
               <Link
                 href={
-                  owner ? (owner.option ? '/all-items' : '/setup') : '/setup'
+                  owner ? (owner.option ? '/all-items' : '/flow') : '/flow'
                 }
               >
                 {hero.button}

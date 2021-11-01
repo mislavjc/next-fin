@@ -161,10 +161,17 @@ export const Navbar = () => {
                       </ListItem>
                     </Link>
                     <Divider variant="inset" component="li" />
-                    <Link
-                      href="#"
-                      locale={router.locale === 'hr' ? 'en' : 'hr'}
-                      passHref
+                    <span
+                      onClick={() => {
+                        const setCookie = (locale) => {
+                          document.cookie = `NEXT_LOCALE=${locale}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+                        };
+                        const locale = router.locale === 'en' ? 'hr' : 'en';
+                        setCookie(locale);
+                        router.push(`/${locale}`, `/${locale}`, {
+                          locale: false,
+                        });
+                      }}
                     >
                       <ListItem onClick={handleClose}>
                         <ListItemAvatar>
@@ -178,7 +185,7 @@ export const Navbar = () => {
                           }
                         />
                       </ListItem>
-                    </Link>
+                    </span>
                     <ListItem onClick={signOut}>
                       <ListItemAvatar>
                         <Avatar>
@@ -190,10 +197,17 @@ export const Navbar = () => {
                   </>
                 ) : (
                   <>
-                    <Link
-                      href={router.pathname}
-                      locale={router.locale === 'hr' ? 'en' : 'hr'}
-                      passHref
+                    <span
+                      onClick={() => {
+                        const setCookie = (locale) => {
+                          document.cookie = `NEXT_LOCALE=${locale}; expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+                        };
+                        const locale = router.locale === 'en' ? 'hr' : 'en';
+                        setCookie(locale);
+                        router.push(`/${locale}`, `/${locale}`, {
+                          locale: false,
+                        });
+                      }}
                     >
                       <ListItem onClick={handleClose}>
                         <ListItemAvatar>
@@ -207,7 +221,7 @@ export const Navbar = () => {
                           }
                         />
                       </ListItem>
-                    </Link>
+                    </span>
                     <Divider variant="inset" component="li" />
                     <ListItem onClick={signIn}>
                       <ListItemAvatar>

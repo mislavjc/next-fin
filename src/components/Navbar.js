@@ -21,6 +21,7 @@ import Brightness4Icon from '@mui/icons-material/Brightness4';
 import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import TranslateIcon from '@mui/icons-material/Translate';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
+import TocIcon from '@mui/icons-material/Toc';
 
 import { useStrings } from '@/lib/use-strings';
 
@@ -145,7 +146,6 @@ export const Navbar = () => {
                         />
                       </ListItem>
                     </Link>
-                    <Divider variant="inset" component="li" />
                     <Link href="/account" passHref>
                       <ListItem onClick={handleClose}>
                         <ListItemAvatar>
@@ -156,6 +156,20 @@ export const Navbar = () => {
                         <ListItemText
                           primary={navbar.export.title}
                           secondary={navbar.export.subtitle}
+                        />
+                      </ListItem>
+                    </Link>
+                    <Divider variant="inset" component="li" />
+                    <Link href="/all-items" passHref>
+                      <ListItem onClick={handleClose}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <TocIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={navbar.items.title}
+                          secondary={navbar.items.subtitle}
                         />
                       </ListItem>
                     </Link>
@@ -266,6 +280,10 @@ const Strings = new LocalizedStrings({
         title: 'Excel export',
         subtitle: 'Download all your entries',
       },
+      items: {
+        title: 'All entries',
+        subtitle: 'View all entries',
+      },
       statistics: {
         title: 'Statistics',
         subtitle: 'View your statistics',
@@ -284,6 +302,10 @@ const Strings = new LocalizedStrings({
       export: {
         title: 'Eksport podataka',
         subtitle: 'Skinite sve unose',
+      },
+      items: {
+        title: 'Svi unosi',
+        subtitle: 'Pregled svih unosa',
       },
       statistics: {
         title: 'Statistke',

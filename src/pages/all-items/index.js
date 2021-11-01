@@ -89,6 +89,16 @@ export async function getServerSideProps(context) {
       },
     });
 
+  const paginationCountObj = {};
+
+  for (let title of option.titles) {
+    paginationCountObj[title] = Math.ceil(await Form.countDocuments({
+      option: owner.option,
+      archived: false,
+      title,
+    }) / 12);
+  }
+
   const tempForms = await Form.find({
     option: owner.option,
     archived: false,
@@ -105,6 +115,7 @@ export async function getServerSideProps(context) {
       forms: JSON.parse(JSON.stringify(forms)),
       option: JSON.parse(JSON.stringify(option)),
       inputs: JSON.parse(JSON.stringify(relatedInputs)),
+      paginationCountObj,
       searchForms,
       cloudinaryUrl,
       cloudinaryPreset,
@@ -118,6 +129,7 @@ export default function AllItems({
   forms,
   option,
   inputs,
+  paginationCountObj,
   searchForms,
   cloudinaryUrl,
   cloudinaryPreset,
@@ -141,7 +153,7 @@ export default function AllItems({
   const [page, setPage] = useState(1);
   const [searchData, setSearchData] = useState(searchForms);
   const [paginationCount, setPaginationCount] = useState(
-    Math.ceil(entries.length / 12)
+    paginationCountObj[selectedTitle]
   );
   const [formCount, setFormCount] = useState(entries.length);
   const handlePagination = (event, value) => {
@@ -218,8 +230,8 @@ export default function AllItems({
         });
     } else {
       setEntries(forms);
-      setPaginationCount(Math.ceil(forms.length / 12));
-      setFormCount(forms.length);
+      setPaginationCount(paginationCountObj[selectedTitle]);
+      setFormCount(paginationCountObj[selectedTitle] * 12);
     }
   }, [search]);
 

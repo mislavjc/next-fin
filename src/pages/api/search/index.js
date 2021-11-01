@@ -19,7 +19,7 @@ const searchHandler = async (req, res) => {
       };
     });
 
-    if (search !== '' && !search.includes('+')) {
+    if (search.length > 0 && !search.includes('+')) {
       const forms = await Form.aggregate([
         {
           $lookup: {

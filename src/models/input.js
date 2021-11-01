@@ -9,7 +9,6 @@ const schema = new Schema({
   type: { type: Schema.Types.ObjectId, ref: "Type" },
   option: { type: Schema.Types.ObjectId, ref: "Option" },
   value: String,
-  test: String,
 });
 
 export default mongoose.models[MODEL_NAME] ||

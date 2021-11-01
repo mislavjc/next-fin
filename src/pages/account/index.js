@@ -99,6 +99,7 @@ export async function getServerSideProps(context) {
   const typeIdArr = {};
   const typeRelationTitle = {};
   const typeRelationCategory = {};
+  const typeHidden = {};
 
   for (const type of types) {
     let count = 0;
@@ -113,9 +114,11 @@ export async function getServerSideProps(context) {
       typeIdArr[type.title] = [];
       typeRelationTitle[type.title] = {};
       typeRelationCategory[type.title] = {};
+      typeHidden[type.title] = {};
     }
     typeNames[type.title][count] = type.name;
     typeTypes[type.title][count] = type.type;
+    typeHidden[type.title][count] = type.hidden || false;
     typeRequired[type.title][count] = type.required;
     typeIdArr[type.title].push(type._id);
     if (type.additional) {
@@ -152,6 +155,7 @@ export async function getServerSideProps(context) {
       typeCount,
       typeNames,
       typeTypes,
+      typeHidden,
       typeRequired,
       typeCurrency,
       typeAdditional,
@@ -172,6 +176,7 @@ export default function Account({
   typeCount,
   typeNames,
   typeTypes,
+  typeHidden,
   typeRequired,
   typeCurrency,
   typeAdditional,
@@ -645,6 +650,7 @@ export default function Account({
                 owner={owner}
                 typeNames={typeNames[selectedTitle]}
                 typeTypes={typeTypes[selectedTitle]}
+                typeHidden={typeHidden[selectedTitle]}
                 typeRequired={typeRequired[selectedTitle]}
                 typeCurrency={typeCurrency[selectedTitle]}
                 typeAdditional={typeAdditional[selectedTitle]}

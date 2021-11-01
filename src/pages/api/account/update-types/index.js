@@ -14,6 +14,7 @@ const updateTypes = async (req, res) => {
       additional,
       typeIdArr,
       count,
+      hidden,
       required,
       currency,
       title,
@@ -25,6 +26,7 @@ const updateTypes = async (req, res) => {
       type.name = names[i.toString()];
       type.type = types[i.toString()];
       type.required = required[i.toString()] || false;
+      type.hidden = hidden[i.toString()] || false;
       if (currency[i.toString()]) {
         type.currency = currency[i.toString()];
       }
@@ -42,6 +44,7 @@ const updateTypes = async (req, res) => {
           name: names[i.toString()],
           type: types[i.toString()],
           required: required[i.toString()] || false,
+          hidden: hidden[i.toString()] || false,
           option: option,
           title,
         };

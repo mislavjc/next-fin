@@ -34,6 +34,7 @@ export const EditTypes = ({
   typeCount,
   typeNames,
   typeTypes,
+  typeHidden,
   typeRequired,
   typeCurrency,
   typeAdditional,
@@ -48,6 +49,7 @@ export const EditTypes = ({
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
+  const [hiddenObj, setHiddenObj] = useState(typeHidden)
   const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState(typeCurrency);
@@ -81,6 +83,7 @@ export const EditTypes = ({
       owner,
       names: nameObj,
       types: typeObj,
+      hidden: hiddenObj,
       required: requiredObj,
       currency: currencyObj,
       additional: additionalArr,
@@ -181,6 +184,24 @@ export const EditTypes = ({
                       />
                     }
                     label={modal.required}
+                    labelPlacement="top"
+                  />
+                  <FormControlLabel
+                    value="top"
+                    className="required-switch"
+                    control={
+                      <Switch
+                        checked={hiddenObj[index] === true}
+                        color="primary"
+                        onChange={() =>
+                          setHiddenObj({
+                            ...hiddenObj,
+                            [index]: !hiddenObj[index],
+                          })
+                        }
+                      />
+                    }
+                    label={modal.hidden}
                     labelPlacement="top"
                   />
                 </div>
@@ -293,6 +314,7 @@ const Strings = new LocalizedStrings({
       title: 'Change collection',
       usage: 'Used',
       required: 'Required',
+      hidden: 'Hidden',
       add: 'Add',
       save: 'Save changes',
       savedChanges: 'Changes saved successfully!',
@@ -303,6 +325,7 @@ const Strings = new LocalizedStrings({
       title: 'Promjena forme',
       usage: 'Iskorišteno',
       required: 'Obavezno',
+      hidden: 'Skriveno',
       add: 'Dodaj',
       save: 'Spremite promjene',
       savedChanges: 'Uspješno promjeljene postavke!',

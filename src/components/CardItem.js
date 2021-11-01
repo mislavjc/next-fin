@@ -65,7 +65,7 @@ export const CardItem = ({
     <Paper className="overscroll-card">
       <List>
         {form.inputs.map((input, index) => {
-          if (input.type) {
+          if (input.type && !input.type.hidden) {
             return (
               <span key={input._id}>
                 <ListItem

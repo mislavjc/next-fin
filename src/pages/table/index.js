@@ -5,6 +5,8 @@ import { getSession } from 'next-auth/client';
 import Container from '@mui/material/Container';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
+import { CollectionSelect } from '@/components/CollectionSelect';
+
 import User from '@/models/user';
 import Form from '@/models/form';
 import Type from '@/models/type';
@@ -101,6 +103,13 @@ export default function TablePage({ option, columns, rows }) {
 
   return (
     <Container maxWidth="xl">
+      {option && (
+        <CollectionSelect
+          option={option}
+          value={selectedTitle}
+          onChange={setSelectedTitle}
+        />
+      )}
       <div style={{ overflowX: 'scroll' }}>
         <DataGrid
           rows={rows[selectedTitle]}

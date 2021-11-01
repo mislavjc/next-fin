@@ -15,6 +15,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Snackbar from '@mui/material/Snackbar';
 import Backdrop from '@mui/material/Backdrop';
 import Button from '@mui/material/Button';
+import Pagination from '@mui/material/Pagination';
 
 import { CardItem } from '@/components/CardItem';
 import { Input } from '@/components/fields/Input';
@@ -59,12 +60,14 @@ export async function getServerSideProps(context) {
   const forms = await Form.find({
     option: owner.option,
     archived: false,
-  }).populate({
-    path: 'inputs',
-    populate: {
-      path: 'type',
-    },
-  });
+  })
+    .limit(12)
+    .populate({
+      path: 'inputs',
+      populate: {
+        path: 'type',
+      },
+    })
 
   return {
     props: {
@@ -104,6 +107,24 @@ export default function AllItems({
     option ? option.titles[0] : ''
   );
   const [columnTypes, setColumnTypes] = useState(types);
+  const [page, setPage] = useState(1);
+  const [paginationCount, setPaginationCount] = useState(
+    Math.ceil(entries.length / 12)
+  );
+  const handlePagination = (event, value) => {
+    axios
+      .post('/api/pagination', {
+        title: selectedTitle,
+        owner,
+        archived: false,
+        page: value,
+      })
+      .then((res) => {
+        setEntries(res.data.forms);
+        setColumnTypes(res.data.types);
+      });
+    setPage(value);
+  };
 
   const { formStrings, snackbar } = useStrings(Strings);
 
@@ -117,6 +138,7 @@ export default function AllItems({
       .then((res) => {
         setEntries(res.data.forms);
         setColumnTypes(res.data.types);
+        setPaginationCount(Math.ceil(res.data.formCount / 12));
       })
       .then(() => setDataObj({}))
       .then(() => localStorage.setItem('selectedTitle', selectedTitle));
@@ -254,6 +276,11 @@ export default function AllItems({
             onChange={setSelectedTitle}
           />
         )}
+        <Pagination
+          count={paginationCount}
+          page={page}
+          onChange={handlePagination}
+        />
         <Grid container spacing={4}>
           <AnimateSharedLayout>
             <AnimatePresence>

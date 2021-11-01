@@ -56,7 +56,27 @@ export async function getServerSideProps(context) {
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
   const option = await Option.findById(owner.option);
-  const inputs = await Inputs.find({ option: owner.option });
+  const inputs = await Inputs.find(
+    { option: owner.option },
+    { type: 1, value: 1 }
+  );
+
+  const relatedInputs = {};
+
+  for (let type of types) {
+    if (type.type === 'relation') {
+      relatedInputs[type._relation] = [];
+      for (let input of inputs) {
+        if (JSON.stringify(input.type) === JSON.stringify(type._relation)) {
+          relatedInputs[type._relation].push(input.value);
+        }
+      }
+      relatedInputs[type._relation] = [
+        ...new Set(relatedInputs[type._relation]),
+      ];
+    }
+  }
+
   const forms = await Form.find({
     option: owner.option,
     archived: false,
@@ -84,7 +104,7 @@ export async function getServerSideProps(context) {
       types: JSON.parse(JSON.stringify(types)),
       forms: JSON.parse(JSON.stringify(forms)),
       option: JSON.parse(JSON.stringify(option)),
-      inputs: JSON.parse(JSON.stringify(inputs)),
+      inputs: JSON.parse(JSON.stringify(relatedInputs)),
       searchForms,
       cloudinaryUrl,
       cloudinaryPreset,
@@ -134,7 +154,6 @@ export default function AllItems({
           page: value,
         })
         .then((res) => {
-          console.log(res.data);
           setEntries(res.data.forms);
           setPaginationCount(Math.ceil(res.data.formCount / 12));
           setFormCount(res.data.formCount);

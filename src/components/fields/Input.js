@@ -98,9 +98,7 @@ export const Input = ({
   if (type === 'relation') {
     return (
       <Autocomplete
-        options={inputs
-          .filter((input) => input.type === relation)
-          .map((input) => input.value)}
+        options={inputs[relation]}
         value={value}
         onChange={(event, newValue) => {
           setValue(newValue);

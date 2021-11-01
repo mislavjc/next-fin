@@ -1,29 +1,17 @@
 import dayjs from 'dayjs';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { getSession } from 'next-auth/client';
-import { useRouter } from 'next/router';
 
-import Paper from '@mui/material/Paper';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
 import Container from '@mui/material/Container';
-
-import { Toolbar } from '@/components/Toolbar';
-import { CollectionSelect } from '@/components/CollectionSelect';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
 import User from '@/models/user';
 import Form from '@/models/form';
 import Type from '@/models/type';
+import Input from '@/models/input';
 import Option from '@/models/option';
 
 import { dbConnect } from '@/middleware/db';
-import { mapAndReduce } from '@/lib/filter';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -47,162 +35,84 @@ export async function getServerSideProps(context) {
     },
   });
   const types = await Type.find({ option: owner.option });
+
+  const columns = {};
+
+  for (let type of types) {
+    if (!columns.hasOwnProperty(type.title)) {
+      columns[type.title] = [
+        { field: type.name, headerName: type.name, width: 160 },
+      ];
+    } else {
+      columns[type.title].push({
+        field: type.name,
+        headerName: type.name,
+        width: 160,
+      });
+    }
+  }
+
+  const rows = {};
+
+  for (let [index, form] of forms.entries()) {
+    if (!rows.hasOwnProperty(form.title)) {
+      rows[form.title] = [];
+    }
+    const rowObj = { id: index };
+    for (let input of form.inputs) {
+      rowObj[input.type.name] = input.value;
+    }
+    rows[form.title].push(rowObj);
+  }
+
+  const inputs = await Input.find(
+    { option: owner.option },
+    { type: 1, value: 1 }
+  );
+
+  const relatedInputs = {};
+
+  for (let type of types) {
+    if (type.type === 'relation') {
+      relatedInputs[type._relation] = [];
+      for (let input of inputs) {
+        if (JSON.stringify(input.type) === JSON.stringify(type._relation)) {
+          relatedInputs[type._relation].push(input.value);
+        }
+      }
+      relatedInputs[type._relation] = [
+        ...new Set(relatedInputs[type._relation]),
+      ];
+    }
+  }
   return {
     props: {
-      forms: JSON.parse(JSON.stringify(forms)),
-      types: JSON.parse(JSON.stringify(types)),
-      owner: JSON.parse(JSON.stringify(owner)),
       option: JSON.parse(JSON.stringify(option)),
+      columns,
+      rows,
     },
   };
 }
 
-export default function TablePage({ forms, owner, option, types }) {
-  const router = useRouter();
-
-  const [dataObj, setDataObj] = useState({});
-  const [entries, setEntries] = useState(forms);
-  const [columnTypes, setColumnTypes] = useState(types);
-
+export default function TablePage({ option, columns, rows }) {
   const [selectedTitle, setSelectedTitle] = useState(
     option ? option.titles[0] : ''
   );
 
-  useEffect(() => {
-    axios
-      .post('/api/crud/read', {
-        title: selectedTitle,
-        owner,
-        archived: false,
-      })
-      .then((res) => {
-        setEntries(res.data.forms);
-        setColumnTypes(res.data.types);
-      })
-      .then(() => setDataObj({}))
-      .then(() => localStorage.setItem('selectedTitle', selectedTitle));
-  }, [selectedTitle]);
-
-  useEffect(() => {
-    if (localStorage.getItem('selectedTitle')) {
-      setSelectedTitle(localStorage.getItem('selectedTitle'));
-    }
-  }, []);
-
-  const columns = [];
-
-  for (const type of columnTypes) {
-    columns.push(type);
-  }
-
-  const rows = [];
-
-  for (let form of entries) {
-    const data = [];
-    for (let i = 0; i < form.inputs.length; i++) {
-      data.push(form.inputs[i].value);
-    }
-    const rowObj = {
-      id: form._id,
-      value: data,
-    };
-    rows.push(rowObj);
-  }
-
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
-    setPage(0);
-  };
-
-  const [search, setSearch] = useState('');
-
-  useEffect(() => {
-    if (search.length > 0) {
-      axios
-        .post('/api/search', { search, option: owner.option })
-        .then((res) => setEntries(res.data));
-    } else {
-      setEntries(forms);
-    }
-  }, [search]);
-
   return (
-    <Container maxWidth="lg">
-      <Toolbar
-        search={search}
-        setSearch={setSearch}
-        owner={owner}
-        inputs={mapAndReduce(entries)}
-      />
-      {option && (
-        <CollectionSelect
-          option={option}
-          value={selectedTitle}
-          onChange={setSelectedTitle}
+    <Container maxWidth="xl">
+      <div style={{ overflowX: 'scroll' }}>
+        <DataGrid
+          rows={rows[selectedTitle]}
+          columns={columns[selectedTitle]}
+          pageSize={24}
+          rowsPerPageOptions={[24]}
+          autoHeight
+          components={{
+            Toolbar: GridToolbar,
+          }}
         />
-      )}
-      <Paper>
-        <TableContainer>
-          <Table stickyHeader aria-label="sticky table">
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <TableCell
-                    key={column._id}
-                    style={{ minWidth: column.minWidth }}
-                  >
-                    {column.name}
-                  </TableCell>
-                ))}
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {rows
-                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                .map((row) => {
-                  return (
-                    <TableRow
-                      hover
-                      role="checkbox"
-                      tabIndex={-1}
-                      key={row.id}
-                      onClick={() => router.push(`/all-items/${row.id}`)}
-                    >
-                      {columns.map((column, index) => {
-                        const value = row.value[index];
-                        return (
-                          <TableCell key={index}>
-                            {column.format && typeof value === 'number'
-                              ? column.format(value)
-                              : column.type === 'date'
-                              ? dayjs(value).format('DD.MM.YYYY')
-                              : value}
-                          </TableCell>
-                        );
-                      })}
-                    </TableRow>
-                  );
-                })}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[10, 25, 100]}
-          component="div"
-          count={rows.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={handleChangePage}
-          onChangeRowsPerPage={handleChangeRowsPerPage}
-        />
-      </Paper>
+      </div>
     </Container>
   );
 }

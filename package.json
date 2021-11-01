@@ -27,6 +27,7 @@
     "next": "^12.0.2",
     "next-auth": "^3.29.0",
     "next-pwa": "^5.4.0",
+    "preact": "^10.5.14",
     "react": "17.0.2",
     "react-chartjs-2": "^3.3.0",
     "react-csv-downloader": "^2.7.0",

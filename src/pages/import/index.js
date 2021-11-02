@@ -179,6 +179,11 @@ export default function Import({
         setShowForm(true);
         setNameObj(nameObj);
         setHeaders(headers);
+        const tempAdditionalObj = {};
+        for (const [key, value] of Object.entries(nameObj)) {
+          tempAdditionalObj[key] = [...new Set(importedValues[value])];
+        }
+        setAdditionalArr(tempAdditionalObj);
       } else {
         setImportedValues({});
         setHeaders([]);

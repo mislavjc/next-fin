@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { getSession } from 'next-auth/client';
 
 import Container from '@mui/material/Container';
@@ -89,32 +89,20 @@ export async function getServerSideProps(context) {
   return {
     props: {
       option: JSON.parse(JSON.stringify(option)),
+      owner: JSON.parse(JSON.stringify(owner)),
       columns,
       rows,
     },
   };
 }
 
-export default function TablePage({ option, columns, rows }) {
+export default function TablePage({ option, columns, rows, owner }) {
   const [selectedTitle, setSelectedTitle] = useState(
     option ? option.titles[0] : ''
   );
 
   useEffect(() => {
-    axios
-      .post('/api/crud/read', {
-        title: selectedTitle,
-        owner,
-        archived: false,
-      })
-      .then((res) => {
-        setEntries(res.data.forms);
-        setColumnTypes(res.data.types);
-        setPaginationCount(Math.ceil(res.data.formCount / 12));
-        setFormCount(res.data.formCount);
-      })
-      .then(() => setDataObj({}))
-      .then(() => localStorage.setItem('selectedTitle', selectedTitle));
+    localStorage.setItem('selectedTitle', selectedTitle);
   }, [selectedTitle]);
 
   useEffect(() => {

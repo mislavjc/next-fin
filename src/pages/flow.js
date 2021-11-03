@@ -1,4 +1,6 @@
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
+import { useEffect } from 'react';
 
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
@@ -12,7 +14,25 @@ import { useStrings } from '@/lib/use-strings';
 
 import Strings from '@/translation/flow/Strings';
 
-export default function Flow() {
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) {
+    context.res.writeHead(302, { Location: '/api/auth/signin' });
+    context.res.end();
+    return {
+      props: {
+        session: false,
+      },
+    };
+  }
+  return {
+    props: {
+      session,
+    },
+  };
+}
+
+export default function Flow({ session }) {
   const router = useRouter();
 
   const { imp, setup, button } = useStrings(Strings);

@@ -56,6 +56,17 @@ export async function getServerSideProps(context) {
   const owner = await User.findOne({ email: user.email });
   const types = await Type.find({ option: owner.option });
   const option = await Option.findById(owner.option);
+  if (!option) {
+    context.res.writeHead(302, { Location: '/flow' });
+    context.res.end();
+    return {
+      props: {
+        owner: false,
+        forms: false,
+      },
+    };
+  }
+
   const inputs = await Inputs.find(
     { option: owner.option },
     { type: 1, value: 1 }
@@ -92,11 +103,13 @@ export async function getServerSideProps(context) {
   const paginationCountObj = {};
 
   for (let title of option.titles) {
-    paginationCountObj[title] = Math.ceil(await Form.countDocuments({
-      option: owner.option,
-      archived: false,
-      title,
-    }) / 12);
+    paginationCountObj[title] = Math.ceil(
+      (await Form.countDocuments({
+        option: owner.option,
+        archived: false,
+        title,
+      })) / 12
+    );
   }
 
   const tempForms = await Form.find({

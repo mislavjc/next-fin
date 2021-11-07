@@ -236,12 +236,15 @@ export default function AllItems({
           page,
         })
         .then((res) => {
+          setPage(1);
           setEntries(res.data.forms);
           setPaginationCount(Math.ceil(res.data.formCount / 12));
           setFormCount(res.data.formCount);
           setSearchData(res.data.searchData);
         });
     } else {
+      setPage(1);
+      setSearchData(searchForms);
       setEntries(forms);
       setPaginationCount(paginationCountObj[selectedTitle]);
       setFormCount(paginationCountObj[selectedTitle] * 12);

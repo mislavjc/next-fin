@@ -57,6 +57,18 @@ export const Options = ({
     }
   };
 
+  const removeHandler = () => {
+    axios
+      .post('/api/add-account/remove', {
+        email,
+        owner,
+      })
+      .then(setOpen(true), setShowOptions(false))
+      .then(router.push('/account'));
+    setOpen(true);
+    setMessage('Korisnik obrisan.');
+  };
+
   return (
     <Paper>
       <List>
@@ -108,6 +120,13 @@ export const Options = ({
           />
         </ListItem>
         <Divider variant="middle" />
+        {user && (
+          <List>
+            <ListItem button onClick={removeHandler}>
+              <ListItemText primary={options.delete} />
+            </ListItem>
+          </List>
+        )}
         <ListItem>
           <ListItemIcon>
             <PlaylistAddIcon />
@@ -170,6 +189,7 @@ const Strings = new LocalizedStrings({
         subtitle: 'Permission for deleting data',
       },
       button: ['Save changes', 'Send invitation'],
+      delete: 'Remove user',
     },
   },
   hr: {
@@ -186,6 +206,7 @@ const Strings = new LocalizedStrings({
         subtitle: 'Dopuštenje za brisanje podataka',
       },
       button: ['Spremite promjene', 'Pošaljite pozivnicu'],
+      delete: 'Obriši korisnika',
     },
   },
 });

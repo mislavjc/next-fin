@@ -2,6 +2,7 @@ import LocalizedStrings from 'react-localization';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { motion, AnimateSharedLayout } from 'framer-motion';
+import { useRouter } from 'next/router';
 
 import Paper from '@mui/material/Paper';
 import Tooltip from '@mui/material/Tooltip';
@@ -49,7 +50,7 @@ export const EditTypes = ({
 }) => {
   const [nameObj, setNameObj] = useState(typeNames);
   const [typeObj, setTypeObj] = useState(typeTypes);
-  const [hiddenObj, setHiddenObj] = useState(typeHidden)
+  const [hiddenObj, setHiddenObj] = useState(typeHidden);
   const [requiredObj, setRequiredObj] = useState(typeRequired);
   const [additionalObj, setAdditionalObj] = useState({});
   const [currencyObj, setCurrencyObj] = useState(typeCurrency);
@@ -61,6 +62,8 @@ export const EditTypes = ({
   const [additionalArr, setAdditionalArr] = useState(typeAdditional || {});
 
   const { modal } = useStrings(Strings);
+
+  const router = useRouter();
 
   const additionalHandler = (index) => {
     if (!additionalArr[index]) {
@@ -97,7 +100,8 @@ export const EditTypes = ({
       .then(
         setShowEditCategories(false),
         setOpen(true),
-        setMessage(modal.savedChanges)
+        setMessage(modal.savedChanges),
+        router.reload()
       );
   };
 

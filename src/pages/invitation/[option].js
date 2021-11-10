@@ -1,4 +1,5 @@
 import axios from 'axios';
+import LocalizedStrings from 'react-localization';
 import { getSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
@@ -11,6 +12,7 @@ import User from '@/models/user';
 import Option from '@/models/option';
 
 import { dbConnect } from '@/middleware/db';
+import { useStrings } from '@/lib/use-strings';
 
 export async function getServerSideProps(context) {
   dbConnect();
@@ -48,6 +50,8 @@ export async function getServerSideProps(context) {
 }
 
 export default function Invitation({ owner, option, username }) {
+  const { invite } = useStrings(Strings);
+
   const router = useRouter();
   const acceptInvitationHandler = () => {
     axios
@@ -72,24 +76,41 @@ export default function Invitation({ owner, option, username }) {
       >
         <Paper variant="outlined" style={{ padding: '1rem' }}>
           <Typography variant="h5" gutterBottom>
-            Pozivnica za pridruživanje poslovanju
+            {invite.title}
           </Typography>
           <Typography
             variant="body2"
             color="textSecondary"
             style={{ marginBottom: '1rem' }}
           >
-            Ukoliko želite se pridružiti poslovanju, pritisnite gumb ispod.
+            {invite.label}
           </Typography>
           <Button
             variant="outlined"
             color="primary"
             onClick={acceptInvitationHandler}
           >
-            Prihvati pozivnicu
+            {invite.button}
           </Button>
         </Paper>
       </Container>
     </div>
   );
 }
+
+const Strings = new LocalizedStrings({
+  en: {
+    invite: {
+      title: 'Invitation to join the business',
+      label: 'If you want to join the business, press the button below.',
+      button: 'Accept invitation',
+    },
+  },
+  hr: {
+    invite: {
+      title: 'Pozivnica za pridruživanje poslovanju',
+      label: 'Ukoliko se želite pridružiti poslovanju, pritisnite gumb ispod.',
+      button: 'Prihvati pozivnicu',
+    },
+  },
+});

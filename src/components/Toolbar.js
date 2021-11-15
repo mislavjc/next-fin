@@ -12,7 +12,7 @@ import TextField from '@mui/material/TextField';
 
 import { useStrings } from '@/lib/use-strings';
 
-export const Toolbar = ({ setSearch, owner, inputs }) => {
+export const Toolbar = ({ setSearch, owner, inputs, hideSearch = false }) => {
   const router = useRouter();
 
   const { toolbar } = useStrings(Strings);
@@ -53,23 +53,25 @@ export const Toolbar = ({ setSearch, owner, inputs }) => {
           />
         </Link>
       </div>
-      <Autocomplete
-        className="search"
-        disabled={!owner.option}
-        multiple
-        id="search"
-        options={inputs}
-        onChange={(event, newValue) => {
-          setSearch(newValue);
-        }}
-        inputValue={autocompleteValue}
-        onInputChange={(event, newAutocompleteValue) => {
-          setAutocompleteValue(newAutocompleteValue);
-        }}
-        renderInput={(params) => (
-          <TextField {...params} variant="outlined" label={toolbar.search} />
-        )}
-      />
+      {!hideSearch && (
+        <Autocomplete
+          className="search"
+          disabled={!owner.option}
+          multiple
+          id="search"
+          options={inputs}
+          onChange={(event, newValue) => {
+            setSearch(newValue);
+          }}
+          inputValue={autocompleteValue}
+          onInputChange={(event, newAutocompleteValue) => {
+            setAutocompleteValue(newAutocompleteValue);
+          }}
+          renderInput={(params) => (
+            <TextField {...params} variant="outlined" label={toolbar.search} />
+          )}
+        />
+      )}
     </div>
   );
 };

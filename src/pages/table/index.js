@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/client';
 import Container from '@mui/material/Container';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 
+import { Toolbar } from '@/components/Toolbar';
 import { CollectionSelect } from '@/components/CollectionSelect';
 
 import User from '@/models/user';
@@ -113,6 +114,13 @@ export default function TablePage({ option, columns, rows, owner }) {
 
   return (
     <Container maxWidth="xl">
+      <Toolbar
+        search={''}
+        setSearch={''}
+        owner={owner}
+        inputs={''}
+        hideSearch
+      />
       {option && (
         <CollectionSelect
           option={option}
@@ -124,8 +132,8 @@ export default function TablePage({ option, columns, rows, owner }) {
         <DataGrid
           rows={rows[selectedTitle]}
           columns={columns[selectedTitle]}
-          pageSize={24}
-          rowsPerPageOptions={[24]}
+          pageSize={12}
+          rowsPerPageOptions={[12]}
           autoHeight
           components={{
             Toolbar: GridToolbar,

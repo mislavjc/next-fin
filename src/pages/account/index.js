@@ -84,7 +84,9 @@ export async function getServerSideProps(context) {
   for (let form of formData) {
     const obj = {};
     for (let input of form.inputs) {
-      obj[input.type.name] = input.value;
+      if (input?.type?.name) {
+        obj[input.type.name] = input.value;
+      }
     }
     datas.push(obj);
   }

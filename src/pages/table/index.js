@@ -62,7 +62,9 @@ export async function getServerSideProps(context) {
     }
     const rowObj = { id: index };
     for (let input of form.inputs) {
-      rowObj[input.type.name] = input.value;
+      if (input?.type?.name) {
+        rowObj[input.type.name] = input.value;
+      }
     }
     rows[form.title].push(rowObj);
   }

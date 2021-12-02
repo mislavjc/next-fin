@@ -1,0 +1,77 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["mongoDb"]
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model forms {
+  id          String                  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  v           Int                     @map("__v")
+  archived    Boolean
+  attachments Unsupported("Unknown")?
+  inputs      String[]                @db.ObjectId
+  option      String                  @db.ObjectId
+  title       String
+}
+
+model inputs {
+  id     String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  v      Int    @map("__v")
+  option String @db.ObjectId
+  type   String @db.ObjectId
+  value  String
+}
+
+model options {
+  id           String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  v            Int      @map("__v")
+  owner        Json
+  subscription String
+  titles       String[]
+}
+
+model sessions {
+  id           String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  accessToken  String
+  createdAt    DateTime @db.Date
+  expires      DateTime @db.Date
+  sessionToken String
+  updatedAt    DateTime @db.Date
+  userId       String   @db.ObjectId
+}
+
+model types {
+  id         String   @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  v          Int      @map("__v")
+  additional String[]
+  hidden     Boolean
+  name       String
+  option     String   @db.ObjectId
+  required   Boolean
+  title      String
+  type       String
+}
+
+model users {
+  id            String                  @id @default(dbgenerated()) @map("_id") @db.ObjectId
+  admin         Boolean
+  color         String
+  create        Boolean
+  createdAt     DateTime                @db.Date
+  delete        Boolean
+  email         String
+  emailVerified DateTime                @db.Date
+  image         Unsupported("Unknown")?
+  name          Unsupported("Unknown")?
+  option        String?                 @db.ObjectId
+  role          String
+  updatedAt     DateTime                @db.Date
+}
+
+model verificationRequests {
+  id String @id @default(dbgenerated()) @map("_id") @db.ObjectId
+}

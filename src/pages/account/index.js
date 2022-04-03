@@ -492,7 +492,7 @@ export default function Account({
                       <Grid item xs={4} md={3} lg={2} key={title}>
                         <Avatar
                           className="avatar"
-                          style={{ background: '#BDBDBD' }}
+                          style={{ background: '#BDBDBD', cursor: 'pointer' }}
                           onClick={() => editTypesHandler(title)}
                         >
                           {title[0]}

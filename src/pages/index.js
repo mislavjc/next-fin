@@ -15,11 +15,17 @@ export async function getServerSideProps(context) {
   dbConnect();
   const session = await getSession(context);
   if (!session) {
+    context.res.statusCode = 302;
+    context.res.setHeader('Location', `/auth/signin`);
+
     return {
       props: {
         owner: false,
       },
     };
+  } else {
+    context.res.statusCode = 302;
+    context.res.setHeader('Location', `/all-items`);
   }
   const { user } = session;
   const owner = await User.findOne({ email: user.email });
@@ -56,9 +62,7 @@ export default function Home({ owner }) {
           <Typography variant="h4" align="center">
             <Button variant="outlined" color="primary" size="large">
               <Link
-                href={
-                  owner ? (owner.option ? '/all-items' : '/flow') : '/flow'
-                }
+                href={owner ? (owner.option ? '/all-items' : '/flow') : '/flow'}
               >
                 {hero.button}
               </Link>

@@ -302,7 +302,7 @@ const Strings = new LocalizedStrings({
         subtitle: 'View all entries',
       },
       link: {
-        title: 'Open link',
+        title: 'Orders',
       },
       statistics: {
         title: 'Statistics',
@@ -328,7 +328,7 @@ const Strings = new LocalizedStrings({
         subtitle: 'Pregled svih unosa',
       },
       link: {
-        title: 'Otvori poveznicu',
+        title: 'Narudžbe',
       },
       statistics: {
         title: 'Statistke',

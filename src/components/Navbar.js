@@ -22,8 +22,10 @@ import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
 import TranslateIcon from '@mui/icons-material/Translate';
 import QueryStatsIcon from '@mui/icons-material/QueryStats';
 import TocIcon from '@mui/icons-material/Toc';
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
 
 import { useStrings } from '@/lib/use-strings';
+import { InsertLink } from '@mui/icons-material';
 
 export const Navbar = () => {
   const router = useRouter();
@@ -187,6 +189,21 @@ export const Navbar = () => {
                       </ListItem>
                     </Link>
                     <Divider variant="inset" component="li" />
+                    <ListItem
+                      onClick={() =>
+                        window.open('http://157.90.165.97/', '_blank')
+                      }
+                    >
+                      <ListItemAvatar>
+                        <Avatar>
+                          <InsertLinkIcon />
+                        </Avatar>
+                      </ListItemAvatar>
+                      <ListItemText
+                        primary={navbar.link.title}
+                      />
+                    </ListItem>
+                    <Divider variant="inset" component="li" />
                     <span
                       onClick={() => {
                         const setCookie = (locale) => {
@@ -284,6 +301,9 @@ const Strings = new LocalizedStrings({
         title: 'All entries',
         subtitle: 'View all entries',
       },
+      link: {
+        title: 'Open link',
+      },
       statistics: {
         title: 'Statistics',
         subtitle: 'View your statistics',
@@ -306,6 +326,9 @@ const Strings = new LocalizedStrings({
       items: {
         title: 'Svi unosi',
         subtitle: 'Pregled svih unosa',
+      },
+      link: {
+        title: 'Otvori poveznicu',
       },
       statistics: {
         title: 'Statistke',

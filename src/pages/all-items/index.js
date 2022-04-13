@@ -244,12 +244,6 @@ export default function AllItems({
           setFormCount(res.data.formCount);
           setSearchData(res.data.searchData);
         });
-    } else {
-      setPage(1);
-      setSearchData(searchForms);
-      setEntries(forms);
-      setPaginationCount(paginationCountObj[selectedTitle]);
-      setFormCount(paginationCountObj[selectedTitle] * 12);
     }
   }, [search]);
 

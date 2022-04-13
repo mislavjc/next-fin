@@ -21,6 +21,9 @@ const paginationHandler = async (req, res) => {
         },
       });
     const types = await Type.find({ option: owner.option, title });
+
+    console.log('paging');
+
     res.send({ forms, types });
   }
 };

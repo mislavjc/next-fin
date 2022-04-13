@@ -201,6 +201,8 @@ export default function AllItems({
     }
   };
 
+  console.log(searchForms);
+
   const { formStrings, snackbar, totalCount } = useStrings(Strings);
 
   useEffect(() => {

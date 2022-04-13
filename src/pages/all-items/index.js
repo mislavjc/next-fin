@@ -121,6 +121,8 @@ export async function getServerSideProps(context) {
 
   const searchForms = mapAndReduce(tempForms);
 
+  console.log(forms.filter(form => form.inputs.length === 0), 'filter');
+
   return {
     props: {
       owner: JSON.parse(JSON.stringify(owner)),
@@ -201,8 +203,6 @@ export default function AllItems({
     }
   };
 
-  console.log(searchForms);
-
   const { formStrings, snackbar, totalCount } = useStrings(Strings);
 
   useEffect(() => {
@@ -244,6 +244,12 @@ export default function AllItems({
           setFormCount(res.data.formCount);
           setSearchData(res.data.searchData);
         });
+    } else {
+      setPage(1);
+      setSearchData(searchForms);
+      setEntries(forms);
+      setPaginationCount(paginationCountObj[selectedTitle]);
+      setFormCount(paginationCountObj[selectedTitle] * 12);
     }
   }, [search]);
 

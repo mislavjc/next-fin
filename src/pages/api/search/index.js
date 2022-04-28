@@ -13,7 +13,8 @@ const searchHandler = async (req, res) => {
     const query = search.map((s) => {
       return {
         $match: {
-          'inputs.value': new RegExp(s),
+          // !remove regex
+          'inputs.value': s,
           option: mongoose.Types.ObjectId(option),
         },
       };
